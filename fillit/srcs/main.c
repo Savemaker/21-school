@@ -6,7 +6,7 @@
 /*   By: gbeqqo <gbeqqo@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/05 14:30:54 by gbeqqo            #+#    #+#             */
-/*   Updated: 2019/04/27 16:24:23 by gbeqqo           ###   ########.fr       */
+/*   Updated: 2019/04/28 13:57:55 by gbeqqo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,10 @@ int			main(int argc, char **argv)
 	int		fd;
 	t_list	*list;
 	int		e;
+	int		c;
 
+	c = 0;
+	fd = 0;
 	e = 0;
 	if (argc == 2)
 	{
@@ -25,6 +28,7 @@ int			main(int argc, char **argv)
 		list = reading(fd);
 		e = solver(list);
 		deletelist(&list);
+		c = close(fd);
 	}
 	else
 		write(1, "usage: ./fillit source_file\n", 28);
