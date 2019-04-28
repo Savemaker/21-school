@@ -6,7 +6,7 @@
 /*   By: gbeqqo <gbeqqo@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/05 14:44:41 by gbeqqo            #+#    #+#             */
-/*   Updated: 2019/04/26 15:54:27 by gbeqqo           ###   ########.fr       */
+/*   Updated: 2019/04/28 17:06:34 by gbeqqo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ t_list		*reading(const int fd)
 			stop();
 		if (buf[ret - 1] != '\n')
 			stop();
-		head = createtr(buf, a++, ret);
+		head = createtr(buf, a++);
 		push_end(&list, head);
 	}
 	if (list == NULL || buf[20] == '\n')
@@ -63,7 +63,7 @@ void		ft_bzero(void *s, size_t n)
 	ft_memset(s, 0, n);
 }
 
-void		bufchecker(char *buf, char a, int ret)
+void		bufchecker(char *buf)
 {
 	int n;
 	int d;
@@ -84,10 +84,10 @@ void		bufchecker(char *buf, char a, int ret)
 	}
 	if (d != 12 || l != 4)
 		stop();
-	nchecker(buf, ret);
+	nchecker(buf);
 }
 
-void		nchecker(char *buf, int ret)
+void		nchecker(char *buf)
 {
 	int flag;
 

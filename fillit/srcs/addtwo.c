@@ -6,7 +6,7 @@
 /*   By: gbeqqo <gbeqqo@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/27 16:09:16 by gbeqqo            #+#    #+#             */
-/*   Updated: 2019/04/27 16:23:31 by gbeqqo           ###   ########.fr       */
+/*   Updated: 2019/04/28 17:07:15 by gbeqqo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@ void		moveleft(char **shape, char a)
 	int		i;
 	int		j;
 	int		move;
-	char	temp;
 
 	i = 0;
 	j = 0;

@@ -6,7 +6,7 @@
 /*   By: gbeqqo <gbeqqo@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/06 14:03:43 by gbeqqo            #+#    #+#             */
-/*   Updated: 2019/04/27 16:12:39 by gbeqqo           ###   ########.fr       */
+/*   Updated: 2019/04/28 17:07:00 by gbeqqo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,18 +48,14 @@ int			listlen(t_list *list)
 	return (n);
 }
 
-t_list		*createtr(char *buf, char a, int ret)
+t_list		*createtr(char *buf, char a)
 {
 	t_list	*head;
 	t_tetr	tetrimino;
-	int		i;
-	int		t;
-	int		c;
 
-	c = 0;
-	bufchecker(buf, a, ret);
+	bufchecker(buf);
 	tetrimino.letter = a;
-	tetrimino.shape = createshape(buf, a, ret);
+	tetrimino.shape = createshape(buf, a);
 	moveleft(tetrimino.shape, a);
 	tetrimino.height = height(tetrimino.shape, a);
 	moveup(tetrimino.shape, a, tetrimino.height);
@@ -76,7 +72,7 @@ t_list		*createtr(char *buf, char a, int ret)
 	return (head);
 }
 
-char		**createshape(char *buf, char a, int ret)
+char		**createshape(char *buf, char a)
 {
 	char	*newbuf;
 	char	**shape;

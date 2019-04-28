@@ -6,7 +6,7 @@
 /*   By: gbeqqo <gbeqqo@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/05 14:31:09 by gbeqqo            #+#    #+#             */
-/*   Updated: 2019/04/27 16:22:34 by gbeqqo           ###   ########.fr       */
+/*   Updated: 2019/04/28 17:06:48 by gbeqqo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ typedef struct		s_tetr{
 }					t_tetr;
 
 t_list				*reading(const int fd);
-t_list				*createtr(char *buf, char a, int ret);
+t_list				*createtr(char *buf, char a);
 void				*ft_memmove(void *dst, const void *src, size_t len);
 void				*ft_memcpy(void *dst, const void *src, size_t n);
 void				*ft_memset(void *b, int c, size_t len);
@@ -48,7 +48,7 @@ void				*ft_memalloc(size_t size);
 void				push_end(t_list **list, t_list *head);
 char				*ft_strncpy(char *dst, const char *src, size_t n);
 int					ft_strlen(const char *s);
-char				**createshape(char *buf, char a, int ret);
+char				**createshape(char *buf, char a);
 void				trim(char **bufnew, char *buf, char a);
 void				freeshape(char **shape);
 int					height(char **shape, char a);
@@ -58,8 +58,8 @@ int					count(char **shape, int *i, int *j, char a);
 int					quantity(char **shape, char a);
 void				val(t_tetr *tetr);
 void				stop(void);
-void				bufchecker(char *buf, char a, int ret);
-void				nchecker(char *buf, int ret);
+void				bufchecker(char *buf);
+void				nchecker(char *buf);
 int					desksize(t_list *list);
 char				**createboard(int s);
 int					checkmoveup(char **shape, char a, int i, int j);

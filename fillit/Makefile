@@ -11,20 +11,23 @@ SRC = srcs/board.c \
 	srcs/addone.c \
 	srcs/addtwo.c
 
-OBJ   = $(SRC:.c=.o)
+OBJ  = ${SRC:.c=.o}
 
-all: $(NAME)
+FLAGS = -Wall -Werror -Wextra
+
+.PHONY: all
+all: ${NAME}
+
+%.o:%.c
+	gcc $(FLAGS) -o $@ -c $<
 
 $(NAME): $(OBJ)
-	gcc $(FLAGS) -o $(NAME) $(OBJ)
-
-%.o: %.c $(HEADER) Makefile
-	gcc $(FLAGS) -c $< -o $@
+	gcc -o $(NAME) $(OBJ)
 
 clean:
-	rm -f $(OBJ)
+	rm -rf $(OBJ)
 
 fclean: clean
-	rm -f $(NAME)
+	rm -rf $(NAME)
 
 re: fclean all
