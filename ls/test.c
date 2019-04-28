@@ -6,7 +6,7 @@
 /*   By: gbeqqo <gbeqqo@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/28 14:54:14 by gbeqqo            #+#    #+#             */
-/*   Updated: 2019/04/28 18:30:58 by gbeqqo           ###   ########.fr       */
+/*   Updated: 2019/04/28 18:59:14 by gbeqqo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,33 +23,36 @@ int		ft_strcmp(const char *s1, const char *s2)
 	return (s1[i] - s2[i]);
 }
 
-int main(void)
+int main(int argc, char **argv)
 {
 	int f;
 	DIR* op;
 	struct dirent *pDirent;
 
-	f = 0;
-	op = NULL;
-	op = opendir("./");
-	if (op == NULL)
+	if (argc < 2)
 	{
-		printf("err\n");
+		printf("usage = ./ft_ls <dirname> \n");
 		return (1);
 	}
-	while ((pDirent = readdir(op)) != NULL)
-	{
-		if (ft_strcmp(pDirent->d_name, "Makefile") == 0)
+		f = 0;
+		op = NULL;
+		op = opendir(argv[1]);
+		if (op == NULL)
 		{
-			f = 1;
-			printf("Makefile ");
+			printf("err\n");
+			return (1);
 		}
-	}
-	closedir(op);
-	op = opendir("./");
-	while ((pDirent = readdir(op)) != NULL)
-	{
-		if (f == 1)
+		while ((pDirent = readdir(op)) != NULL)
+		{
+			if (ft_strcmp(pDirent->d_name, "Makefile") == 0)
+			{
+				f = 1;
+				printf("Makefile ");
+			}
+		}
+		closedir(op);
+		op = opendir(argv[1]);
+		while ((pDirent = readdir(op)) != NULL)
 		{
 			if (pDirent->d_name[0] != '.' && ft_strcmp(pDirent->d_name, "Makefile") != 0)
 			{
@@ -57,6 +60,7 @@ int main(void)
 				printf(" ");
 			}
 		}
-	}
 	printf("\n");
+	closedir(op);
+	return (0);
 }
