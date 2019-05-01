@@ -1,0 +1,1 @@
+ifconfig en1 | awk -F 'ether ' '{print $2}' | awk 'NR == 2'

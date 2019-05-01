@@ -1,0 +1,1 @@
+nslookup slash16.org | awk 'NR == 1' | awk '{print $2}'

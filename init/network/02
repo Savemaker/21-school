@@ -1,0 +1,2 @@
+ifconfig en0 | grep -i broadcast | awk '{print $6}' | tail -n 1
+arp -a | awk '{print $2}'

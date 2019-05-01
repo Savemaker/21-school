@@ -1,0 +1,4 @@
+#permanent 
+hostnamectl set-hostname save
+#not
+hostname save
