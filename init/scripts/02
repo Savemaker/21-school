@@ -1,0 +1,5 @@
+#!/bin/bash
+
+skill -KILL -u $1
+
+deluser --remove-home $1
