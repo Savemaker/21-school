@@ -11,56 +11,119 @@
 /* ************************************************************************** */
 
 #include <dirent.h>
-#include <stdio.h>
+#include <unistd.h>
 
-int		ft_strcmp(const char *s1, const char *s2)
+int	upper_sort(int start, char *s)
 {
-	int i;
+	int				i;
+	int				r;
+	struct dirent	*st;
+	DIR *dir;
 
 	i = 0;
-	while (s1[i] == s2[i] && s1[i] && s2[i])
-		i++;
-	return (s1[i] - s2[i]);
+	r = 0;
+	dir = opendir(s);
+	while ((st = readdir(dir)) != NULL)
+	{
+		i = 0;
+		if (st->d_name[i] >= 65 && st->d_name[i] <= 90)
+		{
+			r = 1;
+			if (start == 1)
+				write(1, " ", 1);
+			start = 1;
+			while (st->d_name[i] != '\0')
+			{
+				write(1, &st->d_name[i], 1);
+				i++;
+			}
+		}
+	}
+	closedir(dir);
+	return (r);
 }
 
-int main(int argc, char **argv)
+int	lower_sort(int start, char *s)
 {
-	int f;
-	DIR* op;
-	struct dirent *pDirent;
+	int				i;
+	int				r;
+	struct dirent	*st;
+	DIR *dir;
 
-	if (argc < 2)
+	i = 0;
+	r = 0;
+	dir = opendir(s);
+	while ((st = readdir(dir)) != NULL)
 	{
-		printf("usage = ./ft_ls <dirname> \n");
-		return (1);
+		i = 0;
+		if (st->d_name[i] >= 97 && st->d_name[i] <= 122)
+		{
+			r = 1;
+			if (start == 1)
+				write(1, " ", 1);
+			start = 1;
+			while (st->d_name[i] != '\0')
+			{
+				write(1, &st->d_name[i], 1);
+				i++;
+			}
+		}
 	}
-		f = 0;
-		op = NULL;
-		op = opendir(argv[1]);
-		if (op == NULL)
+	closedir(dir);
+	return (r);
+}
+
+int	num_sort(int start, char *s)
+{
+	int				i;
+	int				r;
+	struct dirent	*st;
+	DIR *dir;
+
+	i = 0;
+	r = 0;
+	dir = opendir(s);
+	while ((st = readdir(dir)) != NULL)
+	{
+		i = 0;
+		if (st->d_name[i] >= 48 && st->d_name[i] <= 57)
 		{
-			printf("err\n");
-			return (1);
-		}
-		while ((pDirent = readdir(op)) != NULL)
-		{
-			if (ft_strcmp(pDirent->d_name, "Makefile") == 0)
+			r = 1;
+			if (start == 1)
+				write(1, " ", 1);
+			start = 1;
+			while (st->d_name[i] != '\0')
 			{
-				f = 1;
-				printf("Makefile ");
+				write(1, &st->d_name[i], 1);
+				i++;
 			}
 		}
-		closedir(op);
-		op = opendir(argv[1]);
-		while ((pDirent = readdir(op)) != NULL)
-		{
-			if (pDirent->d_name[0] != '.' && ft_strcmp(pDirent->d_name, "Makefile") != 0)
-			{
-				printf("%s", pDirent->d_name);
-				printf(" ");
-			}
-		}
-	printf("\n");
-	closedir(op);
+	}
+	closedir(dir);
+	return (r);
+}
+
+int		main(int argc, char **argv)
+{
+	int				r;
+
+	r = 0;
+	if (argc == 1)
+	{
+		r = num_sort(r, ".");
+		r = upper_sort(r, ".");
+		r = lower_sort(r, ".");
+		if (r == 1)
+			write(1, "\n", 1);
+	}
+	else if (argc == 2)
+	{
+		r = num_sort(r, argv[1]);
+		r = upper_sort(r, argv[1]);
+		r = lower_sort(r, argv[1]);
+		if (r == 1)
+			write(1, "\n", 1);
+	}
 	return (0);
 }
+
