@@ -1,6 +1,6 @@
 NAME = ft_ls
 
-SRC = ft_ls.c
+SRC = test.c
 
 OBJ = $(SRC:.c=.o)
 
