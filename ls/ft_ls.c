@@ -113,17 +113,14 @@ int		main(int argc, char **argv)
 		r = num_sort(r, ".");
 		r = upper_sort(r, ".");
 		r = lower_sort(r, ".");
-		if (r == 1)
-			write(1, "\n", 1);
 	}
 	else if (argc == 2)
 	{
 		r = num_sort(r, argv[1]);
 		r = upper_sort(r, argv[1]);
 		r = lower_sort(r, argv[1]);
-		if (r == 1)
-			write(1, "\n", 1);
 	}
+	write(1, "\n", 1);
 	return (0);
 }
 
