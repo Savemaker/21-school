@@ -1,17 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   test.c                                             :+:      :+:    :+:   */
+/*   ft_ls.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: gbeqqo <gbeqqo@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/28 14:54:14 by gbeqqo            #+#    #+#             */
-/*   Updated: 2019/04/28 18:59:14 by gbeqqo           ###   ########.fr       */
+/*   Updated: 2019/06/06 15:50:18 by gbeqqo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <dirent.h>
 #include <unistd.h>
+#include "libft.h"
 
 int	upper_sort(int start, char *s)
 {
@@ -160,25 +161,25 @@ void	list_directory(char *path)
 	r = lower_sort(r, path);
 }
 
-int	ft_strcmp(char *s1, char *s2)
-{
-	while (*s1 == *s2)
-	{
-		if (*s1 == '\0')
-			return (0);
-		s1++;
-		s2++;
-	}
-	return ((unsigned char)*s1 - (unsigned char)*s2);
-}
+// int	ft_strcmp(char *s1, char *s2)
+// {
+// 	while (*s1 == *s2)
+// 	{
+// 		if (*s1 == '\0')
+// 			return (0);
+// 		s1++;
+// 		s2++;
+// 	}
+// 	return ((unsigned char)*s1 - (unsigned char)*s2);
+// }
 
-void	ft_putstr(char *s)
-{
-	if (s == NULL)
-		return ;
-	while (*s)
-		write(1, s++, 1);
-}
+// void	ft_putstr(char *s)
+// {
+// 	if (s == NULL)
+// 		return ;
+// 	while (*s)
+// 		write(1, s++, 1);
+// }
 
 int		list_current(char *s)
 {
