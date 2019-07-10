@@ -240,26 +240,52 @@ void    expand_list(t_dir **list)
 //     off += output_dir_list(dir_list, flags, off);
 // }
 
-void    parse_args(char **argv, int flags, int start, char *buf)
+char    *right_arg(char *s)
+{
+    int i;
+    char *arg;
+
+    arg = (char *)malloc(sizeof(char) * 1024);
+    arg[1024] = '\0';
+    i = ft_strlen(s) - 1;
+    if (s[i] == '/')
+        return (s);
+    else
+    {
+        i = 0;
+        while (s[i])
+        {
+            arg[i] = s[i];
+            i++;
+        }
+        arg[i++] = '/';
+        arg[i] = '\0';
+        return (arg); 
+    }
+}
+
+int   parse_args(char **argv, int flags, int start, char *buf)
 {
     int c;
+    int ret;
 
     c = arg_len(argv, start);
     if (argv[start] == NULL)
-        basic_stuf(".", flags, 0, c, buf);
+       ret = basic_stuf(".", flags, 0, c, buf);
     if (c == 1)
     {
-        basic_stuf(argv[start], flags, 0, c, buf);
+        ret = basic_stuf(argv[start], flags, 0, c, buf);
     }
     // if (c > 1)
     // {
     //     complex_stuf(&argv[start], flags);
     // }
+    return (ret);
 }
 
-void    output(char *buf)
+void    output(char *buf, int ret)
 {
-    write(1, buf, 900000000);
+    write(1, buf, ret);
 }
 
 int main(int argc, char **argv)
@@ -267,6 +293,7 @@ int main(int argc, char **argv)
     int flags;
     int start;
     static char *buf;
+    int ret;
 
     buf = (char *)malloc(sizeof(char) * BUF_SIZE);
     buf[BUF_SIZE] = '\0';
@@ -274,13 +301,13 @@ int main(int argc, char **argv)
     flags = 0;
     if (argc == 1)
     {
-        basic_stuf(".", flags, 0, 0, buf);
+        ret = basic_stuf(".", flags, 0, 0, buf);
     }
     if (argc > 1)
     {
         start = get_flags(argv, &flags);
-        parse_args(argv, flags, start, buf);
+        ret = parse_args(argv, flags, start, buf);
     }
-    printf("%s", buf);
+    output(buf, ret);
     return (0);
 }

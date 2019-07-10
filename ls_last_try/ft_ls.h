@@ -5,16 +5,49 @@
 #include <errno.h>
 #include <stdio.h>
 #include <sys/stat.h>
-#define BUF_SIZE 43000000000
+#include <sys/xattr.h>
+#include <pwd.h>
+#include <grp.h>
+#include <time.h>
+#include <sys/types.h>
+
+#define BUF_SIZE 43000000
 
 typedef struct s_dir{
 	char *name;
 	char *path;
 	int		level;
-	struct s_dir *inside;
+	nlink_t link;
+	off_t   size;
+	char		*group;
+	char		*user;
 	struct s_dir *next;
-	struct s_dir *prev;
+	struct s_dir *inside;
+	struct s_dir *prev; //delete this shit 
 }t_dir;
+
+typedef struct s_max{
+	size_t		max_group;
+	size_t		max_user;
+	size_t		max_links;
+	off_t		max_size;
+}t_max;
+
+// typedef struct s_stat{
+// 	dev_t 		st_dev;
+// 	ino_t		st_ino;
+// 	mode_t    	st_mode;        /* File type and mode */
+//     nlink_t   	st_nlink;       /* Number of hard links */
+//     uid_t     	st_uid;         /* User ID of owner */
+//    	gid_t     	st_gid;         /* Group ID of owner */
+//    	dev_t     	st_rdev;        /* Device ID (if special file) */
+//     off_t     	st_size;        /* Total size, in bytes */
+// 	blksize_t	st_blksize;     /* Block size for filesystem I/O */
+//     blkcnt_t	st_blocks;
+// }s_stat;
+
+
+t_max *new_max(t_dir *list);
 
 // void    print_arg_rec(t_dir *list, char *buf, int flags);
 void    correct_list(t_dir **head, int flags);
@@ -52,7 +85,7 @@ char    *create_path(char *name, char *path);
 int     arg_len(char **argv, int start);
 int    print_file_name(char *path, int off, char *buf); //
 
-void    parse_args(char **argv, int flags, int start, char *buf);
+int    parse_args(char **argv, int flags, int start, char *buf);
 int    	basic_stuf(char *path, int flags, int offset, int c, char *buf);
 // void    complex_stuf(char **argv, int flags);
 #endif

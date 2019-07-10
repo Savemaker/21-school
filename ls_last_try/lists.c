@@ -16,6 +16,40 @@ void    append(t_dir **head, t_dir *node)
 	}
 }
 
+t_max *new_max(t_dir *list)
+{
+    t_max *res;
+    struct stat s;
+    struct passwd *p;
+    struct group *g;
+
+    res = (t_max *)malloc(sizeof(t_max));
+    res->max_group = 0;
+    res->max_links = 0;
+    res->max_size = 0;
+    res->max_user = 0;
+    while (list)
+    {
+        lstat(list->path, &s);
+        p = getpwuid(s.st_uid);
+        g = getgrgid(s.st_gid);
+        if (ft_strlen(p->pw_name) > res->max_user)
+            res->max_user = ft_strlen(p->pw_name);
+        if (ft_strlen(g->gr_name) > res->max_group)
+            res->max_group = ft_strlen(g->gr_name);
+        list->user = ft_strdup(p->pw_name);
+        list->group = ft_strdup(g->gr_name);
+        if (s.st_nlink > res->max_links)
+            res->max_links = s.st_nlink;
+        if (s.st_size > res->max_size)
+            res->max_size = s.st_size;
+        list->size = s.st_size;
+        list->link = s.st_nlink;
+        list = list->next;
+    }
+    return (res);
+}
+
 t_dir   *new_list(char *name, char *path, int level)
 {
     t_dir *new;
@@ -31,6 +65,10 @@ t_dir   *new_list(char *name, char *path, int level)
     new->prev = NULL;
     new->level = level;
     new->inside = NULL;
+    new->user = NULL;
+    new->group = NULL;
+    new->link = 0;
+    new->size = 0;
     return (new);
 }
 
