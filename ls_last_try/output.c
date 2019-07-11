@@ -221,20 +221,53 @@ int     print_size(char *buf, int off, t_dir *list, t_max *max)
     return (off);
 }
 
+int     check_six_months(time_t stm)
+{
+    time_t now;
+    time_t then;
+    time_t dif;
+
+    now = time(NULL);
+    then = stm;
+    dif = now - then;
+    if (dif >= 15638400)
+        return (1);   //yes 6 months hv pssd
+    return (0);
+}
+
 int     print_time(char *buf, int off, t_dir *list)
 {
     char *time;
     struct stat s;
     int i;
+    int check;
 
     i = 4;
-    lstat(list->path, &s);
-    time = ctime(&s.st_mtime);
-    while (time[i] && i < 16)
+    if (list)
     {
-        buf[off++] = time[i++];
+        lstat(list->path, &s);
+        check = check_six_months(s.st_mtime);
+        time = ctime(&s.st_mtime);
+        if (check == 0)
+        {
+            while (time[i] && i < 16)
+            {
+                buf[off++] = time[i++];
+            }
+        }
+        else
+        {
+            while (time[i] && i < 11)
+            {
+                buf[off++] = time[i++];
+            }
+            buf[off++] = ' ';
+            i = 20;
+            while (time[i] != '\n')
+                buf[off++] = time[i++];
+        }
+        buf[off++] = ' ';
     }
-    buf[off++] = ' ';
     return (off);
 }
 

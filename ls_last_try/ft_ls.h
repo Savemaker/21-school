@@ -1,6 +1,6 @@
 #ifndef FT_LS_H
 #define FT_LS_H
-#include "libft.h"
+#include "libft/includes/libft.h"
 #include <dirent.h>
 #include <errno.h>
 #include <stdio.h>
@@ -11,7 +11,7 @@
 #include <time.h>
 #include <sys/types.h>
 
-#define BUF_SIZE 43000000
+#define BUF_SIZE 55000000
 
 typedef struct s_dir{
 	char *name;

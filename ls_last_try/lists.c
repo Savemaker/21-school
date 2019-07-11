@@ -33,12 +33,30 @@ t_max *new_max(t_dir *list)
         lstat(list->path, &s);
         p = getpwuid(s.st_uid);
         g = getgrgid(s.st_gid);
-        if (ft_strlen(p->pw_name) > res->max_user)
-            res->max_user = ft_strlen(p->pw_name);
-        if (ft_strlen(g->gr_name) > res->max_group)
-            res->max_group = ft_strlen(g->gr_name);
-        list->user = ft_strdup(p->pw_name);
-        list->group = ft_strdup(g->gr_name);
+        if (p != NULL)
+        {
+            if (ft_strlen(p->pw_name) > res->max_user)
+                res->max_user = ft_strlen(p->pw_name);
+            list->user = ft_strdup(p->pw_name);
+        }
+        else
+        {
+            if (s.st_uid > res->max_user)
+                res->max_user = s.st_uid;
+            list->user = ft_itoa(s.st_uid);
+        }
+        if (g != NULL)
+        {
+            if (ft_strlen(g->gr_name) > res->max_group)
+                res->max_group = ft_strlen(g->gr_name);
+            list->group = ft_strdup(g->gr_name);
+        }
+        else
+        {
+            if (s.st_gid > res->max_group)
+                res->max_group = s.st_gid;
+            list->group = ft_itoa(s.st_gid);
+        }
         if (s.st_nlink > res->max_links)
             res->max_links = s.st_nlink;
         if (s.st_size > res->max_size)
