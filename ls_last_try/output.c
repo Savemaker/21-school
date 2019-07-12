@@ -271,6 +271,96 @@ int     print_time(char *buf, int off, t_dir *list)
     return (off);
 }
 
+int     print_major_minor(char *buf, int off, dev_t rdev, t_max *max, t_dir *list)
+{
+    char *res;
+    int i;
+    int num;
+    int spc;
+    int until;
+
+    i = 0;
+    printf("%s\n", list->name);
+    num = major(rdev);
+    spc = space(num);
+    until = space(max->max_major);
+    while (spc < until)
+    {
+        buf[off++] = ' ';
+        spc++;
+    }
+    res = ft_itoa(num);
+    while (res[i])
+        buf[off++] = res[i++];
+    i = 0;
+    buf[off++] = ',';
+    buf[off++] = ' ';
+    num = minor(rdev);
+    spc = space(num);
+    until = space(max->max_minor);
+    while (spc < until)
+    {
+        buf[off++] = ' ';
+        spc++;
+    }
+    res = ft_itoa(num);
+    while (res[i])
+        buf[off++] = res[i++];
+    buf[off++] = ' ';
+    return (off);
+}
+
+int     print_maj_min_std(char *buf, int off, dev_t rdev,  t_max *max)
+{
+    int spc;
+    int i;
+    int num;
+    char *res;
+    int m;
+
+    i = 0;
+    spc = space(max->max_major);
+    while (i <= spc)
+    {
+        buf[off++] = ' ';
+        i++;
+    }
+    spc = space(max->max_minor);
+    i = 0;
+    num = minor(rdev);
+    m = space(num);
+    while (m < spc)
+    {
+        buf[off++] = ' ';
+        spc++;
+    }
+    res = ft_itoa(num);
+    while (res[i])
+        buf[off++] = res[i++];
+    buf[off++] = ' ';
+    return (off);
+}
+
+int     print_link(char *buf, int off, t_dir *list)
+{
+    int res;
+    int i;
+    char b[1024];
+
+    res = readlink(list->path, b, 1024);
+    i = 0;
+    if (res > 0)
+    {
+        buf[off++] = ' ';
+        buf[off++] = '-';
+        buf[off++] = '>';
+        buf[off++] = ' ';
+        while (b[i])
+            buf[off++] = b[i++];
+    }
+        return (off);
+}
+
 int     print_l_flag(char *buf, int off, t_dir *list, int flags, t_max *max)
 {
     struct stat s;
@@ -282,8 +372,40 @@ int     print_l_flag(char *buf, int off, t_dir *list, int flags, t_max *max)
     off = print_link_number(buf, off, list, max);
     off = print_user_name(buf, off, list, max);
     off = print_group_name(buf, off, list, max);
-    off = print_size(buf, off, list, max);
+    if (list->special_file == 0)
+        off = print_size(buf, off, list, max);
+    if (list->special_file == 1)
+    {
+            off = print_major_minor(buf, off, s.st_rdev, max, list);
+    }
     off = print_time(buf, off, list);
+    return (off);
+}
+
+int     print_total(char *buf, int off, t_dir *list)
+{
+    struct stat s;
+    int total;
+    char *res;
+
+    total = 0;
+    while (list)
+    {
+        lstat(list->path, &s);
+        total += s.st_blocks;
+        list = list->next;
+    }
+    res = ft_itoa(total);
+    buf[off++] = 't';
+    buf[off++] = 'o';
+    buf[off++] = 't';
+    buf[off++] = 'a';
+    buf[off++] = 'l';
+    buf[off++] = ' ';
+    total = 0;
+     while (res[total])
+         buf[off++] = res[total++];
+    buf[off++] = '\n';
     return (off);
 }
 
@@ -295,13 +417,21 @@ int     print_dir_content(char *buf, t_dir *list, int flags, int off)
     max = new_max(list);
     flags++;
     i = 0;
+    if (check_flag('l', flags))
+    {
+       off = print_total(buf, off, list);
+    }
     while (list)
     {
         i = 0;
         if (check_flag('l', flags))
+        {
             off = print_l_flag(buf, off, list, flags, max);
+        }
         while (list->name[i])
             buf[off++] = list->name[i++];
+        if (check_flag('l', flags))
+            off = print_link(buf, off, list);
         if (list->next)
             buf[off++] = ' ';
         else

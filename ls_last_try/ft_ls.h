@@ -16,6 +16,9 @@
 typedef struct s_dir{
 	char *name;
 	char *path;
+	int		special_file;
+	int		std;
+	int lnk;
 	int		level;
 	nlink_t link;
 	off_t   size;
@@ -31,6 +34,8 @@ typedef struct s_max{
 	size_t		max_user;
 	size_t		max_links;
 	off_t		max_size;
+	int			max_major;
+	int			max_minor;
 }t_max;
 
 // typedef struct s_stat{

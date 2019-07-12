@@ -28,11 +28,21 @@ t_max *new_max(t_dir *list)
     res->max_links = 0;
     res->max_size = 0;
     res->max_user = 0;
+    res->max_major = 0;
+    res->max_minor = 0;
     while (list)
     {
         lstat(list->path, &s);
+        if (S_ISBLK(s.st_mode) || S_ISCHR(s.st_mode))
+            list->special_file = 1;
+        if (S_ISLNK(s.st_mode))
+            list->lnk = 1;
         p = getpwuid(s.st_uid);
         g = getgrgid(s.st_gid);
+        if (major(s.st_rdev) > res->max_major)
+            res->max_major = major(s.st_rdev);
+        if (minor(s.st_rdev) > res->max_minor)
+            res->max_minor = minor(s.st_rdev);
         if (p != NULL)
         {
             if (ft_strlen(p->pw_name) > res->max_user)
@@ -82,11 +92,14 @@ t_dir   *new_list(char *name, char *path, int level)
     new->next = NULL;
     new->prev = NULL;
     new->level = level;
+    new->std = 0;
+    new->link = 0;
     new->inside = NULL;
     new->user = NULL;
     new->group = NULL;
-    new->link = 0;
+    new->lnk = 0;
     new->size = 0;
+    new->special_file = 0;
     return (new);
 }
 
