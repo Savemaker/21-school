@@ -18,7 +18,10 @@ char    *create_path(char *name, char *path)
     char *new;
     char *res;
 
-    new = ft_strjoin(path, "/");
+    if (ft_strcmp(path, "/") != 0)
+        new = ft_strjoin(path, "/");
+    else
+        new = path;
     res = ft_strjoin(new, name);
     return (res);
 }

@@ -53,7 +53,7 @@ int     print_dir_basic_recursive(char *buf, t_dir *dir_list, int flags)
     {
         j = 0;
         while (dir_list->path[j])
-            buf[i++] = dir_list->path[j++];
+            buf[i++] = dir_list->path[j++];     //name = path
         buf[i++] = ':';
         buf[i++] = '\n';
         cur = open_dir(dir_list->path, flags);
@@ -78,16 +78,18 @@ int    basic_stuf(char *path, int flags, int offset, int c, char *buf)  //flags 
     if (c <= 1)
     {
         check = lstat(path, &s);
-        if (S_ISDIR(s.st_mode) == 1)
+        if (check == 0)
         {
-            content = open_dir(path, flags);
-            offset += print_dir_content(buf, content, flags, offset);
+            if (S_ISDIR(s.st_mode) == 1)
+            {
+                content = open_dir(path, flags);
+                offset += print_dir_content(buf, content, flags, offset);
+            }
+            else
+                offset = print_file_name(path, offset, buf);
         }
         else
-        {
-            if (check == 0)
-                print_file_name(path, offset, buf);
-        }
+            perror(path);
         if (check_flag('R', flags))
         {
             if (content)
