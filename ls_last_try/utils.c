@@ -1,5 +1,14 @@
 #include "ft_ls.h"
 
+int     no_dots_dirs(char *name)
+{
+    if (ft_strcmp(".", name) == 0)
+        return (1);
+    if (ft_strcmp("..", name) == 0)
+        return (1);
+    return (0);
+}
+
 int     arg_len(char **argv, int start)
 {
     int i;

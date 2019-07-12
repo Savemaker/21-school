@@ -65,8 +65,51 @@ int     default_sort(t_dir *dir, t_dir *dira)
     return (0);
 }
 
+int		reverse_sort(t_dir *dir, t_dir *dira)
+{
+	if (ft_strcmp(dir->name, dira->name) < 0)
+		return (1);
+	return (0);
+}
+
+int		time_sort(t_dir *dir, t_dir *dira)
+{
+	struct stat s;
+	struct stat sa;
+	time_t d;
+	time_t da;
+	lstat(dir->path, &s);
+	lstat(dira->path, &sa);
+	d = s.st_mtime;
+	da = sa.st_mtime;
+	if (d < da)
+		return (1);
+	return (0);
+}
+
+int		time_reverse_sort(t_dir *dir, t_dir *dira)
+{
+	struct stat s;
+	struct stat sa;
+	time_t d;
+	time_t da;
+	lstat(dir->path, &s);
+	lstat(dira->path, &sa);
+	d = s.st_mtime;
+	da = sa.st_mtime;
+	if (d > da)
+		return (1);
+	return (0);
+}
+
 void sorts(t_dir **head, int flags)
 {
-	flags++;
-    merge_sorting(head, default_sort);
+	if (check_flag('r', flags) && (check_flag('t', flags) == 0))
+		merge_sorting(head, reverse_sort);
+	else if (check_flag('t', flags) && (check_flag('r', flags) == 0))
+		merge_sorting(head, time_sort);
+	else if (check_flag('t', flags) && (check_flag('r', flags)==1))
+		merge_sorting(head, time_reverse_sort);
+	else
+    	merge_sorting(head, default_sort);
 }

@@ -1,18 +1,5 @@
 #include "ft_ls.h"
 
-int     ft_lstlen(t_list *list)
-{
-    int i;
-
-    i = 0;
-    while (list)
-    {
-        i++;
-        list = list->next;
-    }
-    return (i);
-}
-
 t_dir    *open_dir(char *path, int flags)   // returns sorted list of path content
 {
     DIR *dir;
@@ -24,17 +11,25 @@ t_dir    *open_dir(char *path, int flags)   // returns sorted list of path conte
     dir = opendir(path);
     if (dir == NULL)
     {
-        perror("ft_ls: ");
+        perror(path);
         return (NULL);
     }
     while ((d = readdir(dir)) != NULL)
     {
-        if (d->d_name[0] != '.')   //SJJSJSSJJSSJSJSJSJJ
+        if (check_flag('a', flags))
         {
             new = new_list(d->d_name, path, 0);
             append(&head, new);
         }
-   }
+        else
+        {
+            if (d->d_name[0] != '.')
+            {
+                new = new_list(d->d_name, path, 0);
+                append(&head, new);
+            }
+        }
+    }
     sorts(&head, flags);
     closedir(dir);
     return (head);
@@ -53,7 +48,7 @@ int     print_dir_basic_recursive(char *buf, t_dir *dir_list, int flags)
     {
         j = 0;
         while (dir_list->path[j])
-            buf[i++] = dir_list->path[j++];     //name = path
+            buf[i++] = dir_list->path[j++];    
         buf[i++] = ':';
         buf[i++] = '\n';
         cur = open_dir(dir_list->path, flags);
@@ -140,58 +135,6 @@ void    correct_list(t_dir **head, int flags)
     }
 }
 
-// void    print_arg_rec(t_dir *list, char *buf, int flags)
-// {
-//     int i;
-//     int j;
-//     t_dir *cur;
-//     int off;
-
-//     off = 0;
-//     i = 0;
-//     j = 0;
-//     while (list)
-//     {
-//         j = 0;
-//         while (list->path[j])
-//             buf[i++] = list->path[j++];
-//         buf[i++] = ':';
-//         buf[i++] = '\n';
-//         cur = open_dir(list->path, flags);
-//         i += print_dir_content(&buf[i], cur, flags);
-//         if (list->next)
-//             buf[i++] = '\n';
-//         list = list->next;
-//     }
-// }
-
-// int     output_rec(t_dir *dir_list, int flags, char *buf, int off)
-// {
-//     int i;
-
-//     i = 0;
-//     t_dir *cur;
-
-//     int j;
-//     j = 0;
-//     flags++;
-//     if (dir_list)
-//     {
-//         if (off > 0)
-//             buf[off++] = '\n';
-//     }
-//     i = 0;
-//         while (dir_list->path[i])
-//             buf[j++] = dir_list->path[i++];
-//         buf[j++] = ':';
-//         buf[j++] = '\n';
-//         cur = list_for_output(dir_list->name, flags);
-//         j += print_dir_content(&buf[j], cur, flags);
-//         if (dir_list->next)
-//             buf[j++] = '\n';
-//     return (j);
-// }
-
 void    expand_list(t_dir **list)
 {
     t_dir *args;
@@ -203,66 +146,31 @@ void    expand_list(t_dir **list)
     args = *list;
     while (args)
     {
-        dir = opendir(args->path);
-        if (dir == NULL)
+        if (no_dots_dirs(args->name) == 0)
         {
-            perror("gayy");
-            args = args->next;
-            continue;
-        }
-        while ((d = readdir(dir)) != NULL)
-        {
-            if (d->d_name[0] != '.')
+            dir = opendir(args->path);
+            if (dir == NULL)
             {
-                lstat(create_path(d->d_name, args->path), &s);
-                if (S_ISDIR(s.st_mode) == 1)
+                perror(args->path);
+                args = args->next;
+                continue;
+            }
+            while ((d = readdir(dir)) != NULL)
+            {
+                if (d->d_name[0] != '.')
                 {
-                    new = new_list(create_path(d->d_name, args->path), NULL, 1);
-                    new->next = args->next;
-                    args->next = new;
+                    lstat(create_path(d->d_name, args->path), &s);
+                    if (S_ISDIR(s.st_mode) == 1)
+                    {
+                        new = new_list(create_path(d->d_name, args->path), NULL, 1);
+                        new->next = args->next;
+                        args->next = new;
+                    }
                 }
             }
+            closedir(dir);
         }
-        closedir(dir);
         args = args->next;
-    }
-}
-
-// void    complex_stuf(char **argv, int flags)
-// {
-//     t_dir *arg_list;
-//     t_dir *dir_list;
-//     t_dir *file_list;
-//     int off;
-
-//     off = 0;
-//     arg_list = create_arg_list(argv, flags);
-//     fork_arg_list(arg_list, &dir_list, &file_list, ".");
-//     off += output_file_list(file_list, flags);
-//     off += output_dir_list(dir_list, flags, off);
-// }
-
-char    *right_arg(char *s)
-{
-    int i;
-    char *arg;
-
-    arg = (char *)malloc(sizeof(char) * 1024);
-    arg[1024] = '\0';
-    i = ft_strlen(s) - 1;
-    if (s[i] == '/')
-        return (s);
-    else
-    {
-        i = 0;
-        while (s[i])
-        {
-            arg[i] = s[i];
-            i++;
-        }
-        arg[i++] = '/';
-        arg[i] = '\0';
-        return (arg); 
     }
 }
 

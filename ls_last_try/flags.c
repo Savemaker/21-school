@@ -46,6 +46,14 @@ int    check_flag(char flag, int flags)
     if (flag == 'l')
         if (((flags>> 6) & 1) == 1)
             return (1);
-
+    if (flag == 'a')
+        if (((flags >> 2) & 1) == 1)
+            return (1);
+    if (flag == 'r')
+        if (((flags >>7) & 1) == 1)
+            return (1);
+    if (flag == 't')
+        if (((flags >> 8) & 1) == 1)
+            return (1);
     return (0);
 }
