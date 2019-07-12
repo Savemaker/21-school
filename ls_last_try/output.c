@@ -387,25 +387,31 @@ int     print_total(char *buf, int off, t_dir *list)
     struct stat s;
     int total;
     char *res;
+    int check;
 
+    check = 0;
     total = 0;
     while (list)
     {
+        check++;
         lstat(list->path, &s);
         total += s.st_blocks;
         list = list->next;
     }
-    res = ft_itoa(total);
-    buf[off++] = 't';
-    buf[off++] = 'o';
-    buf[off++] = 't';
-    buf[off++] = 'a';
-    buf[off++] = 'l';
-    buf[off++] = ' ';
-    total = 0;
-     while (res[total])
-         buf[off++] = res[total++];
-    buf[off++] = '\n';
+    if (check > 0)
+    {
+        res = ft_itoa(total);
+        buf[off++] = 't';
+        buf[off++] = 'o';
+        buf[off++] = 't';
+        buf[off++] = 'a';
+        buf[off++] = 'l';
+        buf[off++] = ' ';
+        total = 0;
+        while (res[total])
+            buf[off++] = res[total++];
+        buf[off++] = '\n';
+    }
     return (off);
 }
 

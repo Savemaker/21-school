@@ -266,6 +266,46 @@ char    *right_arg(char *s)
     }
 }
 
+int     complex_stuf(char **argv, int start, int flags, char *buf, int off)
+{
+    t_dir *new;
+    t_dir *args;
+    int i;
+    struct stat s;
+    int st;
+
+    st = 0;
+    i = 0;
+    args = NULL;
+    while (argv[start])
+    {
+        new = new_list(argv[start], NULL, 0);
+        append(&args, new);
+        start++;
+    }
+    sorts(&args, flags);
+    while (args)
+    {
+        i = 0;
+        st = lstat(args->name, &s);
+        if (st == 0)
+        {
+            while (args->name[i])
+                buf[off++] = args->name[i++];
+            buf[off++] = ':';
+            buf[off++] = '\n';
+        }
+        off = basic_stuf(args->name, flags, off, 1, buf);
+        if (st == 0)
+        {
+        if (args->next)
+            buf[off++] = '\n';
+        }
+        args = args->next;
+    }
+    return (off);
+}
+
 int   parse_args(char **argv, int flags, int start, char *buf)
 {
     int c;
@@ -278,10 +318,10 @@ int   parse_args(char **argv, int flags, int start, char *buf)
     {
         ret = basic_stuf(argv[start], flags, 0, c, buf);
     }
-    // if (c > 1)
-    // {
-    //     complex_stuf(&argv[start], flags);
-    // }
+    if (c > 1)
+    {
+       ret = complex_stuf(argv, start, flags, buf, 0);
+    }
     return (ret);
 }
 
