@@ -174,16 +174,57 @@ void    expand_list(t_dir **list)
     }
 }
 
+// int     complex_stuf(char **argv, int start, int flags, char *buf, int off)
+// {
+    // t_dir *new;
+    // t_dir *args;
+    // int i;
+    // struct stat s;
+    // int st;
+
+    // st = 0;
+    // i = 0;
+    // args = NULL;
+    // while (argv[start])
+    // {
+    //     new = new_list(argv[start], NULL, 0);
+    //     append(&args, new);
+    //     start++;
+    // }
+    // sorts(&args, flags);
+    // while (args)
+    // {
+    //     i = 0;
+    //     st = lstat(args->name, &s);
+    //     if (st == 0)
+    //     {
+    //         if (S_ISDIR(s.st_mode) == 1)
+    //         {
+    //             while (args->name[i])
+    //                 buf[off++] = args->name[i++];
+    //             buf[off++] = ':';
+    //             buf[off++] = '\n';
+    //         }
+    //     }
+    //     off = basic_stuf(args->name, flags, off, 1, buf);
+    //     if (st == 0)
+    //     {
+    //         if (args->next)
+    //             buf[off++] = '\n';
+    //     }
+    //     args = args->next;
+    // }
+//     return (off);
+// }
+
 int     complex_stuf(char **argv, int start, int flags, char *buf, int off)
 {
-    t_dir *new;
+    t_dir *files;
+    t_dir *dirs;
     t_dir *args;
-    int i;
+    t_dir *new;
     struct stat s;
-    int st;
 
-    st = 0;
-    i = 0;
     args = NULL;
     while (argv[start])
     {
@@ -192,24 +233,31 @@ int     complex_stuf(char **argv, int start, int flags, char *buf, int off)
         start++;
     }
     sorts(&args, flags);
-    while (args)
+    complex_fork(args, &dirs, &files);
+    while (files)
     {
-        i = 0;
-        st = lstat(args->name, &s);
-        if (st == 0)
+        if (lstat(files->path, &s) == 0)
         {
-            while (args->name[i])
-                buf[off++] = args->name[i++];
-            buf[off++] = ':';
-            buf[off++] = '\n';
+            off = print_file_name(files->path, off, buf);
+            if (files->next)
+                buf[off++] = ' ';
         }
-        off = basic_stuf(args->name, flags, off, 1, buf);
-        if (st == 0)
-        {
-        if (args->next)
+        else
+            perror(files->name);
+        files = files->next;
+    }
+    buf[off++] = '\n';
+    if (dirs)
+        buf[off++] = '\n';
+    while (dirs)
+    {
+        off = print_file_name(dirs->name, off, buf);
+        buf[off++] = ':';
+        buf[off++] = '\n';
+        off = basic_stuf(dirs->path, flags, off, 1, buf);
+        if (dirs->next)
             buf[off++] = '\n';
-        }
-        args = args->next;
+        dirs = dirs ->next;
     }
     return (off);
 }

@@ -103,6 +103,30 @@ t_dir   *new_list(char *name, char *path, int level)
     return (new);
 }
 
+void    complex_fork(t_dir *arg, t_dir **dir, t_dir **file)
+{
+    struct stat s;
+    t_dir *new;
+
+    *dir = NULL;
+    *file = NULL;
+    while (arg)
+    {
+        lstat(arg->path, &s);
+        if ((S_ISDIR(s.st_mode) == 1) && (no_dots_dirs(arg->name) == 0))
+        {
+            new = new_list(arg->name, NULL, 0);
+            append(dir, new);
+        }
+        else if (S_ISDIR(s.st_mode) == 0)
+        {
+            new = new_list(arg->name, NULL, 0);
+            append(file, new);
+        }
+        arg = arg->next;
+    }
+}
+
 void    fork_arg_list(t_dir *arg, t_dir **dir, t_dir **file, char *path)
 {
     struct stat s;

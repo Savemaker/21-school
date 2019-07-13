@@ -42,6 +42,5 @@ int   print_file_name(char *path, int off, char *buf)
     i = 0;
     while (path[i])
         buf[off++] = path[i++];
-    buf[off++] = '\n';
     return (off);
 }

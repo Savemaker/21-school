@@ -123,6 +123,7 @@ void    append(t_dir **head, t_dir *node);
 void    fork_arg_list(t_dir *arg, t_dir **dir, t_dir **file, char *path);
 void    expand_list(t_dir **list);
 void    correct_list(t_dir **head, int flags);
+void    complex_fork(t_dir *arg, t_dir **dir, t_dir **file);
 
 void	sorts(t_dir **head, int flags);
 t_dir	*merge(t_dir *a, t_dir *b, int(f)(t_dir *, t_dir *));
