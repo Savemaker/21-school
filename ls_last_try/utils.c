@@ -35,12 +35,47 @@ char    *create_path(char *name, char *path)
     return (res);
 }
 
-int   print_file_name(char *path, int off, char *buf)
+int   print_file_name(char *path, char *buf)
 {
+    int i;
+    int off;
+
+    off = 0;
+    i = 0;
+    while (path[i])
+        buf[off++] = path[i++];
+    buf[off++] = ':';
+    buf[off++] = '\n';
+    return (off);
+}
+
+int   print_file_name_comp(char *path)
+{
+    int i;
+    int off;
+    char buf[4096];
+
+    off = 0;
+    i = 0;
+    while (path[i])
+        buf[off++] = path[i++];
+    buf[off++] = ':';
+    buf[off++] = '\n';
+    write(1, buf, off);
+    return (off);
+}
+
+void    print_file(char *path)
+{
+    char buf[4096];
     int i;
 
     i = 0;
     while (path[i])
-        buf[off++] = path[i++];
-    return (off);
+    {
+        buf[i] = path[i];
+        i++;
+    }
+    buf[i++] = '\n';
+    write(1, buf, i);
 }

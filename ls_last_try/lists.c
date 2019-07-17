@@ -12,7 +12,6 @@ void    append(t_dir **head, t_dir *node)
 		while (temp->next)
 			temp = temp->next;
 		temp->next = node;
-		node->prev = temp;
 	}
 }
 
@@ -90,10 +89,10 @@ t_dir   *new_list(char *name, char *path, int level)
     else
         new->path = create_path(name, path);
     new->next = NULL;
-    new->prev = NULL;
     new->level = level;
     new->std = 0;
     new->link = 0;
+    new->dir = 0;
     new->inside = NULL;
     new->user = NULL;
     new->group = NULL;
@@ -112,17 +111,21 @@ void    complex_fork(t_dir *arg, t_dir **dir, t_dir **file)
     *file = NULL;
     while (arg)
     {
-        lstat(arg->path, &s);
-        if ((S_ISDIR(s.st_mode) == 1) && (no_dots_dirs(arg->name) == 0))
+        if (lstat(arg->path, &s) == 0)
         {
-            new = new_list(arg->name, NULL, 0);
-            append(dir, new);
+            if ((S_ISDIR(s.st_mode) == 1) && (no_dots_dirs(arg->name) == 0))
+            {
+                new = new_list(arg->name, NULL, 0);
+                append(dir, new);
+            }
+            else if (S_ISDIR(s.st_mode) == 0)
+            {
+                new = new_list(arg->name, NULL, 0);
+                append(file, new);
+            }
         }
-        else if (S_ISDIR(s.st_mode) == 0)
-        {
-            new = new_list(arg->name, NULL, 0);
-            append(file, new);
-        }
+        else
+            perror(arg->path);
         arg = arg->next;
     }
 }
@@ -136,17 +139,21 @@ void    fork_arg_list(t_dir *arg, t_dir **dir, t_dir **file, char *path)
     *file = NULL;
     while (arg)
     {
-        lstat(arg->path, &s);    //path = name
-        if ((S_ISDIR(s.st_mode) == 1) && (no_dots_dirs(arg->name) == 0))
-        {
-            new = new_list(arg->name, path, 0);
-            append(dir, new);
+        if (lstat(arg->path, &s) == 0)
+        {  
+            if ((S_ISDIR(s.st_mode) == 1) && (no_dots_dirs(arg->name) == 0))
+            {
+                new = new_list(arg->name, path, 0);
+                append(dir, new);
+            }
+            else if (S_ISDIR(s.st_mode) == 0)
+            {
+                new = new_list(arg->name, path, 0);
+                append(file, new);
+            }
         }
-        else if (S_ISDIR(s.st_mode) == 0)
-        {
-            new = new_list(arg->name, path, 0);
-            append(file, new);
-        }
+        else
+            perror(arg->path);
         arg = arg->next;
     }
 }

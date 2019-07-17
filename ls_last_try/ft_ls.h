@@ -11,13 +11,14 @@
 #include <time.h>
 #include <sys/types.h>
 
-#define BUF_SIZE 55000000
+#define BUF_SIZE 8000000
 
 typedef struct s_dir{
 	char *name;
 	char *path;
 	int		special_file;
 	int		std;
+	int		dir;
 	int lnk;
 	int		level;
 	nlink_t link;
@@ -25,8 +26,7 @@ typedef struct s_dir{
 	char		*group;
 	char		*user;
 	struct s_dir *next;
-	struct s_dir *inside;
-	struct s_dir *prev; //delete this shit 
+	struct s_dir *inside; 
 }t_dir;
 
 typedef struct s_max{
@@ -91,18 +91,18 @@ int     arg_len(char **argv, int start);
 
 
 
-int    	basic_stuf(char *path, int flags, int offset, int c, char *buf);
-int     complex_stuf(char **argv, int start, int flags, char *buf, int off);
-int		parse_args(char **argv, int flags, int start, char *buf);
+int    	basic_stuf(char *path, int flags, int offset, int c);
+int     complex_stuf(char **argv, int start, int flags, int off);
+int		parse_args(char **argv, int flags, int start);
 
 t_dir   *open_dir(char *path, int flags);
 
-int     print_dir_content(char *buf, t_dir *list, int flags, int off);
-int		print_file_name(char *path, int off, char *buf);
+int     print_dir_content(t_dir *list, int flags, int n, char *argsname);
+int		print_file_name(char *path, char *buf);
 int     print_dir_basic_recursive(char *buf, t_dir *dir_list, int flags);
 
 int     print_total(char *buf, int off, t_dir *list);
-int     print_l_flag(char *buf, int off, t_dir *list, int flags, t_max *max);
+int     print_l_flag(char *buf, int off, t_dir *list, t_max *max);
 int     print_file_type(char *buf, int off, mode_t st_mode);
 int     print_l_rights(char *buf, int off, mode_t st_mode);
 int     print_l_extended(char *buf, int off, char *path);
@@ -110,7 +110,7 @@ int     print_link_number(char *buf, int off, t_dir *list, t_max *max);
 int     print_user_name(char *buf, int off, t_dir *list, t_max *max);
 int     print_group_name(char *buf, int off, t_dir *list, t_max *max);
 int     print_size(char *buf, int off, t_dir *list, t_max *max);
-int     print_major_minor(char *buf, int off, dev_t rdev, t_max *max, t_dir *list);
+int     print_major_minor(char *buf, int off, dev_t rdev, t_max *max);
 int     print_time(char *buf, int off, t_dir *list);
 int     print_link(char *buf, int off, t_dir *list);
 
@@ -121,7 +121,7 @@ t_dir   *new_list(char *name, char *path, int level);
 t_max 	*new_max(t_dir *list);
 void    append(t_dir **head, t_dir *node);
 void    fork_arg_list(t_dir *arg, t_dir **dir, t_dir **file, char *path);
-void    expand_list(t_dir **list);
+void    expand_list(t_dir **list, int flags);
 void    correct_list(t_dir **head, int flags);
 void    complex_fork(t_dir *arg, t_dir **dir, t_dir **file);
 
@@ -138,4 +138,6 @@ int     no_dots_dirs(char *name);
 char    *create_path(char *name, char *path);
 int     arg_len(char **argv, int start);
 void    output(char *buf, int ret);
+void    print_file(char *path);
+int		print_file_name_comp(char *path);
 #endif

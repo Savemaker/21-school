@@ -9,15 +9,11 @@ t_dir *merge(t_dir *a, t_dir *b, int(f)(t_dir *, t_dir *))
 	if ((f(a,b) == 0))
 	{
 		a->next=merge(a->next, b, f);
-		a->next->prev=a;
-		a->prev=NULL;
 		return (a);
 	}
 	else
 	{
 		b->next=merge(b->next, a, f);
-		b->next->prev=b;
-		b->prev=NULL;
 		return (b);
 	}
 }

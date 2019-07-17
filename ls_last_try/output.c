@@ -61,6 +61,7 @@ int     print_l_extended(char *buf, int off, char *path)
     {
         perror(path);
         buf[off++] = ' ';
+        buf[off++] = ' ';
     }
     return (off);
 }
@@ -69,17 +70,17 @@ int     print_file_type(char *buf, int off, mode_t st_mode)
 {
     if (S_ISDIR(st_mode))
         buf[off++] = 'd';
-    if (S_ISBLK(st_mode))
+    else if (S_ISBLK(st_mode))
         buf[off++] = 'b';
-    if (S_ISCHR(st_mode))
+    else if (S_ISCHR(st_mode))
         buf[off++] = 'c';
-    if (S_ISLNK(st_mode))
+    else if (S_ISLNK(st_mode))
         buf[off++] = 'l';
-    if (S_ISSOCK(st_mode))
+    else if (S_ISSOCK(st_mode))
         buf[off++] = 's';
-    if (S_ISFIFO(st_mode))
+    else if (S_ISFIFO(st_mode))
         buf[off++] = 'p';
-    if (S_ISREG(st_mode))
+    else if (S_ISREG(st_mode))
         buf[off++] = '-';
     return (off);
 }
@@ -197,10 +198,11 @@ int     check_six_months(time_t stm)
     time_t then;
     time_t dif;
 
+    //15638400
     now = time(NULL);
     then = stm;
     dif = now - then;
-    if (dif >= 15638400)
+    if (dif > 15811200)
         return (1);   //yes 6 months hv pssd
     return (0);
 }
@@ -241,7 +243,7 @@ int     print_time(char *buf, int off, t_dir *list)
     return (off);
 }
 
-int     print_major_minor(char *buf, int off, dev_t rdev, t_max *max, t_dir *list)
+int     print_major_minor(char *buf, int off, dev_t rdev, t_max *max)
 {
     char *res;
     int i;
@@ -250,7 +252,6 @@ int     print_major_minor(char *buf, int off, dev_t rdev, t_max *max, t_dir *lis
     int until;
 
     i = 0;
-    printf("%s\n", list->name);
     num = major(rdev);
     spc = space(num);
     until = space(max->max_major);
@@ -300,10 +301,23 @@ int     print_link(char *buf, int off, t_dir *list)
         return (off);
 }
 
-int     print_l_flag(char *buf, int off, t_dir *list, int flags, t_max *max)
+int     print_std_spaces(t_dir *list, char *buf, int off)
+{
+    int i;
+
+    i = 6;
+    if (ft_strcmp(list->name, "stderr") == 0 || ft_strcmp(list->name, "stdin") == 0 || ft_strcmp(list->name, "stdout") == 0)
+    while (i > 0)
+    {
+        buf[off++] = ' ';
+        i--;
+    }
+    return (off);
+}
+
+int     print_l_flag(char *buf, int off, t_dir *list, t_max *max)
 {
     struct stat s;
-    flags++; ///useleeesss
     lstat(list->path, &s);
     off = print_file_type(buf, off, s.st_mode);
     off = print_l_rights(buf, off, s.st_mode);
@@ -311,11 +325,12 @@ int     print_l_flag(char *buf, int off, t_dir *list, int flags, t_max *max)
     off = print_link_number(buf, off, list, max);
     off = print_user_name(buf, off, list, max);
     off = print_group_name(buf, off, list, max);
+    off = print_std_spaces(list, buf, off);
     if (list->special_file == 0)
         off = print_size(buf, off, list, max);
     if (list->special_file == 1)
     {
-            off = print_major_minor(buf, off, s.st_rdev, max, list);
+            off = print_major_minor(buf, off, s.st_rdev, max);
     }
     off = print_time(buf, off, list);
     return (off);
@@ -354,36 +369,43 @@ int     print_total(char *buf, int off, t_dir *list)
     return (off);
 }
 
-int     print_dir_content(char *buf, t_dir *list, int flags, int off)
+int     print_dir_content(t_dir *list, int flags, int n, char *argsname)
 {
     int i;
-    t_max *max;
-
+    int off;
+    t_max *max = NULL;
+    char tb[BUF_SIZE];
     max = new_max(list);
-    flags++;
     i = 0;
+    off = 0;
+    if (argsname)
+        off = print_file_name(argsname, tb);
     if (check_flag('l', flags))
     {
-       off = print_total(buf, off, list);
+       off = print_total(tb, off, list);
     }
+    
     while (list)
     {
         i = 0;
         if (check_flag('l', flags))
         {
-            off = print_l_flag(buf, off, list, flags, max);
+            off = print_l_flag(tb, off, list, max);
         }
         while (list->name[i])
-            buf[off++] = list->name[i++];
+            tb[off++] = list->name[i++];
         if (check_flag('l', flags))
-            off = print_link(buf, off, list);
+            off = print_link(tb, off, list);
         if (list->next)
-            buf[off++] = ' ';
+            tb[off++] = ' ';
         else
-            buf[off++] = '\n';
+            tb[off++] = '\n';
         if (check_flag('l', flags) && list->next)
-            buf[off++] = '\n';
+            tb[off++] = '\n';
         list = list->next;
     }
+    if (n == 1)
+        tb[off++] = '\n';
+    write(1, tb, off);
     return (off);
 }

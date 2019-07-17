@@ -4,6 +4,7 @@ t_dir    *open_dir(char *path, int flags)   // returns sorted list of path conte
 {
     DIR *dir;
     struct dirent *d;
+    struct stat s;
     t_dir *head;
     t_dir *new;
 
@@ -18,14 +19,23 @@ t_dir    *open_dir(char *path, int flags)   // returns sorted list of path conte
     {
         if (check_flag('a', flags))
         {
-            new = new_list(d->d_name, path, 0);
-            append(&head, new);
+            // if (no_dots_dirs(d->d_name) == 0)
+            // {
+                lstat(create_path(d->d_name, path), &s);
+                new = new_list(d->d_name, path, 0);
+                if (S_ISDIR(s.st_mode) == 1)
+                    new->dir = 1;
+                append(&head, new);
+            // }
         }
         else
         {
             if (d->d_name[0] != '.')
             {
+                lstat(create_path(d->d_name, path), &s);
                 new = new_list(d->d_name, path, 0);
+                if (S_ISDIR(s.st_mode) == 1)
+                    new->dir = 1;
                 append(&head, new);
             }
         }
@@ -52,7 +62,7 @@ int     print_dir_basic_recursive(char *buf, t_dir *dir_list, int flags)
         buf[i++] = ':';
         buf[i++] = '\n';
         cur = open_dir(dir_list->path, flags);
-        i = print_dir_content(buf, cur, flags, i);
+        i = print_dir_content(cur, flags, i, dir_list->name);
         if (dir_list->next)
             buf[i++] = '\n';
         dir_list = dir_list->next;
@@ -60,8 +70,7 @@ int     print_dir_basic_recursive(char *buf, t_dir *dir_list, int flags)
     return (i);
 }
 
-
-int    basic_stuf(char *path, int flags, int offset, int c, char *buf)  //flags ???
+int    basic_stuf(char *path, int flags, int offset, int c)  //flags ???
 {
     t_dir *content;
     t_dir *dir_list;
@@ -78,10 +87,10 @@ int    basic_stuf(char *path, int flags, int offset, int c, char *buf)  //flags 
             if (S_ISDIR(s.st_mode) == 1)
             {
                 content = open_dir(path, flags);
-                offset += print_dir_content(buf, content, flags, offset);
+                print_dir_content(content, flags, check_flag('R', flags), NULL);
             }
             else
-                offset = print_file_name(path, offset, buf);
+                print_file(path);
         }
         else
             perror(path);
@@ -89,11 +98,8 @@ int    basic_stuf(char *path, int flags, int offset, int c, char *buf)  //flags 
         {
             if (content)
             {
-                buf[offset++] = '\n';
                 fork_arg_list(content, &dir_list, &file, path);
-                expand_list(&dir_list);
-                correct_list(&dir_list, flags);
-                offset += print_dir_basic_recursive(&buf[offset], dir_list, flags);
+                expand_list(&dir_list, flags);
             }
         }
     }
@@ -108,7 +114,7 @@ void    correct_list(t_dir **head, int flags)
     t_dir *point;
 
     list = *head;
-    while (list)
+    while (list && list->level != 0)
     {
         if (list->level == 0)
         {
@@ -135,95 +141,94 @@ void    correct_list(t_dir **head, int flags)
     }
 }
 
-void    expand_list(t_dir **list)
+int     print_files(char *name, char *buf)
+{
+    int i;
+    int off;
+
+    off = 0;
+    i = 0;
+    while (name[i])
+        buf[off++] = name[i++];
+    buf[off++] = ' ';
+    return (off);
+}
+
+void    expand_list(t_dir **list, int flags)
 {
     t_dir *args;
     t_dir *new;
-    DIR *dir;
-    struct stat s;
-    struct dirent *d;
+    t_dir *open;
+    int n;
+    t_dir *temp;
+    t_dir *head;
+    head = NULL;
+    t_dir *t;
 
     args = *list;
-    while (args)
+    while (args)    //empty jp libft  ..
     {
-        if (no_dots_dirs(args->name) == 0)
+        n = 0;
+        if (no_dots_dirs(args->path) == 0)
         {
-            dir = opendir(args->path);
-            if (dir == NULL)
+            open = open_dir(args->path, flags);
+            temp = open;
+            while (open)
             {
-                perror(args->path);
-                args = args->next;
-                continue;
-            }
-            while ((d = readdir(dir)) != NULL)
-            {
-                if (d->d_name[0] != '.')
+                if (open->dir == 1 && no_dots_dirs(open->name) == 0)
                 {
-                    lstat(create_path(d->d_name, args->path), &s);
-                    if (S_ISDIR(s.st_mode) == 1)
-                    {
-                        new = new_list(create_path(d->d_name, args->path), NULL, 1);
-                        new->next = args->next;
-                        args->next = new;
-                    }
+                    new = new_list(create_path(open->name, args->path), NULL, 1);
+                    append(&head, new);
                 }
+                open = open->next;
             }
-            closedir(dir);
+            if (head)
+            {
+                sorts(&head, flags);
+                t = args->next;
+                args->next = head;
+                while (head->next)
+                    head = head->next;
+                head->next = t;
+            }
+            head = NULL;
         }
+        if (args->next)
+            n = 1;
+        print_dir_content(temp, flags, n, args->path);
         args = args->next;
     }
 }
 
-// int     complex_stuf(char **argv, int start, int flags, char *buf, int off)
-// {
-    // t_dir *new;
-    // t_dir *args;
-    // int i;
-    // struct stat s;
-    // int st;
+int    output_files(t_dir *files)
+{
+    char buf[4096];
+    int i;
+    int off;
 
-    // st = 0;
-    // i = 0;
-    // args = NULL;
-    // while (argv[start])
-    // {
-    //     new = new_list(argv[start], NULL, 0);
-    //     append(&args, new);
-    //     start++;
-    // }
-    // sorts(&args, flags);
-    // while (args)
-    // {
-    //     i = 0;
-    //     st = lstat(args->name, &s);
-    //     if (st == 0)
-    //     {
-    //         if (S_ISDIR(s.st_mode) == 1)
-    //         {
-    //             while (args->name[i])
-    //                 buf[off++] = args->name[i++];
-    //             buf[off++] = ':';
-    //             buf[off++] = '\n';
-    //         }
-    //     }
-    //     off = basic_stuf(args->name, flags, off, 1, buf);
-    //     if (st == 0)
-    //     {
-    //         if (args->next)
-    //             buf[off++] = '\n';
-    //     }
-    //     args = args->next;
-    // }
-//     return (off);
-// }
+    off = 0;
+    while (files)
+    {
+        i = 0;
+        while(files->path[i])
+            buf[off++] = files->path[i++];
+        if (files->next)
+            buf[off++] = ' ';
+        files = files->next;
+    }
+    if (i > 0)
+        buf[off++] = '\n';
+    write(1, buf, off);
+    return (off);
+}
 
-int     complex_stuf(char **argv, int start, int flags, char *buf, int off)
+int     complex_stuf(char **argv, int start, int flags, int off)
 {
     t_dir *files;
     t_dir *dirs;
     t_dir *args;
     t_dir *new;
-    struct stat s;
+    int c;
 
     args = NULL;
     while (argv[start])
@@ -234,49 +239,35 @@ int     complex_stuf(char **argv, int start, int flags, char *buf, int off)
     }
     sorts(&args, flags);
     complex_fork(args, &dirs, &files);
-    while (files)
-    {
-        if (lstat(files->path, &s) == 0)
-        {
-            off = print_file_name(files->path, off, buf);
-            if (files->next)
-                buf[off++] = ' ';
-        }
-        else
-            perror(files->name);
-        files = files->next;
-    }
-    buf[off++] = '\n';
-    if (dirs)
-        buf[off++] = '\n';
+    c = output_files(files);
+    if (dirs && c > 0)
+        write(1, "\n", 1);
     while (dirs)
     {
-        off = print_file_name(dirs->name, off, buf);
-        buf[off++] = ':';
-        buf[off++] = '\n';
-        off = basic_stuf(dirs->path, flags, off, 1, buf);
+        print_file_name_comp(dirs->path);
+        basic_stuf(dirs->path, flags, 0, 1);
         if (dirs->next)
-            buf[off++] = '\n';
+            write(1, "\n", 1);
         dirs = dirs ->next;
     }
     return (off);
 }
 
-int   parse_args(char **argv, int flags, int start, char *buf)
+int   parse_args(char **argv, int flags, int start)
 {
     int c;
     int ret;
 
     c = arg_len(argv, start);
     if (argv[start] == NULL)
-       ret = basic_stuf(".", flags, 0, c, buf);
+       ret = basic_stuf(".", flags, 0, c);
     if (c == 1)
     {
-        ret = basic_stuf(argv[start], flags, 0, c, buf);
+       ret = basic_stuf(argv[start], flags, 0, c);
     }
     if (c > 1)
     {
-       ret = complex_stuf(argv, start, flags, buf, 0);
+       ret = complex_stuf(argv, start, flags, 0);
     }
     return (ret);
 }
@@ -290,22 +281,18 @@ int main(int argc, char **argv)
 {
     int flags;
     int start;
-    static char *buf;
     int ret;
 
-    buf = (char *)malloc(sizeof(char) * BUF_SIZE);
-    buf[BUF_SIZE] = '\0';
     start = 0;
     flags = 0;
     if (argc == 1)
     {
-        ret = basic_stuf(".", flags, 0, 0, buf);
+        ret = basic_stuf(".", flags, 0, 0);
     }
     if (argc > 1)
     {
         start = get_flags(argv, &flags);
-        ret = parse_args(argv, flags, start, buf);
+        ret = parse_args(argv, flags, start);
     }
-    output(buf, ret);
     return (0);
 }
