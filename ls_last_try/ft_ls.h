@@ -10,6 +10,7 @@
 #include <grp.h>
 #include <time.h>
 #include <sys/types.h>
+#include <sys/acl.h>
 
 #define BUF_SIZE 8000000
 
@@ -17,6 +18,7 @@ typedef struct s_dir{
 	char *name;
 	char *path;
 	int		special_file;
+	int		extended;
 	int		std;
 	int		dir;
 	int lnk;
@@ -105,7 +107,7 @@ int     print_total(char *buf, int off, t_dir *list);
 int     print_l_flag(char *buf, int off, t_dir *list, t_max *max);
 int     print_file_type(char *buf, int off, mode_t st_mode);
 int     print_l_rights(char *buf, int off, mode_t st_mode);
-int     print_l_extended(char *buf, int off, char *path);
+int     print_l_extended(char *buf, int off, t_dir *list);
 int     print_link_number(char *buf, int off, t_dir *list, t_max *max);
 int     print_user_name(char *buf, int off, t_dir *list, t_max *max);
 int     print_group_name(char *buf, int off, t_dir *list, t_max *max);

@@ -41,25 +41,40 @@ int     print_l_rights(char *buf, int off, mode_t st_mode)
     return (off);
 }
 
-int     print_l_extended(char *buf, int off, char *path)
+int     print_l_extended(char *buf, int off, t_dir *list)
 {
     ssize_t res;
+    acl_t acl;
+    acl_entry_t d;
     char name[1024];
 
-    res = listxattr(path, name, 1024, XATTR_NOFOLLOW);
-    if (res == 0)
+    acl = NULL;
+    res = listxattr(list->path, name, 1024, XATTR_NOFOLLOW);
+    acl = acl_get_link_np(list->path, ACL_TYPE_EXTENDED);
+    if (acl && acl_get_entry(acl, ACL_FIRST_ENTRY, &d) == -1) 
+    {
+        acl_free(acl);
+        acl = NULL;
+    }
+    if (res == 0 && acl == NULL)
     {
         buf[off++] = ' ';
         buf[off++] =' ';
     }
     if (res > 0)
     {
+        list->extended = 1;
         buf[off++] = '@';
+        buf[off++] = ' ';
+    }
+    if (acl != NULL)
+    {
+        buf[off++] = '+';
         buf[off++] = ' ';
     }
     if (res < 0)
     {
-        perror(path);
+        perror(list->path);
         buf[off++] = ' ';
         buf[off++] = ' ';
     }
@@ -321,7 +336,7 @@ int     print_l_flag(char *buf, int off, t_dir *list, t_max *max)
     lstat(list->path, &s);
     off = print_file_type(buf, off, s.st_mode);
     off = print_l_rights(buf, off, s.st_mode);
-    off = print_l_extended(buf, off, list->path);
+    off = print_l_extended(buf, off, list);
     off = print_link_number(buf, off, list, max);
     off = print_user_name(buf, off, list, max);
     off = print_group_name(buf, off, list, max);
@@ -383,8 +398,7 @@ int     print_dir_content(t_dir *list, int flags, int n, char *argsname)
     if (check_flag('l', flags))
     {
         off = print_total(tb, off, list);
-    }
-    
+    } 
     while (list)
     {
         i = 0;

@@ -52,6 +52,9 @@ int     get_flags(char **args, int *flag)
 
 int    check_flag(char flag, int flags)
 {
+    if (flag == '@')
+        if (((flags >> 0) & 1) == 1)
+            return (1);
     if (flag == 'R')
         if (((flags >> 1) & 1) == 1)
             return (1);

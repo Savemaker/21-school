@@ -19,14 +19,11 @@ t_dir    *open_dir(char *path, int flags)   // returns sorted list of path conte
     {
         if (check_flag('a', flags))
         {
-            // if (no_dots_dirs(d->d_name) == 0)
-            // {
                 lstat(create_path(d->d_name, path), &s);
                 new = new_list(d->d_name, path, 0);
                 if (S_ISDIR(s.st_mode) == 1)
                     new->dir = 1;
                 append(&head, new);
-            // }
         }
         else
         {
@@ -106,40 +103,40 @@ int    basic_stuf(char *path, int flags, int offset, int c)  //flags ???
     return (offset);
 }
 
-void    correct_list(t_dir **head, int flags)
-{
-    t_dir *list;
-    t_dir *start;
-    t_dir *stop;
-    t_dir *point;
+// void    correct_list(t_dir **head, int flags)
+// {
+//     t_dir *list;
+//     t_dir *start;
+//     t_dir *stop;
+//     t_dir *point;
 
-    list = *head;
-    while (list && list->level != 0)
-    {
-        if (list->level == 0)
-        {
-            point = list;
-            list = list->next;
-            continue;
-        }
-        if (list->next && list->next->level == 0)
-        {
-            list = list->next;
-            continue;
-        }
-        start = list;
-        while (list->next && list->next->level != 0)
-            list = list->next;
-        stop = list->next;
-        list->next = NULL;
-        sorts(&start, flags);
-        point->next = start;
-        while (start->next && start->next->level == 1)
-            start = start->next;
-        start->next = stop;
-        list = stop;
-    }
-}
+//     list = *head;
+//     while (list && list->level != 0)
+//     {
+//         if (list->level == 0)
+//         {
+//             point = list;
+//             list = list->next;
+//             continue;
+//         }
+//         if (list->next && list->next->level == 0)
+//         {
+//             list = list->next;
+//             continue;
+//         }
+//         start = list;
+//         while (list->next && list->next->level != 0)
+//             list = list->next;
+//         stop = list->next;
+//         list->next = NULL;
+//         sorts(&start, flags);
+//         point->next = start;
+//         while (start->next && start->next->level == 1)
+//             start = start->next;
+//         start->next = stop;
+//         list = stop;
+//     }
+// }
 
 int     print_files(char *name, char *buf)
 {

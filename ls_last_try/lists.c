@@ -93,6 +93,7 @@ t_dir   *new_list(char *name, char *path, int level)
     new->std = 0;
     new->link = 0;
     new->dir = 0;
+    new->extended = 0;
     new->inside = NULL;
     new->user = NULL;
     new->group = NULL;
