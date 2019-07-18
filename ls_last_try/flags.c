@@ -1,5 +1,14 @@
 #include "ft_ls.h"
 
+int     usage(char c)
+{
+    write(1, "ls: illegal option -- ", 22);
+    ft_putchar(c);
+    ft_putchar('\n');
+    write(1, "usage: ./ft_ls [-@Radfglrtu] [file ...]\n", 40);
+    return (-1);
+}
+
 int     get_flags(char **args, int *flag)
 {
     int i;
@@ -13,24 +22,27 @@ int     get_flags(char **args, int *flag)
         {
             if (args[i][j] == '@')
                 *flag |= 1 << 0;
-            if (args[i][j] == 'R')
+           else if (args[i][j] == 'R')
                 *flag |= 1 << 1;
-            if (args[i][j] == 'a')
+            else if (args[i][j] == 'a')
                 *flag |= 1 << 2;
-            if (args[i][j] == 'd')
+           else if (args[i][j] == 'd')
                 *flag |= 1 << 3;
-            if (args[i][j] == 'f')
+            else if (args[i][j] == 'f')
                 *flag |= 1 << 4;
-            if (args[i][j] == 'g')
+           else  if (args[i][j] == 'g')
                 *flag |= 1 << 5;
-            if (args[i][j] == 'l')
+           else if (args[i][j] == 'l')
                 *flag |= 1 << 6;
-            if (args[i][j] == 'r')
+            else if (args[i][j] == 'r')
                 *flag |= 1 << 7;
-            if (args[i][j] == 't')
+           else  if (args[i][j] == 't')
                 *flag |= 1 << 8;
-            if (args[i][j] == 'u')
+           else  if (args[i][j] == 'u')
                 *flag |= 1 << 9;
+            else
+                return(usage(args[i][j]));
+
             j++;
         }
         i++;

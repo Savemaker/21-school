@@ -292,6 +292,8 @@ int main(int argc, char **argv)
     if (argc > 1)
     {
         start = get_flags(argv, &flags);
+        if (start == -1)
+            return (1);
         ret = parse_args(argv, flags, start);
     }
     return (0);

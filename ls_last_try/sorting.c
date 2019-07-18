@@ -95,6 +95,11 @@ int		time_reverse_sort(t_dir *dir, t_dir *dira)
 	da = sa.st_mtime;
 	if (d > da)
 		return (1);
+	if (d == da)
+	{
+		if (ft_strcmp(dir->name, dira->name) < 0)
+			return (1);
+	}
 	return (0);
 }
 

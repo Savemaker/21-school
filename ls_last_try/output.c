@@ -382,7 +382,7 @@ int     print_dir_content(t_dir *list, int flags, int n, char *argsname)
         off = print_file_name(argsname, tb);
     if (check_flag('l', flags))
     {
-       off = print_total(tb, off, list);
+        off = print_total(tb, off, list);
     }
     
     while (list)
@@ -396,12 +396,15 @@ int     print_dir_content(t_dir *list, int flags, int n, char *argsname)
             tb[off++] = list->name[i++];
         if (check_flag('l', flags))
             off = print_link(tb, off, list);
-        if (list->next)
-            tb[off++] = ' ';
-        else
-            tb[off++] = '\n';
         if (check_flag('l', flags) && list->next)
             tb[off++] = '\n';
+        else
+        {
+            if (list->next)
+                tb[off++] = ' ';
+            else
+                tb[off++] = '\n';
+        }
         list = list->next;
     }
     if (n == 1)
