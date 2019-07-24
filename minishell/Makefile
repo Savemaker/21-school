@@ -1,4 +1,4 @@
-NAME = ft_ls
+NAME = minishell
 
 SRC = main.c
 
