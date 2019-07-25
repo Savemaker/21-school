@@ -87,20 +87,129 @@ char	*edit_command(char *cmd, char **envp)
 	return (cmd);
 }
 
+int		count_words(char *cmd)
+{
+	int i;
+	int w;
+
+	i = 0;
+	w = 0;
+	while (cmd[i])
+	{
+		while (cmd[i] == '\t' || cmd[i] == ' ')
+			i++;
+		if (cmd[i] != '\0')
+			w++;
+		while (cmd[i] != '\0' && cmd[i] != '\t' && cmd[i] != ' ')
+			i++;
+	}
+	return (w);
+}
+
+int		*create_tab(char *cmd)
+{
+	int *res;
+	int i;
+	int words;
+
+	i = 0;
+	words = count_words(cmd);
+	res = (int *)malloc(sizeof(int) * words);
+	while (i < words)
+	{
+		res[i] = 0;
+		i++;
+	}
+	return (res);
+}
+
+int		*count_each_word(char *cmd)
+{
+	int i;
+	int len;
+	int *tab;
+	int j;
+
+	i = 0;
+	j = 0;
+	len = 0;
+	tab = create_tab(cmd);
+	while (cmd[i])
+	{
+		while (cmd[i] == '\t' || cmd[i] == ' ')
+			i++;
+		while (cmd[i] != '\0' && cmd[i] != '\t' && cmd[i] != ' ')
+		{
+			tab[j]++;
+			i++;
+		}
+		j++;
+	}
+	return (tab);
+}
+
+void	copy_split(char **res, char *cmd)
+{
+	int i;
+	int j;
+	int k;
+
+	i = 0;
+	j = 0;
+	k = 0;
+	while (cmd[i])
+	{
+		while (cmd[i] == '\t' || cmd[i] == ' ')
+			i++;
+		k = 0;
+		if (cmd[i] == '\0')
+			break;
+		while (cmd[i] != '\0' && cmd[i] != '\t' && cmd[i] != ' ')
+			res[j][k++] = cmd[i++];
+		res[j][k] = '\0';
+		j++;
+	}
+}
+
+char	**ft_full_split(char *cmd)
+{
+	char **res;
+	int words;
+	int *tab;
+	int i;
+
+	i = 0;
+	tab = count_each_word(cmd);
+	words = count_words(cmd);
+	res = (char **)malloc(sizeof(char *) * words + 1);
+	while (i < words)
+	{
+		res[i] = (char *)malloc(sizeof(char) * tab[i] + 1);
+		i++;
+	}
+	res[i] = NULL;
+	copy_split(res, cmd);
+	return (res);
+}
+
 int		main(int argc, char **argv, char **envp)
 {
-	pid_t p;
 	char *cmd;
+	char **parse;
+	pid_t p;
 
+	(void)argv;
+	parse = NULL;
 	cmd = NULL;
 	while (argc)
 	{
 		print_shell_name();
 		if (get_next_line(1, &cmd) == 1)
 		{
-			cmd = edit_command(cmd, envp);
+			parse = ft_full_split(cmd);
+			parse[0] = edit_command(parse[0], envp);
 			if ((p = fork()) == 0)
-				execve(cmd, argv, envp);
+				execve(parse[0], parse, envp);
 			else
 				waitpid(p, NULL, WUNTRACED);
 		}
