@@ -6,7 +6,7 @@
 /*   By: gbeqqo <gbeqqo@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/10 15:14:34 by gbeqqo            #+#    #+#             */
-/*   Updated: 2019/08/10 15:28:45 by gbeqqo           ###   ########.fr       */
+/*   Updated: 2019/08/10 16:05:59 by gbeqqo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,5 +64,5 @@ int		open_dir(char *path_from_env, char *name);
 void	relative_execution(char *path, char **command, char **envp);
 char	*create_path(char *name, char *path);
 void	free_parse(char **parse, int w);
-
+char	*sub_line(char *parse, char **envp);
 #endif

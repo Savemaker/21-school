@@ -6,7 +6,7 @@
 /*   By: gbeqqo <gbeqqo@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/10 15:39:24 by gbeqqo            #+#    #+#             */
-/*   Updated: 2019/08/10 15:41:17 by gbeqqo           ###   ########.fr       */
+/*   Updated: 2019/08/10 16:12:22 by gbeqqo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,8 @@ int		test_exp(char **parse)
 	while (parse[i])
 	{
 		if (parse[i][0] == '$')
+			return (1);
+		if (parse[i][0] == '~')
 			return (1);
 		i++;
 	}

@@ -6,7 +6,7 @@
 /*   By: gbeqqo <gbeqqo@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/10 15:37:03 by gbeqqo            #+#    #+#             */
-/*   Updated: 2019/08/10 15:46:59 by gbeqqo           ###   ########.fr       */
+/*   Updated: 2019/08/10 16:13:00 by gbeqqo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,28 +36,44 @@ int		count_pointers(char **envp)
 	return (i);
 }
 
+char	*sub_line(char *parse, char **envp)
+{
+	char *seek;
+	char *res;
+
+	if (parse[0] == '$')
+	{
+		seek = ft_getenv(&parse[1], envp);
+		if (seek == NULL)
+			res = NULL;
+		else
+			res = ft_strdup(seek);
+	}
+	else if (parse[0] == '~')
+	{
+		seek = ft_getenv("HOME", envp);
+		if (seek == NULL)
+			res = NULL;
+		else
+			res = ft_strdup(seek);
+	}
+	else
+		res = ft_strdup(parse);
+	return (res);
+}
+
 char	**sub_parse(char **parse, char **envp)
 {
 	int		p;
 	int		i;
 	char	**res;
-	char	*seek;
 
 	i = 0;
 	p = count_pointers(parse);
 	res = (char **)malloc(sizeof(char *) * (p + 1));
 	while (i < p)
 	{
-		if (parse[i][0] == '$')
-		{
-			seek = ft_getenv(&parse[i][1], envp);
-			if (seek == NULL)
-				res[i] = NULL;
-			else
-				res[i] = ft_strdup(seek);
-		}
-		else
-			res[i] = ft_strdup(parse[i]);
+		res[i] = sub_line(parse[i], envp);
 		i++;
 	}
 	res[i] = NULL;
