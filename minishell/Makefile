@@ -1,6 +1,6 @@
 NAME = minishell
 
-SRC = main.c
+SRC = main.c parse.c split.c setenv.c unsetenv.c builtin.c getenv.c env_copy.c stuff.c command.c
 
 OBJ = $(SRC:.c=.o)
 
