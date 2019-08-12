@@ -12,6 +12,8 @@
 
 #include "minishell.h"
 
+static char **my_env;
+
 int		open_dir(char *path_from_env, char *name)
 {
 	DIR				*dir;
@@ -73,7 +75,7 @@ char	**action(char *cmd, char **my_env)
 	return (my_env);
 }
 
-void	signals(void)
+void	signals()
 {
 	signal(SIGINT, handle_sig);
 }
@@ -81,7 +83,6 @@ void	signals(void)
 int		main(int argc, char **argv, char **envp)
 {
 	char *cmd;
-	char **my_env;
 
 	(void)argv;
 	cmd = NULL;
