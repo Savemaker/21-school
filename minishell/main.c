@@ -6,7 +6,7 @@
 /*   By: gbeqqo <gbeqqo@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/10 13:47:55 by gbeqqo            #+#    #+#             */
-/*   Updated: 2019/08/10 15:48:08 by gbeqqo           ###   ########.fr       */
+/*   Updated: 2019/08/11 15:31:46 by gbeqqo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,29 @@ void	handle_sig(int sig)
 		return ;
 }
 
+char	**action(char *cmd, char **my_env)
+{
+	int		i;
+	int		count;
+	char	**parsed_cmd;
+
+	i = 0;
+	count = count_words_delim(cmd, ';');
+	parsed_cmd = ft_split_delim(cmd, count, ';');
+	while (i < count)
+	{
+		my_env = take_command(parsed_cmd[i], my_env);
+		i++;
+	}
+	free_parse(parsed_cmd, count);
+	return (my_env);
+}
+
+void	signals(void)
+{
+	signal(SIGINT, handle_sig);
+}
+
 int		main(int argc, char **argv, char **envp)
 {
 	char *cmd;
@@ -68,10 +91,10 @@ int		main(int argc, char **argv, char **envp)
 		while (my_env != NULL)
 		{
 			print_shell_name();
-			signal(SIGINT, handle_sig);
+			signals();
 			if (get_next_line(0, &cmd) == 1)
 			{
-				my_env = take_command(cmd, my_env);
+				my_env = action(cmd, my_env);
 				free(cmd);
 			}
 			else
