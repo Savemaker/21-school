@@ -17,6 +17,9 @@
 # include <sys/stat.h>
 # include <sys/wait.h>
 # include <signal.h>
+# include <stdio.h>
+# include <readline/readline.h>
+# include <readline/history.h>
 
 int		count_words(char *cmd);
 int		*create_tab(int words);

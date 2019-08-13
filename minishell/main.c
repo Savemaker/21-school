@@ -12,8 +12,6 @@
 
 #include "minishell.h"
 
-static char **my_env;
-
 int		open_dir(char *path_from_env, char *name)
 {
 	DIR				*dir;
@@ -83,6 +81,7 @@ void	signals()
 int		main(int argc, char **argv, char **envp)
 {
 	char *cmd;
+	static char **my_env;
 
 	(void)argv;
 	cmd = NULL;
@@ -91,15 +90,16 @@ int		main(int argc, char **argv, char **envp)
 		my_env = create_env_copy(envp, count_pointers(envp));
 		while (my_env != NULL)
 		{
-			print_shell_name();
 			signals();
-			if (get_next_line(0, &cmd) == 1)
+			cmd = readline("♿  \e[96m\e[1mminishell \e[0m");
+			if (cmd == NULL || !cmd)
 			{
-				my_env = action(cmd, my_env);
-				free(cmd);
-			}
-			else
+				ft_exit(my_env);
 				break ;
+			}
+			add_history(cmd);
+			my_env = action(cmd, my_env);
+			free(cmd);
 		}
 	}
 	return (0);

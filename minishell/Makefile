@@ -20,7 +20,7 @@ all: $(NAME)
 	gcc $(FLAGS) -I . $(LIB_INC) -o $@ -c $<
 
 $(NAME): $(LIBFT) $(OBJ)
-	gcc $(FLAGS) -o $(NAME) -I . $(OBJ) $(LIBFT) $(LIB_INC)
+	gcc $(FLAGS) -o $(NAME) -I . $(OBJ) $(LIBFT) $(LIB_INC) -lreadline -ledit
 
 $(LIBFT):
 	make -C $(LIB)
