@@ -37,6 +37,11 @@ char	**ft_cd(char **parse, char **envp)
 	i = 0;
 	while (parse[i])
 		i++;
+	if (i > 2)
+	{
+		ft_putendl("cd: too many arguments");
+		return (envp);
+	}
 	--i;
 	if (parse[i][0] == '~' || i == 0)
 	{
@@ -44,9 +49,7 @@ char	**ft_cd(char **parse, char **envp)
 		res = chdir(home);
 	}
 	else
-	{
 		res = chdir(parse[i]);
-	}
 	return (envp);
 }
 
