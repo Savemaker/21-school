@@ -38,7 +38,7 @@ char	**ft_cd(char **parse, char **envp)
 	while (parse[i])
 		i++;
 	--i;
-	if (parse[i][0] == '~')
+	if (parse[i][0] == '~' || i == 0)
 	{
 		home = ft_getenv("HOME", envp);
 		res = chdir(home);
