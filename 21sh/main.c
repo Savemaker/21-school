@@ -11,13 +11,7 @@
 /* ************************************************************************** */
 
 #include "21sh.h"
-
-typedef struct my_pipe{
-	char *cmd;
-	int fd_in;
-	int fd_out;
-	struct my_pipe *next;
-}my_pipe;
+#include <string.h>
 
 int		*create_tab(int words)
 {
@@ -215,64 +209,249 @@ char	**ft_full_split(char *cmd, int words)
 
 //  command: ls | cat - e | grep '21'
 
-my_pipe *create_new_pipe(char *line)
-{
-	my_pipe *res;
+typedef struct tokens{
+	int type;
+	char *buf;
+	struct tokens *next;
+}token;
 
-	res = (my_pipe *)malloc(sizeof(my_pipe) * 1);
-	res->cmd = ft_strdup(line);
-	res->fd_in = 0;
-	res ->fd_out = 1;
-	res->next = NULL;
-	return (res);
+typedef struct tree{
+	struct tree *left;
+	struct tree *right;
+	token *current;
+	int type;   // 1 = pipe; 2 = command; 3 = suffix; 4 = word;
+}tree;
+
+typedef struct eval{
+    int args;
+    char **argv;
+    int cur;
+}ev;
+
+int		type(char *buf)
+{
+	if (ft_strcmp(buf, "|") == 0)
+		return (0);
+	return (1);
 }
 
-void	append(my_pipe **head, my_pipe *new)
+token *create_new(char *buf)
 {
-	my_pipe *tmp;
+	token *new;
+
+	new = (token *)malloc(sizeof(token) * 1);
+	new->buf = ft_strdup(buf);
+	new->type = type(buf);
+	new->next = NULL;
+	return (new);
+}
+
+void	append(token **head, token *new)
+{
+	token *tmp;
 
 	tmp = *head;
 	if (*head == NULL)
-	{
 		*head = new;
-	}
 	else
 	{
 		while (tmp->next)
-			tmp = tmp ->next;
+			tmp = tmp->next;
 		tmp->next = new;
 	}
 }
 
-my_pipe *creation(char **pipes)
+token *create_list(char *buf)
 {
-	my_pipe *new;
-	my_pipe *head;
-	int		i;
+	token *head;
+	token *new;
+	char **split;
+	int w;
+	int i;
 
-	i = 0;
 	head = NULL;
-	while (pipes[i])
+	i = 0;
+	w = count_words(buf);
+	split = ft_full_split(buf, w);
+	while (split[i])
 	{
-		new = create_new_pipe(pipes[i]);
+		new = create_new(split[i]);
 		append(&head, new);
 		i++;
 	}
 	return (head);
 }
 
-void	create_struct(char *cmd)
+int		count_pipes(token *list)
 {
-	char	**pipes;
-	int		words;
-	int		d_words;
-	my_pipe	*new;
+	int i;
 
-	words = count_words(cmd);
-	d_words = count_words_delim(cmd, '|');
-	pipes = ft_split_delim(cmd, d_words, '|');
-	new = creation(pipes);
-	
+	i = 0;
+	while (list)
+	{
+		if (list->type == 0)
+			i++;
+		list = list->next;
+	}
+	return (i);
+}
+
+void	split_list(token **list, token **right, int pipes)
+{
+	token *temp;
+
+	temp = *list;
+	while (temp->next)
+	{
+		if (temp->next && temp->next->type == 0)
+		{
+			pipes -= 1;
+			if (pipes == 0)
+			{
+				*right = temp->next->next;
+				temp->next = NULL;
+				break ;
+			}
+		}
+		temp = temp->next;
+	}
+}
+
+tree *create_node(token *list, int type)
+{
+	tree *res;
+
+	res = (tree *)malloc(sizeof(tree) * 1);
+	res->current = list;
+	res->left = NULL;
+	res->right = NULL;
+	res->type = type;
+	return (res);
+}
+
+int     list_len(token *list)
+{
+	int i;
+
+	i = 0;
+	while (list)
+	{
+		i++;
+		list = list->next;
+	}
+	return (i);
+}
+
+void	split(token **list, token **right)
+{
+	token *temp;
+
+	temp = *list;
+	*right = temp->next;
+	temp->next = NULL;
+}
+
+void	create_tree(tree *ast, token *list, int pipes)
+{
+	token *left;
+	token *right;
+
+	left = list;
+	right = NULL;
+	if (ast->type == 1 && pipes == 0)
+	{
+		ast->type = 2;
+	}
+	else if (ast->type == 1 && pipes != 0)
+	{
+		split_list(&list, &right, pipes);
+		ast->left = create_node(list, 1);
+		ast->right = create_node(right, 2);
+		pipes -= 1;
+		create_tree(ast->left, list, pipes);
+		create_tree(ast->right, right, 0);
+	}
+	if (ast->type == 2)
+	{
+		if (list_len(ast->current) == 1)
+		{
+			ast->type = 4;
+			return ;
+		}
+		else
+		{
+			split(&(ast->current), &right);
+			ast->left = create_node(ast->current, 4);
+			ast->right = create_node(right, 2);
+			create_tree(ast->right, right, 0);
+		}
+	}
+}
+
+void    check_tree(tree *pipe, ev *eval)
+{
+    if (pipe == NULL)
+        return ;
+    if (pipe->type == 4)
+        eval->args += 1;
+    check_tree(pipe->left, eval);
+    check_tree(pipe->right, eval);
+}
+
+void     create_argv(tree *tree, ev *eval)
+{
+    if (tree == NULL)
+        return;
+    if (tree->type == 4)
+    {
+        eval->argv[eval->cur] = strdup(tree->current->buf);
+        eval->cur += 1;
+    }
+    create_argv(tree->left, eval);
+    create_argv(tree->right, eval);
+}
+
+void     execute_tree(tree *tr, ev *eval)
+{
+    if (tr == NULL)
+        return ;
+    if (tr->type == 2)
+    {
+        check_tree(tr, eval);
+        eval->argv = (char **)malloc(sizeof(char *) * (eval->args + 1));
+        create_argv(tr, eval);
+        eval->argv[eval->cur] = NULL;
+        if (fork() == 0)
+            execvp(eval->argv[0], eval->argv);
+        eval->argv = NULL;
+        eval->args = 0;
+        eval->cur = 0;
+        wait(NULL);
+        
+    }
+    execute_tree(tr->left, eval);
+    execute_tree(tr->right, eval);
+}
+
+void	action(char *cmd)
+{
+	token *list;
+	tree *ast;
+	int pipes;
+
+	list = create_list(cmd);
+	pipes = count_pipes(list);
+	ast = (tree *)malloc(sizeof(tree) * 1);
+	ast->current = list;
+	ast->type = 1;
+	create_tree(ast, list, pipes);
+	ev *eval;
+    eval = (ev *)malloc(sizeof(ev) * 1);
+    eval->args=0;
+    eval->cur = 0;
+    eval->argv =NULL;
+    execute_tree(ast, eval);
+
 }
 
 int main()
@@ -282,6 +461,6 @@ int main()
 	while (1)
 	{
 		cmd = readline("-> ");
-		create_struct(cmd);
+		action(cmd);
 	}
 }
