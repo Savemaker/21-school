@@ -226,6 +226,9 @@ typedef struct eval{
     int args;
     char **argv;
     int cur;
+	int in;
+	int out;
+	int pipes;
 }ev;
 
 int		type(char *buf)
@@ -413,16 +416,30 @@ void     create_argv(tree *tree, ev *eval)
 
 void     execute_tree(tree *tr, ev *eval)
 {
+	int fd[2];
     if (tr == NULL)
         return ;
     if (tr->type == 2)
     {
+		pipe(fd);
         check_tree(tr, eval);
         eval->argv = (char **)malloc(sizeof(char *) * (eval->args + 1));
         create_argv(tr, eval);
         eval->argv[eval->cur] = NULL;
         if (fork() == 0)
+		{
+			dup2(eval->in, 0);
+			if (eval->pipes != 0)
+				dup2(fd[1], 1);
+			close(fd[0]);
             execvp(eval->argv[0], eval->argv);
+		}
+		close(fd[1]);
+		if (eval->pipes != 0)
+		{
+			eval->in = fd[0];
+			eval->pipes -= 1;
+		}
         eval->argv = NULL;
         eval->args = 0;
         eval->cur = 0;
@@ -450,6 +467,9 @@ void	action(char *cmd)
     eval->args=0;
     eval->cur = 0;
     eval->argv =NULL;
+	eval->in = 0;
+	eval->out = 1;
+	eval->pipes = 2;
     execute_tree(ast, eval);
 
 }
