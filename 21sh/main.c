@@ -6,7 +6,7 @@
 /*   By: gbeqqo <gbeqqo@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/07 20:45:46 by gbeqqo            #+#    #+#             */
-/*   Updated: 2019/09/14 16:30:32 by gbeqqo           ###   ########.fr       */
+/*   Updated: 2019/09/21 18:41:16 by gbeqqo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,15 @@ typedef struct tree{
 	struct tree *left;
 	struct tree *right;
 	token		*current;
+	char		**argv;
+	int			args;
+	int			cur;
 	int t_pipes;
 	int t_semis;
+	int in;
+	int out;
 	int type;   // 1 = pipe; 2 = command; 3 = suffix; 4 = word;
+	int exe;
 }tree;
 
 typedef struct eval{
@@ -30,6 +36,8 @@ typedef struct eval{
     int cur;
 	int in;
 	int out;
+	int st_in;
+	int st_out;
 	int pipes;
 	int semis;
 }ev;
@@ -93,6 +101,14 @@ tree *create_node(token *list, int type)
 	res->current = list;
 	res->left = NULL;
 	res->right = NULL;
+	res->in = 0;
+	res->out = 1;
+	res->t_pipes = 0;
+	res->t_semis = 0;
+	res->argv = NULL;
+	res->args = 0;
+	res->cur = 0;
+	res->exe = 0;
 	if (list == NULL)
 		res->type = 0;
 	else
@@ -185,28 +201,28 @@ void	split(token **list, token **right)
 // 	}
 // }
 
-void    check_tree(tree *pipe, ev *eval)
-{
-    if (pipe == NULL)
-        return ;
-    if (pipe->type == 4)
-        eval->args += 1;
-    check_tree(pipe->left, eval);
-    check_tree(pipe->right, eval);
-}
+// void    check_tree(tree *pipe)
+// {
+//     if (pipe == NULL)
+//         return ;
+//     if (pipe->type == 4)
+//         pipe->args += 1;
+//     check_tree(pipe->left);
+//     check_tree(pipe->right);
+// }
 
-void     create_argv(tree *tree, ev *eval)
-{
-    if (tree == NULL)
-        return;
-    if (tree->type == 4)
-    {
-        eval->argv[eval->cur] = strdup(tree->current->buf);
-        eval->cur += 1;
-    }
-    create_argv(tree->left, eval);
-    create_argv(tree->right, eval);
-}
+// void     create_argv(tree *tree)
+// {
+//     if (tree == NULL)
+//         return;
+//     if (tree->type == 4)
+//     {
+//         tree->argv[tree->cur] = strdup(tree->current->buf);
+//         tree->cur += 1;
+//     }
+//     create_argv(tree->left);
+//     create_argv(tree->right);
+// }
 
 // void	execute_tree(tree *ast, ev *eval)
 // {
@@ -247,40 +263,112 @@ void     create_argv(tree *tree, ev *eval)
 // 	}
 // }
 
-void     execute_tree(tree *tr, ev *eval)
+void	args_counter(tree *ast, tree *tmp)
+{
+	if (ast == NULL)
+		return ;
+	if (ast->type == 4)
+		tmp->args += 1;
+	args_counter(ast->left, tmp);
+	args_counter(ast->right, tmp);
+}
+
+void	argv_creation(tree *ast, tree *tmp)
+{
+	if (ast == NULL)
+		return ;
+	if (ast->type == 4)
+	{
+		tmp->argv[tmp->cur] = ft_strdup(ast->current->buf);
+		tmp->cur += 1;
+	}
+	argv_creation(ast->left, tmp);
+	argv_creation(ast->right, tmp);
+}
+
+void	create_argv(tree *ast)
+{
+	tree *tmp;
+
+	tmp = ast;
+	args_counter(ast, tmp);
+	ast->argv = (char **)malloc(sizeof(char *) * (ast->args + 1));
+	argv_creation(ast, tmp);
+	ast->argv[ast->cur] = NULL;
+}
+
+void     execute_tree(tree *ast)    // 0 = def exe             1 = output to pipe      2 = take pipe
 {
 	int fd[2];
-    if (tr == NULL)
-        return ;
-    if (tr->type == 3)
-    {
-		pipe(fd);
-        check_tree(tr, eval);
-        eval->argv = (char **)malloc(sizeof(char *) * (eval->args + 1));
-        create_argv(tr, eval);
-        eval->argv[eval->cur] = NULL;
-        if (fork() == 0)
+	int pid;
+	int status;
+
+	if (ast->type == 1)
+	{
+		if (ast->left->type == 3)
 		{
-			dup2(eval->in, 0);
-			if (eval->pipes != 0)
-				dup2(fd[1], 1);
-			close(fd[0]);
-            execvp(eval->argv[0], eval->argv);
+			pipe(fd);
+			ast->left->in  = fd[0];
+			ast->left->out = fd[1];
+			ast->left->exe = 1;
+
+			ast->right->out = fd[1];
+			ast->right->in = fd[0];
+			ast->right->exe = 2;
+			if ((pid = fork()) == 0)
+			{
+				execute_tree(ast->left);
+				close(fd[0]);
+				close(fd[1]);
+			}
+			else
+			{
+				execute_tree(ast->right);
+				waitpid(pid, &status, WUNTRACED);
+				while (!WIFEXITED(status) && !WIFSIGNALED(status))
+					waitpid(pid, &status, WUNTRACED);
+				close(fd[0]);
+				close(fd[1]);
+			}
 		}
-		close(fd[1]);
-		if (eval->pipes != 0)
+	}
+	if (ast->type == 3)
+	{
+		create_argv(ast);
+		if (ast->exe == 1)
 		{
-			eval->in = fd[0];
-			eval->pipes -= 1;
+			if (ast->exe == 1)
+			{
+				dup2(ast->out, 1);
+				close(ast->in);
+			}
+			if (ast->exe == 2)
+			{
+				dup2(ast->in, 0);
+				close(ast->out);
+			}
+			execvp(ast->argv[0], ast->argv);
 		}
-        eval->argv = NULL;
-        eval->args = 0;
-        eval->cur = 0;
-        wait(NULL);
-        
-    }
-    execute_tree(tr->left, eval);
-    execute_tree(tr->right, eval);
+		if (ast->exe == 2)
+		{
+			if (fork() == 0)
+			{
+			if (ast->exe == 1)
+			{
+				dup2(ast->out, 1);
+				close(ast->in);
+			}
+			if (ast->exe == 2)
+			{
+				dup2(ast->in, 0);
+				close(ast->out);
+			}
+			execvp(ast->argv[0], ast->argv);
+			}
+			else
+				wait(NULL);
+		}
+	}
 }
 
 ev *create_eval(token *list)
@@ -288,11 +376,13 @@ ev *create_eval(token *list)
 	ev *eval;
 
 	eval = (ev *)malloc(sizeof(ev) * 1);
-    eval->args=0;
+    eval->args = 0;
     eval->cur = 0;
-    eval->argv =NULL;
+    eval->argv = NULL;
 	eval->in = 0;
 	eval->out = 1;
+	eval->st_in = 0;
+	eval->st_out = 0;
 	eval->pipes = count_token_types(list, 1);
 	eval->semis = count_token_types(list, 2);
 	return (eval);
@@ -355,13 +445,9 @@ void	action(char *cmd)
 
 	list = lexer(cmd);
 	eval = create_eval(list);
-	ast = (tree *)malloc(sizeof(tree) * 1);
-	ast->current = list;
-	ast->type = 1;
-	ast->t_semis = count_token_types(list, 2);
-	ast->t_pipes = count_token_types(list, 1);
+	ast = create_node(list, 1);
 	create_tree(ast);
-	execute_tree(ast, eval);
+	execute_tree(ast);
 }
 
 int main()
