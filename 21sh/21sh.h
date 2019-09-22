@@ -10,6 +10,24 @@ typedef struct tokens{
 	struct tokens *next;
 }token;
 
+typedef struct tree{
+	struct tree *parent;
+	struct tree *left;
+	struct tree *right;
+	token		*current;
+	char		**argv;
+	int			args;
+	int			cur;
+	int t_pipes;
+	int t_semis;
+	int in;
+	int out;
+	int type;   // 1 = pipe; 2 = command; 3 = suffix; 4 = word;
+	int exe;
+}tree;
+
+
+
 //parse_split
 int		*create_tab(int words);
 void	copy_split_delim(char **res, char *cmd, char delim);
@@ -32,6 +50,9 @@ token	*create_token(char *cmd, int i, size_t cmd_len);
 token	*create_new(char *cmd, int i, size_t cmd_len);
 token	*lexer(char *cmd);
 //
+
+
+void	execute_tree(tree *ast);
 
 
 #endif

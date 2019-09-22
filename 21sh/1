@@ -1,0 +1,15 @@
+1
+21sh
+21sh.h
+Makefile
+calculator.c
+cr_ex_tree.c
+l.dSYM
+lexer.c
+lexer.o
+libft
+main.c
+main.o
+nt.c
+parse_split.c
+pipe.c

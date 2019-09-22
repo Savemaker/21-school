@@ -15,20 +15,7 @@
 
 //  command: ls | cat - e | grep '21'
 
-typedef struct tree{
-	struct tree *left;
-	struct tree *right;
-	token		*current;
-	char		**argv;
-	int			args;
-	int			cur;
-	int t_pipes;
-	int t_semis;
-	int in;
-	int out;
-	int type;   // 1 = pipe; 2 = command; 3 = suffix; 4 = word;
-	int exe;
-}tree;
+
 
 typedef struct eval{
     int args;
@@ -93,11 +80,12 @@ void	split_list(token **list, token **right, tree *ast, int type)
 	}
 }
 
-tree *create_node(token *list, int type)
+tree *create_node(token *list, int type, tree *parent)
 {
 	tree *res;
 
 	res = (tree *)malloc(sizeof(tree) * 1);
+	res->parent = parent;
 	res->current = list;
 	res->left = NULL;
 	res->right = NULL;
@@ -297,77 +285,102 @@ void	create_argv(tree *ast)
 	ast->argv[ast->cur] = NULL;
 }
 
-void     execute_tree(tree *ast)    // 0 = def exe             1 = output to pipe      2 = take pipe
+void	execute_start(tree *ast, int in, int out)
 {
-	int fd[2];
-	int pid;
-	int status;
+	pid_t p;
 
-	if (ast->type == 1)
+	p = fork();
+	if (p == 0)
 	{
-		if (ast->left->type == 3)
-		{
-			pipe(fd);
-			ast->left->in  = fd[0];
-			ast->left->out = fd[1];
-			ast->left->exe = 1;
-
-			ast->right->out = fd[1];
-			ast->right->in = fd[0];
-			ast->right->exe = 2;
-			if ((pid = fork()) == 0)
-			{
-				execute_tree(ast->left);
-				close(fd[0]);
-				close(fd[1]);
-			}
-			else
-			{
-				execute_tree(ast->right);
-				waitpid(pid, &status, WUNTRACED);
-				while (!WIFEXITED(status) && !WIFSIGNALED(status))
-					waitpid(pid, &status, WUNTRACED);
-				close(fd[0]);
-				close(fd[1]);
-			}
-		}
+		if (ast->right)
+			dup2(out, 1);
+		close(in);
+		create_argv(ast->left);
+		execvp(ast->left->argv[0], ast->left->argv);
 	}
-	if (ast->type == 3)
+	else
+	{
+		waitpid(p, NULL, 0);
+		close(out);
+	}
+}
+
+void	execute_right(tree *ast, int in, int out, int temp)
+{
+	pid_t p;
+
+	p = fork();
+	if (p == 0)
+	{
+		create_argv(ast->right);
+		dup2(temp, 0);
+		close(in);
+		if (ast->parent)
+			dup2(out, 1);
+		execvp(ast->right->argv[0], ast->right->argv);
+	}
+	else
+	{
+		waitpid(p, NULL, 0);
+		close(out);
+		close(temp);
+	}
+}
+
+void	simple_execution(tree *ast)
+{
+	pid_t p;
+
+	p = fork();
+	if (p == 0)
 	{
 		create_argv(ast);
-		if (ast->exe == 1)
+		execvp(ast->argv[0], ast->argv);
+	}
+	else
+	{
+		waitpid(p, NULL, 0);
+	}
+}
+
+void	execute_tree(tree *ast)
+{
+	int fd[2];
+	int tmp_fd;
+	int start;
+	int semi;
+
+	if (ast == NULL)
+		return ;
+	start = 0;
+	tmp_fd = 0;
+	if (ast->type == 1)
+	{
+		while (ast->left->type == 1)
+			ast = ast->left;
+		while (ast != NULL)
 		{
-			if (ast->exe == 1)
+			pipe(fd);
+			if (start == 0)
 			{
-				dup2(ast->out, 1);
-				close(ast->in);
+				execute_start(ast, fd[0], fd[1]);
+				start = 1;
+				tmp_fd = fd[0];
+				pipe(fd);
 			}
-			if (ast->exe == 2)
-			{
-				dup2(ast->in, 0);
-				close(ast->out);
-			}
-			execvp(ast->argv[0], ast->argv);
+			execute_right(ast, fd[0], fd[1], tmp_fd);
+			tmp_fd = fd[0];
+			ast = ast->parent;
 		}
-		if (ast->exe == 2)
-		{
-			if (fork() == 0)
-			{
-			if (ast->exe == 1)
-			{
-				dup2(ast->out, 1);
-				close(ast->in);
-			}
-			if (ast->exe == 2)
-			{
-				dup2(ast->in, 0);
-				close(ast->out);
-			}
-			execvp(ast->argv[0], ast->argv);
-			}
-			else
-				wait(NULL);
-		}
+	}
+	else if (ast->type == 2)
+	{
+		execute_tree(ast->left);
+		execute_tree(ast->right);
+	}
+	else if (ast->type == 3)
+	{
+		simple_execution(ast);
 	}
 }
 
@@ -408,8 +421,8 @@ void	create_tree(tree *ast)
 		else
 		{
 			split_list(&left, &right, ast, 1);
-			ast->left = create_node(left, 1);
-			ast->right = create_node(right, 2);
+			ast->left = create_node(left, 1, ast);
+			ast->right = create_node(right, 2, ast);
 			create_tree(ast->left);
 			create_tree(ast->right);
 		}
@@ -421,8 +434,8 @@ void	create_tree(tree *ast)
 		else
 		{
 			split_list(&left, &right, ast, 2);
-			ast->left = create_node(left, 2);
-			ast->right = create_node(right, 3);
+			ast->left = create_node(left, 2, ast);
+			ast->right = create_node(right, 3, ast);
 			create_tree(ast->left);
 			create_tree(ast->right);
 		}
@@ -430,8 +443,8 @@ void	create_tree(tree *ast)
 	if (ast->type == 3)
 	{
 		split(&left, &right);
-		ast->left = create_node(left, 4);
-		ast->right = create_node(right, 3);
+		ast->left = create_node(left, 4, ast);
+		ast->right = create_node(right, 3, ast);
 		create_tree(ast->right);
 	}
 }
@@ -445,7 +458,7 @@ void	action(char *cmd)
 
 	list = lexer(cmd);
 	eval = create_eval(list);
-	ast = create_node(list, 1);
+	ast = create_node(list, 1, NULL);
 	create_tree(ast);
 	execute_tree(ast);
 }
