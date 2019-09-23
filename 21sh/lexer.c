@@ -14,6 +14,10 @@ int		type(char *buf)
 		return (4);
 	if (ft_strcmp(buf, "<<") == 0)
 		return (4);
+	if (ft_strcmp(buf, "<&") == 0)
+		return (7);
+	if (ft_strcmp(buf, ">&") == 0)
+		return (8);
 	return (0);
 }
 
@@ -55,7 +59,7 @@ char *create_buf(char *cmd)
 	if (len > 0)
 	{
 		res = (char *)malloc(sizeof(char) * (len + 1));
-		while (cmd[i] && cmd[i] != ' ' && cmd[i] != '\t' && cmd[i] != ';' && cmd[i] != '|')
+		while (cmd[i] && cmd[i] != ' ' && cmd[i] != '\t' && cmd[i] != ';' && cmd[i] != '|' && cmd[i] != '<' && cmd[i] != '>')
 		{
 			res[i] = cmd[i];
 			i++;

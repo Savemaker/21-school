@@ -312,11 +312,11 @@ void	execute_right(tree *ast, int in, int out, int temp)
 	p = fork();
 	if (p == 0)
 	{
-		create_argv(ast->right);
 		dup2(temp, 0);
 		close(in);
-		if (ast->parent)
+		if (ast->parent && ast->parent->type == 1)
 			dup2(out, 1);
+		create_argv(ast->right);
 		execvp(ast->right->argv[0], ast->right->argv);
 	}
 	else
@@ -348,17 +348,19 @@ void	execute_tree(tree *ast)
 	int fd[2];
 	int tmp_fd;
 	int start;
-	int semi;
 
-	if (ast == NULL)
-		return ;
 	start = 0;
 	tmp_fd = 0;
+	if (ast == NULL)
+		return ;
+	// printf("%d", ast->type);
+	// execute_tree(ast->left);
+	// execute_tree(ast->right);
 	if (ast->type == 1)
 	{
 		while (ast->left->type == 1)
 			ast = ast->left;
-		while (ast != NULL)
+		while (ast != NULL && ast->type == 1)
 		{
 			pipe(fd);
 			if (start == 0)
@@ -401,6 +403,71 @@ ev *create_eval(token *list)
 	return (eval);
 }
 
+void	split_semicolomn(token **left, token **right)
+{
+	token *list;
+
+	list = *left;
+	if (list == NULL)
+		return ;
+	while (list->next && list->next->type != 2)
+		list = list->next;
+	if (list->next && list->next->next)
+	{
+		*right = list->next->next;
+	}
+	list->next = NULL;
+}
+
+// void	create_tree(tree *ast)
+// {
+// 	token *left;
+// 	token *right;
+
+// 	left = ast->current;
+// 	right = NULL;
+// 	if (ast == NULL)
+// 		return ;
+// 	ast->t_pipes = count_token_types(ast->current, 1);
+// 	ast->t_semis = count_token_types(ast->current, 2);
+// 	if (ast->type == 1)
+// 	{
+// 		if (ast->t_pipes == 0)
+// 			ast->type = 2;
+// 		else if (ast->type == 2 && ast->t_semis == 0)
+// 			ast->type = 3;
+// 		else
+// 		{
+// 			split_list(&left, &right, ast, 1);
+// 			ast->left = create_node(left, 1, ast);
+// 			ast->right = create_node(right, 2, ast);
+// 			create_tree(ast->left);
+// 			create_tree(ast->right);
+// 		}
+// 	}
+// 	if (ast->type == 2)
+// 	{
+// 		if (ast->t_semis == 0)
+// 			ast->type = 3;
+// 		else
+// 		{
+// 			split_semicolomn(&left, &right, ast);
+// 			ast->left = create_node(left, 3, ast);
+// 			ast->right = create_node(right, 2, ast);
+// 			create_tree(ast->left);
+// 			create_tree(ast->right);
+// 		}
+// 	}
+// 	if (ast->type == 3)
+// 	{
+// 		split(&left, &right);
+// 		ast->left = create_node(left, 4, ast);
+// 		ast->right = create_node(right, 3, ast);
+// 		create_tree(ast->right);
+// 	}
+// }
+
+
 void	create_tree(tree *ast)
 {
 	token *left;
@@ -412,11 +479,24 @@ void	create_tree(tree *ast)
 		return ;
 	ast->t_pipes = count_token_types(ast->current, 1);
 	ast->t_semis = count_token_types(ast->current, 2);
+	if (ast->type == 2)
+	{
+		if (ast->t_pipes == 0 && ast->t_semis == 0)
+			ast->type = 3;
+		else if (ast->t_semis == 0 && ast->t_pipes > 0)
+			ast->type = 1;
+		else
+		{
+			split_semicolomn(&left, &right);
+			ast->left = create_node(left, 2, ast);
+			ast->right = create_node(right, 2, ast);
+			create_tree(ast->left);
+			create_tree(ast->right);
+		}
+	}
 	if (ast->type == 1)
 	{
 		if (ast->t_pipes == 0)
-			ast->type = 2;
-		else if (ast->type == 2 && ast->t_semis == 0)
 			ast->type = 3;
 		else
 		{
@@ -427,38 +507,44 @@ void	create_tree(tree *ast)
 			create_tree(ast->right);
 		}
 	}
-	if (ast->type == 2)
-	{
-		if (ast->t_semis == 0)
-			ast->type = 3;
-		else
-		{
-			split_list(&left, &right, ast, 2);
-			ast->left = create_node(left, 2, ast);
-			ast->right = create_node(right, 3, ast);
-			create_tree(ast->left);
-			create_tree(ast->right);
-		}
-	}
 	if (ast->type == 3)
 	{
+		if (ast->current->type >= 3 && ast->current->type <= 7)
+			ast->type = 5;
+		else
+		{
 		split(&left, &right);
 		ast->left = create_node(left, 4, ast);
 		ast->right = create_node(right, 3, ast);
 		create_tree(ast->right);
+		}
 	}
 }
-
 
 void	action(char *cmd)
 {
 	token *list;
+	token *feed;
 	tree *ast;
 	ev *eval;
+	int br;
 
+	br = 0;
 	list = lexer(cmd);
-	eval = create_eval(list);
-	ast = create_node(list, 1, NULL);
+	// while (list)
+	// {
+	// 	printf("%s\n", list->buf);
+	// 	list = list->next;
+	// }
+	//feed->next = NULL;
+	ast = create_node(list, 2, NULL);
+	// while (list)
+	// {
+	// 	if (list->type == 1)
+	// 		br = 1;
+	// 	if (list->type)
+	// 	list = list->next;
+	// }
 	create_tree(ast);
 	execute_tree(ast);
 }
