@@ -12,6 +12,7 @@
 
 #include "21sh.h"
 #include <string.h>
+#include <fcntl.h>
 
 //  command: ls | cat - e | grep '21'
 
@@ -305,31 +306,86 @@ void	execute_start(tree *ast, int in, int out)
 	}
 }
 
+int check_for_redir(tree *ast)
+{
+	while (ast)
+	{
+		if (ast->type == 5)
+			return (1);
+		ast = ast->right;
+	}
+	return (0);
+}
+
+void	execute_redirections(tree *ast)
+{
+	int fd;
+	char **argv;
+	pid_t p;
+	int copy;
+
+	if (check_for_redir(ast))
+	{
+		create_argv(ast);
+		argv = ast->argv;
+		while (ast->type == 3)
+			ast = ast->right;
+		while (ast->current)
+		{
+			if (ast->current->type == 3)
+			{
+				p = fork();
+				if (p == 0)
+				{
+					fd = open(ast->current->next->buf, O_RDWR | O_CREAT, 0644);
+					dup2(fd, 1);
+					execvp(argv[0], argv);
+				}
+				else
+				{
+					waitpid(p, NULL, 0);
+					close(fd);
+				}
+			}
+			ast->current = ast->current->next->next;
+		}
+	}
+}
+
 void	execute_right(tree *ast, int in, int out, int temp)
 {
 	pid_t p;
-
+	int cpy;
+	int fd;
+	
 	p = fork();
 	if (p == 0)
 	{
+		cpy = dup(1);
 		dup2(temp, 0);
 		close(in);
 		if (ast->parent && ast->parent->type == 1)
+		{
 			dup2(out, 1);
+		}
 		create_argv(ast->right);
 		execvp(ast->right->argv[0], ast->right->argv);
 	}
 	else
 	{
 		waitpid(p, NULL, 0);
+		
 		close(out);
 		close(temp);
 	}
 }
 
+
+
 void	simple_execution(tree *ast)
 {
 	pid_t p;
+
 
 	p = fork();
 	if (p == 0)
@@ -348,6 +404,7 @@ void	execute_tree(tree *ast)
 	int fd[2];
 	int tmp_fd;
 	int start;
+	int red;
 
 	start = 0;
 	tmp_fd = 0;
@@ -374,6 +431,7 @@ void	execute_tree(tree *ast)
 			tmp_fd = fd[0];
 			ast = ast->parent;
 		}
+		close(tmp_fd);
 	}
 	else if (ast->type == 2)
 	{
@@ -509,7 +567,7 @@ void	create_tree(tree *ast)
 	}
 	if (ast->type == 3)
 	{
-		if (ast->current->type >= 3 && ast->current->type <= 7)
+		if (ast->current->type >= 3 && ast->current->type <= 8)
 			ast->type = 5;
 		else
 		{

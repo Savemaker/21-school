@@ -9,11 +9,11 @@ int		type(char *buf)
 	if (ft_strcmp(buf, ">") == 0)
 		return (3);
 	if (ft_strcmp(buf, "<") == 0)
-		return (3);
+		return (4);
 	if (ft_strcmp(buf, ">>") == 0)
-		return (4);
+		return (5);
 	if (ft_strcmp(buf, "<<") == 0)
-		return (4);
+		return (6);
 	if (ft_strcmp(buf, "<&") == 0)
 		return (7);
 	if (ft_strcmp(buf, ">&") == 0)
@@ -80,6 +80,10 @@ token *create_token(char *cmd, int i, size_t cmd_len)
 		buf = ft_strdup(">>");
 	else if (i < cmd_len  && i + 1 < cmd_len  && cmd[i] == '<' && cmd[i+1] == '<')
 		buf = ft_strdup("<<");
+	else if (i < cmd_len  && i + 1 < cmd_len  && cmd[i] == '<' && cmd[i+1] == '&')
+		buf = ft_strdup("<&");
+	else if (i < cmd_len  && i + 1 < cmd_len  && cmd[i] == '>' && cmd[i+1] == '&')
+		buf = ft_strdup(">&");
 	else if (cmd[i] && cmd[i] == ';')
 		buf = ft_strdup(";");
 	else if (cmd[i] && cmd[i] == '|')
@@ -138,6 +142,10 @@ token *lexer(char *cmd)
 		if (cmd[i + 1] && cmd[i] == '>' && cmd[i+1] == '>')
 			i += 2;
 		else if (cmd[i + 1] && cmd[i] == '<' && cmd[i+1] == '<')
+			i += 2;
+		else if (cmd[i + 1] && cmd[i] == '<' && cmd[i+1] == '&')
+			i += 2;
+		else if (cmd[i + 1] && cmd[i] == '>' && cmd[i+1] == '&')
 			i += 2;
 		else if (cmd[i] == ';' || cmd[i] == '|' || cmd[i] == '>' || cmd[i] == '<')
 			i++;
