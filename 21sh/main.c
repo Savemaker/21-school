@@ -6,7 +6,7 @@
 /*   By: gbeqqo <gbeqqo@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/07 20:45:46 by gbeqqo            #+#    #+#             */
-/*   Updated: 2019/09/21 18:41:16 by gbeqqo           ###   ########.fr       */
+/*   Updated: 2019/09/29 20:17:05 by gbeqqo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,6 +98,7 @@ tree *create_node(token *list, int type, tree *parent)
 	res->args = 0;
 	res->cur = 0;
 	res->exe = 0;
+	res->fd = 0;
 	if (list == NULL)
 		res->type = 0;
 	else
@@ -133,6 +134,20 @@ void	split(token **list, token **right)
 		*right = temp->next;
 		temp->next = NULL;
 	}
+}
+
+int		count_type(token *list, int type)
+{
+	int res;
+
+	res = 0;
+	while (list)
+	{
+		if (list->type == type)
+			res++;
+		list = list->next;
+	}
+	return (res);
 }
 
 // void	create_tree(tree *ast, token *list, ev *eval)
@@ -317,70 +332,92 @@ int check_for_redir(tree *ast)
 	return (0);
 }
 
-void	execute_redirections(tree *ast)
+int		redirections(tree *ast, int type)
 {
 	int fd;
-	char **argv;
-	pid_t p;
-	int copy;
+	int count;
 
-	if (check_for_redir(ast))
+	fd = -1;
+	while (ast && ast->type != 5)
+		ast = ast->right;
+	count = count_type(ast->current, type);
+	while (ast->current)
 	{
-		create_argv(ast);
-		argv = ast->argv;
-		while (ast->type == 3)
-			ast = ast->right;
-		while (ast->current)
+		if (ast->current->type == type)
 		{
-			if (ast->current->type == 3)
-			{
-				p = fork();
-				if (p == 0)
-				{
-					fd = open(ast->current->next->buf, O_RDWR | O_CREAT, 0644);
-					dup2(fd, 1);
-					execvp(argv[0], argv);
-				}
-				else
-				{
-					waitpid(p, NULL, 0);
-					close(fd);
-				}
-			}
-			ast->current = ast->current->next->next;
+			count -= 1;
+			if (count == 0)
+				break;
 		}
+		ast->current = ast->current->next;
+	}
+	if (ast->type == 5)
+	{
+		fd = open(ast->current->next->buf, O_RDWR | O_CREAT, 0644);
+	}
+	return (fd);
+}
+
+void	other_executions(tree *ast, int fd)
+{
+	int count;
+	int new;
+
+	while (ast && ast->type != 5)
+		ast = ast->right;
+	count = count_type(ast->current, 3) - 1;
+	while (ast->current && count != 0)
+	{
+		if (ast->current->type == 3)
+		{
+			count -= 1;
+			new = open(ast->current->next->buf, O_RDWR, 0644);
+			dup2(new, fd);
+		}
+		ast->current = ast->current->next->next;
 	}
 }
 
 void	execute_right(tree *ast, int in, int out, int temp)
 {
 	pid_t p;
-	int cpy;
 	int fd;
-	
+	int flag;
+
+	flag = 0;
+	if (check_for_redir(ast->right))
+	{
+		fd = redirections(ast, 3);
+		ast->fd = fd;
+		flag = 1;
+	}
 	p = fork();
 	if (p == 0)
 	{
-		cpy = dup(1);
 		dup2(temp, 0);
 		close(in);
 		if (ast->parent && ast->parent->type == 1)
 		{
-			dup2(out, 1);
+			if (flag == 0)
+				dup2(out, 1);
+			if (flag == 1)
+				dup2(fd, 1);
 		}
+		else
+			if (flag == 1)
+				dup2(fd, 1);
 		create_argv(ast->right);
 		execvp(ast->right->argv[0], ast->right->argv);
 	}
 	else
 	{
 		waitpid(p, NULL, 0);
-		
+		if (flag)
+			other_executions(ast->right, fd);
 		close(out);
 		close(temp);
 	}
 }
-
-
 
 void	simple_execution(tree *ast)
 {
@@ -399,12 +436,37 @@ void	simple_execution(tree *ast)
 	}
 }
 
+char	*take_buf(tree *ast, int type)
+{
+	char *res;
+	int count;
+
+	while (ast && ast->type != 5)
+		ast = ast->right;
+	count = count_type(ast->current, type);
+	while (ast->current)
+	{
+		if (ast->current->type == type)
+		{
+			count -= 1;
+			if (count == 0)
+			{
+				res = ast->current->next->buf;
+				break;
+			}
+		}
+		ast->current = ast->current->next;
+	}
+	return (res);
+}
+
 void	execute_tree(tree *ast)
 {
 	int fd[2];
 	int tmp_fd;
 	int start;
-	int red;
+	int new;
+	char *buf;
 
 	start = 0;
 	tmp_fd = 0;
@@ -428,7 +490,14 @@ void	execute_tree(tree *ast)
 				pipe(fd);
 			}
 			execute_right(ast, fd[0], fd[1], tmp_fd);
-			tmp_fd = fd[0];
+			if (check_for_redir(ast->right))
+			{
+				buf = take_buf(ast->right, 3);
+				new = open(buf, O_RDONLY);
+				tmp_fd = new;
+			}
+			else
+				tmp_fd = fd[0];
 			ast = ast->parent;
 		}
 		close(tmp_fd);

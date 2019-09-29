@@ -24,6 +24,7 @@ typedef struct tree{
 	int out;
 	int type;   // 1 = pipe; 2 = command; 3 = suffix; 4 = word;
 	int exe;
+	int fd;
 }tree;
 
 
