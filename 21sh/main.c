@@ -12,100 +12,8 @@
 
 #include "21sh.h"
 #include <string.h>
-#include <fcntl.h>
 
 //  command: ls | cat - e | grep '21'
-
-
-
-typedef struct eval{
-    int args;
-    char **argv;
-    int cur;
-	int in;
-	int out;
-	int st_in;
-	int st_out;
-	int pipes;
-	int semis;
-}ev;
-
-
-int		count_token_types(token *list, int type)
-{
-	int i;
-
-	i = 0;
-	while (list)
-	{
-		if (list->type == type)
-			i++;
-		list = list->next;
-	}
-	return (i);
-}
-
-void	split_list(token **list, token **right, tree *ast, int type)
-{
-	token *temp;
-
-	temp = *list;
-	if (temp == NULL)
-		return ;
-	while (temp->next)
-	{
-		if (temp->next && temp->next->type == type)
-		{
-			if (type == 1)
-			{
-				ast->t_pipes -= 1;
-				if (ast->t_pipes == 0)
-				{
-					*right = temp->next->next;
-					temp->next = NULL;
-					break ;
-				}
-			}
-			if (type == 2)
-			{
-				ast->t_semis -= 1;
-				if (ast->t_semis == 0)
-				{
-					*right = temp->next->next;
-					temp->next = NULL;
-					break ;
-				}
-			}
-		}
-		temp = temp->next;
-	}
-}
-
-tree *create_node(token *list, int type, tree *parent)
-{
-	tree *res;
-
-	res = (tree *)malloc(sizeof(tree) * 1);
-	res->parent = parent;
-	res->current = list;
-	res->left = NULL;
-	res->right = NULL;
-	res->in = 0;
-	res->out = 1;
-	res->t_pipes = 0;
-	res->t_semis = 0;
-	res->argv = NULL;
-	res->args = 0;
-	res->cur = 0;
-	res->exe = 0;
-	res->fd = 0;
-	if (list == NULL)
-		res->type = 0;
-	else
-		res->type = type;
-	return (res);
-}
-
 int     list_len(token *list)
 {
 	int i;
@@ -118,154 +26,6 @@ int     list_len(token *list)
 	}
 	return (i);
 }
-
-void	split(token **list, token **right)
-{
-	token *temp;
-
-	temp = *list;
-	*right = NULL;
-	if (temp == NULL)
-	{
-		return ;
-	}
-	if (temp->next)
-	{
-		*right = temp->next;
-		temp->next = NULL;
-	}
-}
-
-int		count_type(token *list, int type)
-{
-	int res;
-
-	res = 0;
-	while (list)
-	{
-		if (list->type == type)
-			res++;
-		list = list->next;
-	}
-	return (res);
-}
-
-// void	create_tree(tree *ast, token *list, ev *eval)
-// {
-// 	token *left;
-// 	token *right;
-
-// 	left = list;
-// 	right = NULL;
-// 	if (ast->type == 1 && eval->t_pipes == 0)
-// 	{
-// 		ast->type = 2;
-// 		return ;
-// 	}
-// 	if (ast->type == 1 && eval->t_pipes != 0)
-// 	{
-// 		split_list(&list, &right, eval, 1);
-// 		eval->t_pipes -= 1;
-// 		eval->pipes = eval->t_pipes;
-// 		ast->left = create_node(left, 1);
-// 		ast->right = create_node(right, 2);
-// 		create_tree(ast->left, left, eval);
-// 		create_tree(ast->right, right, eval);
-// 	}
-// }
-
-
-// void	create_tree(tree *ast, token *list, ev *eval)
-// {
-// 	token *left;
-// 	token *right;
-
-// 	left = list;
-// 	right = NULL;
-// 	if (ast->type == 1 && eval->pipes == 0)
-// 	{
-// 		ast->type = 2;
-// 	}
-// 	else if (ast->type == 1 && eval->pipes != 0)
-// 	{
-// 		split_list(&list, &right, eval);
-// 		ast->left = create_node(list, 1);
-// 		ast->right = create_node(right, 2);
-// 		create_tree(ast->left, list, eval);
-// 		create_tree(ast->right, right, eval);
-// 	}
-// 	if (ast->type == 2)
-// 	{
-// 		if (ast == NULL)
-// 			return ;
-// 		split(&(ast->current), &right);
-// 		ast->left = create_node(ast->current, 4);
-// 		ast->right = create_node(right, 2);
-// 		create_tree(ast->right, right, eval);
-// 	}
-// }
-
-// void    check_tree(tree *pipe)
-// {
-//     if (pipe == NULL)
-//         return ;
-//     if (pipe->type == 4)
-//         pipe->args += 1;
-//     check_tree(pipe->left);
-//     check_tree(pipe->right);
-// }
-
-// void     create_argv(tree *tree)
-// {
-//     if (tree == NULL)
-//         return;
-//     if (tree->type == 4)
-//     {
-//         tree->argv[tree->cur] = strdup(tree->current->buf);
-//         tree->cur += 1;
-//     }
-//     create_argv(tree->left);
-//     create_argv(tree->right);
-// }
-
-// void	execute_tree(tree *ast, ev *eval)
-// {
-// 	int fd[2];
-
-// 	if (ast == NULL)
-// 		return ;
-// 	if (ast->type == 1)
-// 	{
-// 		pipe(fd);
-// 		dup2(eval->in, 0);
-// 		dup2(eval->out, 1);
-// 		execute_tree(ast->left, eval);
-// 		execute_tree(ast->right, eval);
-// 	}
-// 	if (ast->type == 2)
-// 	{
-// 		execute_tree(ast->left, eval);
-// 		execute_tree(ast->right, eval);
-// 	}
-// 	if (ast->type == 3)
-// 	{
-// 		check_tree(ast, eval);
-// 		eval->argv = (char **)malloc(sizeof(char *) * (eval->args + 1));
-// 		create_argv(ast, eval);
-// 		eval->argv[eval->cur] = NULL;
-// 		if (fork() == 0)
-// 		{
-// 			dup2(eval->in, 0);
-// 			if (eval->pipes != 0)
-// 				dup2(eval->out, 1);
-// 			execvp(eval->argv[0], eval->argv);
-// 		}
-// 		wait(NULL);
-// 		eval->args = 0;
-// 		eval->argv = NULL;
-// 		eval->cur = 0;
-// 	}
-// }
 
 void	args_counter(tree *ast, tree *tmp)
 {
@@ -340,7 +100,7 @@ int		redirections(tree *ast, int type)
 	fd = -1;
 	while (ast && ast->type != 5)
 		ast = ast->right;
-	count = count_type(ast->current, type);
+	count = count_token_types(ast->current, type);
 	while (ast->current)
 	{
 		if (ast->current->type == type)
@@ -365,7 +125,7 @@ void	other_executions(tree *ast, int fd)
 
 	while (ast && ast->type != 5)
 		ast = ast->right;
-	count = count_type(ast->current, 3) - 1;
+	count = count_token_types(ast->current, 3) - 1;
 	while (ast->current && count != 0)
 	{
 		if (ast->current->type == 3)
@@ -443,7 +203,7 @@ char	*take_buf(tree *ast, int type)
 
 	while (ast && ast->type != 5)
 		ast = ast->right;
-	count = count_type(ast->current, type);
+	count = count_token_types(ast->current, type);
 	while (ast->current)
 	{
 		if (ast->current->type == type)
@@ -513,37 +273,29 @@ void	execute_tree(tree *ast)
 	}
 }
 
-ev *create_eval(token *list)
-{
-	ev *eval;
-
-	eval = (ev *)malloc(sizeof(ev) * 1);
-    eval->args = 0;
-    eval->cur = 0;
-    eval->argv = NULL;
-	eval->in = 0;
-	eval->out = 1;
-	eval->st_in = 0;
-	eval->st_out = 0;
-	eval->pipes = count_token_types(list, 1);
-	eval->semis = count_token_types(list, 2);
-	return (eval);
-}
-
-void	split_semicolomn(token **left, token **right)
+void	action(char *cmd)
 {
 	token *list;
+	token *feed;
+	tree *ast;
+	int br;
 
-	list = *left;
-	if (list == NULL)
-		return ;
-	while (list->next && list->next->type != 2)
-		list = list->next;
-	if (list->next && list->next->next)
+	br = 0;
+	list = lexer(cmd);
+	ast = create_node(list, 2, NULL);
+	create_tree(ast);
+	execute_tree(ast);
+}
+
+int main()
+{
+	char *cmd;
+
+	while (1)
 	{
-		*right = list->next->next;
+		cmd = readline("-> ");
+		action(cmd);
 	}
-	list->next = NULL;
 }
 
 // void	create_tree(tree *ast)
@@ -593,96 +345,3 @@ void	split_semicolomn(token **left, token **right)
 // 		create_tree(ast->right);
 // 	}
 // }
-
-
-void	create_tree(tree *ast)
-{
-	token *left;
-	token *right;
-
-	left = ast->current;
-	right = NULL;
-	if (ast == NULL)
-		return ;
-	ast->t_pipes = count_token_types(ast->current, 1);
-	ast->t_semis = count_token_types(ast->current, 2);
-	if (ast->type == 2)
-	{
-		if (ast->t_pipes == 0 && ast->t_semis == 0)
-			ast->type = 3;
-		else if (ast->t_semis == 0 && ast->t_pipes > 0)
-			ast->type = 1;
-		else
-		{
-			split_semicolomn(&left, &right);
-			ast->left = create_node(left, 2, ast);
-			ast->right = create_node(right, 2, ast);
-			create_tree(ast->left);
-			create_tree(ast->right);
-		}
-	}
-	if (ast->type == 1)
-	{
-		if (ast->t_pipes == 0)
-			ast->type = 3;
-		else
-		{
-			split_list(&left, &right, ast, 1);
-			ast->left = create_node(left, 1, ast);
-			ast->right = create_node(right, 2, ast);
-			create_tree(ast->left);
-			create_tree(ast->right);
-		}
-	}
-	if (ast->type == 3)
-	{
-		if (ast->current->type >= 3 && ast->current->type <= 8)
-			ast->type = 5;
-		else
-		{
-		split(&left, &right);
-		ast->left = create_node(left, 4, ast);
-		ast->right = create_node(right, 3, ast);
-		create_tree(ast->right);
-		}
-	}
-}
-
-void	action(char *cmd)
-{
-	token *list;
-	token *feed;
-	tree *ast;
-	ev *eval;
-	int br;
-
-	br = 0;
-	list = lexer(cmd);
-	// while (list)
-	// {
-	// 	printf("%s\n", list->buf);
-	// 	list = list->next;
-	// }
-	//feed->next = NULL;
-	ast = create_node(list, 2, NULL);
-	// while (list)
-	// {
-	// 	if (list->type == 1)
-	// 		br = 1;
-	// 	if (list->type)
-	// 	list = list->next;
-	// }
-	create_tree(ast);
-	execute_tree(ast);
-}
-
-int main()
-{
-	char *cmd;
-
-	while (1)
-	{
-		cmd = readline("-> ");
-		action(cmd);
-	}
-}

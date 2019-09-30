@@ -1,6 +1,6 @@
 NAME = 21sh
 
-SRC =	main.c lexer.c
+SRC =	main.c lexer.c tree_creation.c
 
 OBJ = $(SRC:.c=.o)
 

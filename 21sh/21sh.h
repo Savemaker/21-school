@@ -3,6 +3,7 @@
 #include <readline/readline.h>
 #include <readline/history.h>
 #include "libft.h"
+#include <fcntl.h>
 
 typedef struct tokens{
 	int type;                 // 1 = |        2 = ;         3 = redirect         4 = aggregation
@@ -52,6 +53,14 @@ token	*create_new(char *cmd, int i, size_t cmd_len);
 token	*lexer(char *cmd);
 //
 
+//tree_creation.c
+void	split(token **list, token **right);
+tree	*create_node(token *list, int type, tree *parent);
+void	split_list(token **list, token **right, tree *ast, int type);
+void	split_semicolomn(token **left, token **right);
+int		count_token_types(token *list, int type);
+void	create_tree(tree *ast);
+//
 
 void	execute_tree(tree *ast);
 
