@@ -6,7 +6,7 @@
 /*   By: gbeqqo <gbeqqo@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/07 20:45:46 by gbeqqo            #+#    #+#             */
-/*   Updated: 2019/09/30 21:47:05 by gbeqqo           ###   ########.fr       */
+/*   Updated: 2019/10/01 20:34:59 by gbeqqo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #include <string.h>
 
 //  command: ls | cat - e | grep '21'
+
 int     list_len(token *list)
 {
 	int i;
@@ -25,6 +26,26 @@ int     list_len(token *list)
 		list = list->next;
 	}
 	return (i);
+}
+
+char	*take_buf(token *list, int type, int count)
+{
+	char *res;
+
+	while (list)
+	{
+		if (list->type == type)
+		{
+			count -= 1;
+			if (count == 0)
+			{
+				res = list->next->buf;
+				break;
+			}
+		}
+		list = list->next;
+	}
+	return (res);
 }
 
 void	args_counter(tree *ast, tree *tmp)
@@ -81,81 +102,56 @@ void	execute_start(tree *ast, int in, int out)
 	}
 }
 
-int		check_for_redir(tree *ast, int type)
+token	*check_for_redir(tree *ast, int type)
 {
 	while (ast)
 	{
 		if (ast->type == 5)
 		{
-			while (ast->current)
+			while(ast->current)
 			{
 				if (ast->current->type == type)
-					return (1);
+				{
+					return (ast->current);
+				}
 				ast->current = ast->current->next;
 			}
 		}
 		ast = ast->right;
 	}
-	return (0);
+	return (NULL);
 }
 
-int		redirections(tree *ast, int type)
+int		get_input(tree *ast, int old)
+{
+	token *temp;
+
+	temp = check_for_redir(ast, 4);
+	// if (temp != NULL)
+	// 	ft_putstr("yikes");
+	return (old);
+}
+
+int		get_output(tree *ast, int old)
 {
 	int fd;
 	int count;
+	token *temp;
+	char *buf;
 
-	fd = -1;
-	while (ast && ast->type != 5)
-		ast = ast->right;
-	count = count_token_types(ast->current, type);
-	while (ast->current)
+	count = 0;
+	temp = check_for_redir(ast, 3);
+	if (temp != NULL)
 	{
-		if (ast->current->type == type)
-		{
-			count -= 1;
-			if (count == 0)
-				break;
-		}
-		ast->current = ast->current->next;
-	}
-	if (ast->current->type == 3)
-		fd = open(ast->current->next->buf, O_RDWR | O_CREAT, 0644);
-	if (ast->current->type == 4)
-		fd = open(ast->current->next->buf, O_RDONLY);
-	return (fd);
-}
-
-void	other_executions(tree *ast, int fd)
-{
-	int count;
-	int new;
-
-	while (ast && ast->type != 5)
-		ast = ast->right;
-	count = count_token_types(ast->current, 3) - 1;
-	while (ast->current && count != 0)
-	{
-		if (ast->current->type == 3)
-		{
-			count -= 1;
-			new = open(ast->current->next->buf, O_RDWR, 0644);
-			dup2(new, fd);
-		}
-		ast->current = ast->current->next->next;
-	}
-}
-
-int		assign_fd(tree *ast, int old, int type)
-{
-	int fd;
-
-	if (check_for_redir(ast, type))
-	{
-		ft_putstr("kaka");
-		fd = redirections(ast, type);
+		count = count_token_types(temp, 3);
+		buf = take_buf(temp, 3, count);
+		ft_putstr(buf);
+		fd = open(buf, O_RDWR | O_CREAT, 0644);
 		close(old);
 		return (fd);
 	}
+	else
+		ft_putstr("yikes");
 	return (old);
 }
 
@@ -163,17 +159,20 @@ void	execute_right(tree *ast, int in, int out, int temp)
 {
 	pid_t	p;
 
-	temp = assign_fd(ast, temp, 4);
-	out  = assign_fd(ast, out, 3);
+	temp = get_input(ast, temp);
+	out = get_output(ast, out);	
 	p = fork();
 	if (p == 0)
 	{
 		dup2(temp, 0);
 		close(in);
-		if (ast->parent && ast->parent->type == 1)
+		if (check_for_redir(ast, 3) != NULL)
 			dup2(out, 1);
-		else if (check_for_redir(ast, 3))
-			dup2(out, 1);
+		else
+		{
+			if	(ast->parent && ast->parent->type == 1)
+				dup2(out, 1);
+		}
 		create_argv(ast->right);
 		execvp(ast->right->argv[0], ast->right->argv);
 	}
@@ -201,46 +200,6 @@ void	simple_execution(tree *ast)
 	}
 }
 
-char	*take_buf(tree *ast, int type)
-{
-	char *res;
-	int count;
-
-	while (ast && ast->type != 5)
-		ast = ast->right;
-	count = count_token_types(ast->current, type);
-	while (ast->current)
-	{
-		if (ast->current->type == type)
-		{
-			count -= 1;
-			if (count == 0)
-			{
-				res = ast->current->next->buf;
-				break;
-			}
-		}
-		ast->current = ast->current->next;
-	}
-	return (res);
-}
-
-int		init_redirections(tree *ast, int fd)
-{
-	char *buf;
-	int new;
-	int tmp_fd;
-
-	if (check_for_redir(ast->right, 3))
-	{
-		buf = take_buf(ast->right, 3);
-		new = open(buf, O_RDONLY);
-		tmp_fd = new;
-		return (tmp_fd);
-	}
-	return (fd);
-}
-
 void	execute_tree_type_one(tree *ast)
 {
 	int fd[2];
@@ -261,7 +220,7 @@ void	execute_tree_type_one(tree *ast)
 			pipe(fd);
 		}
 		execute_right(ast, fd[0], fd[1], tmp_fd);
-		tmp_fd = init_redirections(ast, fd[0]);
+		tmp_fd = fd[0];
 		ast = ast->parent;
 	}
 	close(tmp_fd);
