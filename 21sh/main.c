@@ -6,7 +6,7 @@
 /*   By: gbeqqo <gbeqqo@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/07 20:45:46 by gbeqqo            #+#    #+#             */
-/*   Updated: 2019/10/01 20:34:59 by gbeqqo           ###   ########.fr       */
+/*   Updated: 2019/10/02 20:01:44 by gbeqqo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,25 @@ int     list_len(token *list)
 		list = list->next;
 	}
 	return (i);
+}
+
+int		check_type_class(token *list, int type, int count)
+{
+	while (list)
+	{
+		if (list->type == type)
+		{
+			count -= 1;
+			if (count == 0)
+			{
+				if (ft_strcmp(list->buf, ">") == 0)
+					return (1);
+				if (ft_strcmp(list->buf, ">>") == 0)
+					return (2);
+			}
+		}
+	}
+	return (0);
 }
 
 char	*take_buf(token *list, int type, int count)
@@ -82,18 +101,86 @@ void	create_argv(tree *ast)
 	ast->argv[ast->cur] = NULL;
 }
 
+int		check_for_type(token *list, int type)
+{
+	while (list)
+	{
+		if (list->type == type)
+			return (1);
+		list = list->next;
+	}
+	return (0);
+}
+
+int		check_for_redir(tree *ast, int type)
+{
+	int res;
+
+	res = 0;
+	while (ast)
+	{
+		if (ast->type == 5)
+		{
+			res = check_for_type(ast->current, type);
+		}
+		ast = ast->right;
+	}
+	return (res);
+}
+
+tree	*get_redirs_node(tree *ast)
+{
+	while (ast)
+	{
+		if (ast->type == 5)
+			return (ast);
+		ast = ast->right;
+	}
+	return (NULL);
+}
+
+int		get_redirections(tree *ast, int old, int type, int flag)
+{
+	int fd;
+	int count;
+	char *buf;
+	tree *redirs;
+
+	if (check_for_redir(ast, type))
+	{
+		redirs = get_redirs_node(ast);
+		count = count_token_types(redirs->current, type);
+		buf = take_buf(redirs->current, type, count);
+		if (type == 3)
+		{
+			if (check_type_class(redirs->current, type, count) == 1)
+				fd = open(buf, O_RDWR | O_CREAT, 0644);
+			if (check_type_class(redirs->current, type, count) == 2)
+				fd = open(buf, O_RDWR | O_CREAT | O_APPEND, 0644);
+		}
+		if (type == 4)
+			fd = open(buf, O_RDONLY);
+		if (flag == 1)
+			close(old);
+		return (fd);
+	}
+	return (old);
+}
+
 void	execute_start(tree *ast, int in, int out)
 {
 	pid_t p;
 
+	in = get_redirections(ast, in, 4, 0);
+	out = get_redirections(ast, out, 3, 1);
 	p = fork();
 	if (p == 0)
 	{
-		if (ast->right)
-			dup2(out, 1);
+		dup2(in, 0);
+		dup2(out, 1);
 		close(in);
-		create_argv(ast->left);
-		execvp(ast->left->argv[0], ast->left->argv);
+		create_argv(ast);
+		execvp(ast->argv[0], ast->argv);
 	}
 	else
 	{
@@ -102,79 +189,25 @@ void	execute_start(tree *ast, int in, int out)
 	}
 }
 
-token	*check_for_redir(tree *ast, int type)
-{
-	while (ast)
-	{
-		if (ast->type == 5)
-		{
-			while(ast->current)
-			{
-				if (ast->current->type == type)
-				{
-					return (ast->current);
-				}
-				ast->current = ast->current->next;
-			}
-		}
-		ast = ast->right;
-	}
-	return (NULL);
-}
-
-int		get_input(tree *ast, int old)
-{
-	token *temp;
-
-	temp = check_for_redir(ast, 4);
-	// if (temp != NULL)
-	// 	ft_putstr("yikes");
-	return (old);
-}
-
-int		get_output(tree *ast, int old)
-{
-	int fd;
-	int count;
-	token *temp;
-	char *buf;
-
-	count = 0;
-	temp = check_for_redir(ast, 3);
-	if (temp != NULL)
-	{
-		count = count_token_types(temp, 3);
-		buf = take_buf(temp, 3, count);
-		ft_putstr(buf);
-		fd = open(buf, O_RDWR | O_CREAT, 0644);
-		close(old);
-		return (fd);
-	}
-	else
-		ft_putstr("yikes");
-	return (old);
-}
-
 void	execute_right(tree *ast, int in, int out, int temp)
 {
 	pid_t	p;
 
-	temp = get_input(ast, temp);
-	out = get_output(ast, out);	
+	temp = get_redirections(ast, temp, 4, 1);
+	out = get_redirections(ast, out, 3, 1);
 	p = fork();
 	if (p == 0)
 	{
 		dup2(temp, 0);
 		close(in);
-		if (check_for_redir(ast, 3) != NULL)
-			dup2(out, 1);
-		else
+		if (check_for_redir(ast, 3) == 1)
 		{
-			if	(ast->parent && ast->parent->type == 1)
-				dup2(out, 1);
+			dup2(out, 1);
 		}
-		create_argv(ast->right);
-		execvp(ast->right->argv[0], ast->right->argv);
+		else if (ast->parent && ast->parent->parent && ast->parent->parent->type == 1)
+			dup2(out, 1);
+		create_argv(ast);
+		execvp(ast->argv[0], ast->argv);
 	}
 	else
 	{
@@ -186,11 +219,19 @@ void	execute_right(tree *ast, int in, int out, int temp)
 
 void	simple_execution(tree *ast)
 {
-	pid_t p;
+	pid_t	p;
+	int		in;
+	int		out;
 
+	in = 0;
+	out = 1;
+	out = get_redirections(ast, out, 3, 0);
+	in = get_redirections(ast, in, 4, 0);
 	p = fork();
 	if (p == 0)
 	{
+		dup2(in, 0);
+		dup2(out, 1);
 		create_argv(ast);
 		execvp(ast->argv[0], ast->argv);
 	}
@@ -199,6 +240,7 @@ void	simple_execution(tree *ast)
 		waitpid(p, NULL, 0);
 	}
 }
+
 
 void	execute_tree_type_one(tree *ast)
 {
@@ -214,13 +256,16 @@ void	execute_tree_type_one(tree *ast)
 		pipe(fd);
 		if (start == 0)
 		{
-			execute_start(ast, fd[0], fd[1]);
+			execute_start(ast->left, fd[0], fd[1]);
 			start = 1;
 			tmp_fd = fd[0];
 			pipe(fd);
 		}
-		execute_right(ast, fd[0], fd[1], tmp_fd);
-		tmp_fd = fd[0];
+		execute_right(ast->right, fd[0], fd[1], tmp_fd);
+		if (check_for_redir(ast->right, 3) == 0)
+			tmp_fd = fd[0];
+		else
+			tmp_fd = get_redirections(ast->right, fd[1], 3, 1);
 		ast = ast->parent;
 	}
 	close(tmp_fd);

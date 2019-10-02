@@ -1,15 +1,27 @@
 #include <fcntl.h>
 #include <stdio.h>
-#include "21sh.h"
+#include <unistd.h>
+#include <sys/wait.h>
 
 int main(void)
 {
-	int fd;
-	int fd1;
-	int fd2;
-	int orig;
+	char *cat[] = {"cat", NULL};
+	int in;
+	int out;
+	int p;
 
-	orig = dup(1);
-	fd = open("file", O_RDONLY);
+	out = open("2", O_CREAT | O_RDWR, 0644);
+	in = 0;
+	p = fork();
+	if (p == 0)
+	{
+		dup2(in, 0);
+		dup2(out, 1);
+		execvp(cat[0], cat);
+	}
+	else
+	{
+		waitpid(p, NULL, 0);
+	}
 	return (0);
 }

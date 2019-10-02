@@ -1,1 +1,20 @@
 21 42
+1
+21sh
+21sh.h
+Makefile
+calculator.c
+cr_ex_tree.c
+lexer.c
+lexer.o
+libft
+main.c
+main.o
+nt.c
+parse_split.c
+pipe.c
+test
+test.c
+test_redir.c
+tree_creation.c
+tree_creation.o

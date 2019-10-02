@@ -11,7 +11,7 @@ int		type(char *buf)
 	if (ft_strcmp(buf, "<") == 0)
 		return (4);
 	if (ft_strcmp(buf, ">>") == 0)
-		return (5);
+		return (3);
 	if (ft_strcmp(buf, "<<") == 0)
 		return (6);
 	if (ft_strcmp(buf, "<&") == 0)
