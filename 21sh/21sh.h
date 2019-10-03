@@ -31,38 +31,38 @@ typedef struct tree{
 
 
 //parse_split
-int		*create_tab(int words);
-void	copy_split_delim(char **res, char *cmd, char delim);
-int		*count_each_word_delim(char *cmd, int words, char delim);
-char	**ft_split_delim(char *cmd, int words, char delim);
-int		count_words_delim(char *cmd, char delim);
-int		count_words(char *cmd);
-int		*count_each_word(char *cmd, int words);
-void	copy_split(char **res, char *cmd);
-char	**ft_full_split(char *cmd, int words);
-// 
+// int		*create_tab(int words);
+// void	copy_split_delim(char **res, char *cmd, char delim);
+// int		*count_each_word_delim(char *cmd, int words, char delim);
+// char	**ft_split_delim(char *cmd, int words, char delim);
+// int		count_words_delim(char *cmd, char delim);
+// int		count_words(char *cmd);
+// int		*count_each_word(char *cmd, int words);
+// void	copy_split(char **res, char *cmd);
+// char	**ft_full_split(char *cmd, int words);
+// // 
 
-//lexer.c
+// //lexer.c
 
-int		type(char *buf);
-void	append(token **head, token *new);
-int     buf_word_len(char *cmd);
-char	*create_buf(char *cmd);
-token	*create_token(char *cmd, int i, size_t cmd_len);
-token	*create_new(char *cmd, int i, size_t cmd_len);
-token	*lexer(char *cmd);
-//
+// int		type(char *buf);
+// void	append(token **head, token *new);
+// int     buf_word_len(char *cmd);
+// char	*create_buf(char *cmd);
+// token	*create_token(char *cmd, int i, size_t cmd_len);
+// token	*create_new(char *cmd, int i, size_t cmd_len);
+// token	*lexer(char *cmd);
+// //
 
-//tree_creation.c
-void	split(token **list, token **right);
-tree	*create_node(token *list, int type, tree *parent);
-void	split_list(token **list, token **right, tree *ast, int type);
-void	split_semicolomn(token **left, token **right);
-int		count_token_types(token *list, int type);
-void	create_tree(tree *ast);
-//
+// //tree_creation.c
+// void	split(token **list, token **right);
+// tree	*create_node(token *list, int type, tree *parent);
+// void	split_list(token **list, token **right, tree *ast, int type);
+// void	split_semicolomn(token **left, token **right);
+// int		count_token_types(token *list, int type);
+// void	create_tree(tree *ast);
+// //
 
-void	execute_tree(tree *ast);
+// void	execute_tree(tree *ast);
 
 
 #endif
