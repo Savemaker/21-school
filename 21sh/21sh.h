@@ -17,6 +17,7 @@ typedef struct tree{
 	struct tree *right;
 	token		*current;
 	char		**argv;
+	char		**envp;
 	int			args;
 	int			cur;
 	int t_pipes;
@@ -28,7 +29,7 @@ typedef struct tree{
 	int fd;
 }tree;
 
-
+char **hash_table;
 
 //parse_split
 // int		*create_tab(int words);
@@ -42,27 +43,55 @@ typedef struct tree{
 // char	**ft_full_split(char *cmd, int words);
 // // 
 
-// //lexer.c
+//lexer.c
 
-// int		type(char *buf);
-// void	append(token **head, token *new);
-// int     buf_word_len(char *cmd);
-// char	*create_buf(char *cmd);
-// token	*create_token(char *cmd, int i, size_t cmd_len);
-// token	*create_new(char *cmd, int i, size_t cmd_len);
-// token	*lexer(char *cmd);
-// //
+int		type(char *buf);
+void	append(token **head, token *new);
+int     buf_word_len(char *cmd);
+char	*create_buf(char *cmd);
+token	*create_token(char *cmd, size_t i, size_t cmd_len);
+token	*create_new(char *cmd, size_t i, size_t cmd_len);
+token	*lexer(char *cmd);
+//
 
-// //tree_creation.c
-// void	split(token **list, token **right);
-// tree	*create_node(token *list, int type, tree *parent);
-// void	split_list(token **list, token **right, tree *ast, int type);
-// void	split_semicolomn(token **left, token **right);
-// int		count_token_types(token *list, int type);
-// void	create_tree(tree *ast);
-// //
+//creat_tree.c
+void	split(token **list, token **right);
+tree	*create_node(token *list, int type, tree *parent, char **envp);
+void	split_list(token **list, token **right, tree *ast, int type);
+void	split_semicolomn(token **left, token **right);
+int		count_token_types(token *list, int type);
+void	create_tree(tree *ast);
+//
 
-// void	execute_tree(tree *ast);
 
+//copy_env.c
+void	copy_env_to(char **envp, char **copy);
+char	**create_env_copy(char **envp, int c);
+int		count_pointers(char **envp);
+//
+
+
+//execute_tree.c
+void	execute_start(tree *ast, int in, int out);
+void	execute_right(tree *ast, int in, int out, int temp);
+void	simple_execution(tree *ast);
+void	execute_tree_type_one(tree *ast);
+void	execute_tree(tree *ast);
+//
+
+//redirections.c
+int		check_type_class(token *list, int type, int count);
+char	*take_buf(token *list, int type, int count);
+int		check_for_type(token *list, int type);
+int		check_for_redir(tree *ast, int type);
+tree	*get_redirs_node(tree *ast);
+int		get_redirections(tree *ast, int old, int type, int flag);
+void    aggregation_order(token *list, int fd);
+//
+
+//create_argv.c
+void	args_counter(tree *ast, tree *tmp);
+void	argv_creation(tree *ast, tree *tmp);
+void	create_argv(tree *ast);
 
 #endif

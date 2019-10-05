@@ -17,11 +17,12 @@ void	split(token **list, token **right)
 	}
 }
 
-tree *create_node(token *list, int type, tree *parent)
+tree *create_node(token *list, int type, tree *parent, char **envp)
 {
 	tree *res;
 
 	res = (tree *)malloc(sizeof(tree) * 1);
+	res->envp = envp;
 	res->parent = parent;
 	res->current = list;
 	res->left = NULL;
@@ -128,8 +129,8 @@ void	create_tree(tree *ast)
 		else
 		{
 			split_semicolomn(&left, &right);
-			ast->left = create_node(left, 2, ast);
-			ast->right = create_node(right, 2, ast);
+			ast->left = create_node(left, 2, ast, ast->envp);
+			ast->right = create_node(right, 2, ast, ast->envp);
 			create_tree(ast->left);
 			create_tree(ast->right);
 		}
@@ -141,21 +142,21 @@ void	create_tree(tree *ast)
 		else
 		{
 			split_list(&left, &right, ast, 1);
-			ast->left = create_node(left, 1, ast);
-			ast->right = create_node(right, 2, ast);
+			ast->left = create_node(left, 1, ast, ast->envp);
+			ast->right = create_node(right, 2, ast, ast->envp);
 			create_tree(ast->left);
 			create_tree(ast->right);
 		}
 	}
 	if (ast->type == 3)
 	{
-		if (ast->current->type >= 3 && ast->current->type <= 8)
+		if (ast->current->type >= 3 && ast->current->type <= 9)
 			ast->type = 5;
 		else
 		{
 		split(&left, &right);
-		ast->left = create_node(left, 4, ast);
-		ast->right = create_node(right, 3, ast);
+		ast->left = create_node(left, 4, ast, ast->envp);
+		ast->right = create_node(right, 3, ast, ast->envp);
 		create_tree(ast->right);
 		}
 	}

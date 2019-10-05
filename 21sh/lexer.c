@@ -42,7 +42,7 @@ int buf_word_len(char *cmd)
 	int i;
 
 	i = 0;
-	while (cmd[i] && cmd[i] != ' ' && cmd[i] != '\t' && cmd[i] != ';' && cmd[i] != '|' && cmd[i] != '>' && cmd[i] != '<')
+	while (cmd[i] && cmd[i] != ' ' && cmd[i] != '\t' && cmd[i] != ';' && cmd[i] != '|' && cmd[i] != '>' && cmd[i] != '<' && cmd[i] != '"' && cmd[i] != 39)
 		i++;
 	return (i);
 }
@@ -59,7 +59,7 @@ char *create_buf(char *cmd)
 	if (len > 0)
 	{
 		res = (char *)malloc(sizeof(char) * (len + 1));
-		while (cmd[i] && cmd[i] != ' ' && cmd[i] != '\t' && cmd[i] != ';' && cmd[i] != '|' && cmd[i] != '<' && cmd[i] != '>')
+		while (cmd[i] && cmd[i] != ' ' && cmd[i] != '\t' && cmd[i] != ';' && cmd[i] != '|' && cmd[i] != '<' && cmd[i] != '>' && cmd[i] != '"' && cmd[i] != 39)
 		{
 			res[i] = cmd[i];
 			i++;
@@ -69,7 +69,7 @@ char *create_buf(char *cmd)
 	return (res);
 }
 
-token *create_token(char *cmd, int i, size_t cmd_len)
+token *create_token(char *cmd, size_t i, size_t cmd_len)
 {
 	token	*new;
 	char	*buf;
@@ -102,7 +102,7 @@ token *create_token(char *cmd, int i, size_t cmd_len)
 	return (new);
 }
 
-token *create_new(char *cmd, int i, size_t cmd_len)
+token *create_new(char *cmd, size_t i, size_t cmd_len)
 {
 	token *new;
 	char *buf;
@@ -125,7 +125,7 @@ token *lexer(char *cmd)
 {
 	token *head;
 	token *new;
-	int i;
+	size_t i;
 	size_t len;
 
 	len = ft_strlen(cmd);

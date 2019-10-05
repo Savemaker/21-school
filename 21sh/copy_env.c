@@ -1,0 +1,48 @@
+#include "21sh.h"
+
+int		count_pointers(char **envp)
+{
+	int i;
+
+	i = 0;
+	while (envp[i])
+		i++;
+	return (i);
+}
+
+void	copy_env_to(char **envp, char **copy)
+{
+	int i;
+	int j;
+
+	i = 0;
+	j = 0;
+	while (envp[i])
+	{
+		j = 0;
+		while (envp[i][j] != '\0')
+		{
+			copy[i][j] = envp[i][j];
+			j++;
+		}
+		copy[i][j] = '\0';
+		i++;
+	}
+}
+
+char	**create_env_copy(char **envp, int c)
+{
+	char	**copy;
+	int		i;
+
+	i = 0;
+	copy = (char **)malloc(sizeof(char *) * (c + 1));
+	while (i < c)
+	{
+		copy[i] = (char *)malloc(sizeof(char) * (ft_strlen(envp[i]) + 1));
+		i++;
+	}
+	copy[i] = NULL;
+	copy_env_to(envp, copy);
+	return (copy);
+}

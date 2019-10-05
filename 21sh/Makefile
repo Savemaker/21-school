@@ -1,10 +1,11 @@
 NAME = 21sh
 
-SRC =	main.c lexer.c tree_creation.c
+SRC =	main.c lexer.c create_tree.c copy_env.c execute_tree.c redirections.c create_argv.c 
+# create_hash_table.c
 
 OBJ = $(SRC:.c=.o)
 
-FLAGS = 
+FLAGS = -Wall -Werror -Wextra -g
 
 LIBFT = ./libft/libft.a
 
