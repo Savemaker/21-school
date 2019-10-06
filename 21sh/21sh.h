@@ -4,6 +4,18 @@
 #include <readline/history.h>
 #include "libft.h"
 #include <fcntl.h>
+#include <dirent.h>
+
+typedef struct hash_node{
+    char *path;
+    char *name;
+	struct hash_node *next;
+}hash_node;
+
+typedef struct hash{
+    int quant;
+    hash_node **node;
+}hash;
 
 typedef struct tokens{
 	int type;                 // 1 = |        2 = ;         3 = redirect         4 = aggregation
@@ -17,7 +29,6 @@ typedef struct tree{
 	struct tree *right;
 	token		*current;
 	char		**argv;
-	char		**envp;
 	int			args;
 	int			cur;
 	int t_pipes;
@@ -26,10 +37,11 @@ typedef struct tree{
 	int out;
 	int type;   // 1 = pipe; 2 = command; 3 = suffix; 4 = word;
 	int exe;
-	int fd;
+	int fd;         // o;      r;        n;
 }tree;
 
-char **hash_table;
+hash *table;
+char **my_env;
 
 //parse_split
 // int		*create_tab(int words);
@@ -54,9 +66,9 @@ token	*create_new(char *cmd, size_t i, size_t cmd_len);
 token	*lexer(char *cmd);
 //
 
-//creat_tree.c
+//create_tree.c
 void	split(token **list, token **right);
-tree	*create_node(token *list, int type, tree *parent, char **envp);
+tree	*create_node(token *list, int type, tree *parent);
 void	split_list(token **list, token **right, tree *ast, int type);
 void	split_semicolomn(token **left, token **right);
 int		count_token_types(token *list, int type);
@@ -68,6 +80,7 @@ void	create_tree(tree *ast);
 void	copy_env_to(char **envp, char **copy);
 char	**create_env_copy(char **envp, int c);
 int		count_pointers(char **envp);
+char	*ft_getenv(const char *name, char **envp);
 //
 
 
@@ -93,5 +106,46 @@ void    aggregation_order(token *list, int fd);
 void	args_counter(tree *ast, tree *tmp);
 void	argv_creation(tree *ast, tree *tmp);
 void	create_argv(tree *ast);
+//
 
+//built_in.c
+int     check_builtin(tree *ast);
+int		execute_builtin(tree *ast);
+void	free_copy_envp(char ***envp);
+void	free_parse(char **parse, int w);
+//
+
+//ft_setenv.c
+int     ft_setenv(char **parse, char **envp);
+char	**realloc_envp(int pointers, char *name, char *value, char **envp);
+char	*malloc_line(char *name, char *value);
+void	copy_to_realloc(char **envp, char **res, char *name, char *value);
+void	copy_index(char **ress, char *name, char *value);
+int		test_getenv(const char *name, char *ret);
+int		ft_getenv_index(const char *name, char **envp);
+//
+
+//ft_unsetenv.c
+int		ft_unsetenv(char **parse, char **envp);
+char	**realloc_envp_del(int p, char *name, char **envp);
+void	copy_realloc_del(char **res, char **envp, int index);
+//
+
+//ft_cd.c
+int     ft_cd(char **parse);
+void	ft_cd_stuf(char **parse);
+void	print_no_such(char *s);
+void	update_pwd(char *name, char *oldpath);
+//
+
+//ft_split.c
+char	**ft_split_delim(char *cmd, int words, char delim);
+int		count_words_delim(char *cmd, char delim);
+//
+
+
+//create_hash_table.c
+hash    *create_table(void);
+unsigned int hashing(char *name, int size);
+//
 #endif

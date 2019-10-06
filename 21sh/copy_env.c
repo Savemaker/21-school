@@ -1,5 +1,26 @@
 #include "21sh.h"
 
+char	*ft_getenv(const char *name, char **envp)
+{
+	int		i;
+	char	*ret;
+	int		len;
+
+	i = 0;
+	len = ft_strlen(name) + 1;
+	while (envp[i])
+	{
+		ret = ft_strstr(envp[i], name);
+		if (ret != NULL)
+		{
+			if (test_getenv(name, envp[i]) == 1)
+				return (ret + len);
+		}
+		i++;
+	}
+	return (NULL);
+}
+
 int		count_pointers(char **envp)
 {
 	int i;

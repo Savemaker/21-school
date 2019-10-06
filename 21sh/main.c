@@ -26,39 +26,40 @@ void	update_lexer(token *list)
 	}
 }
 
-void	action(char *cmd, char **envp)
+void	action(char *cmd)
 {
 	token *list;
 	tree *ast;
+	unsigned int i;
+	i = 0;
 	// ast = NULL;
 	// (void)envp;
 	list = lexer(cmd);
 	update_lexer(list);
+	
 	// while (list)
 	// {
 	// 	ft_putnbr(list->type);
 	// 	list = list->next;
 	// }
-	ast = create_node(list, 2, NULL, envp);
+	ast = create_node(list, 2, NULL);
 	create_tree(ast);
 	execute_tree(ast);
 }
 
-
-
 int main(int argc, char **argv, char **envp)
 {
 	char *cmd;
-	char **my_env;
 
 	(void)argv;
 	if (argc == 1)
 	{
 		my_env = create_env_copy(envp, count_pointers(envp));
+		table = create_table();
 		while (1)
 		{
 			cmd = readline("-> ");
-			action(cmd, my_env);
+			action(cmd);
 		}
 	}
 }
