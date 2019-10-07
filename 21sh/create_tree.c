@@ -125,6 +125,7 @@ void	create_tree(tree *ast)
 			ast->type = 3;
 		else if (ast->t_semis == 0 && ast->t_pipes > 0)
 			ast->type = 1;
+
 		else
 		{
 			split_semicolomn(&left, &right);

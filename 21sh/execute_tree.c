@@ -1,5 +1,26 @@
 #include "21sh.h"
 
+int		check_path(char *path)
+{
+	struct stat s;
+
+	if ((lstat(path, &s)) == -1)
+	{
+		ft_putstr("minishell: command not found: ");
+		ft_putendl(path);
+		return (-1);
+	}
+	if (access(path, X_OK) == -1)
+	{
+		ft_putstr("minishell: permission denied: ");
+		ft_putendl(path);
+		return (-1);
+	}
+	if (ft_strcmp(path, "./") == 0 || ft_strcmp(path, "/") == 0)
+		return (-1);
+	return (0);
+}
+
 char	*create_path(char *name, char *path)
 {
 	char *new;
@@ -19,6 +40,8 @@ char	*get_cmd(char *cmd, unsigned int hash)
 {
 	hash_node *node;
 
+	if (hash == 0)
+		return (NULL);
 	if (table->node[hash] == NULL)
 		return (NULL);
 	else
@@ -43,7 +66,8 @@ int		argv_checker(char **argv)
 	upd = get_cmd(argv[0], hash);
 	if (upd == NULL)
 	{
-		ft_putendl("Command not found");
+		if (check_path(argv[0]) == 0)
+			return (1);
 		return (0);
 	}
 	else
@@ -54,7 +78,7 @@ int		argv_checker(char **argv)
 	}
 }
 
-void	execute_start(tree *ast, int in, int out)
+int	execute_start(tree *ast, int in, int out)
 {
 	pid_t p;
 	tree *redirs;
@@ -81,10 +105,14 @@ void	execute_start(tree *ast, int in, int out)
 				// waitpid(p, NULL, 0);
 			close(out);
 		}
+		return (0);
 	}
+	close(in);
+	close(out);
+	return (1);
 }
 
-void	execute_right(tree *ast, int in, int out, int temp)
+int	execute_right(tree *ast, int in, int out, int temp)
 {
 	pid_t	p;
 	tree *redirs;
@@ -114,7 +142,8 @@ void	execute_right(tree *ast, int in, int out, int temp)
 			}
 			else
 			{
-				waitpid(p, NULL, 0);
+				if (ast->parent->parent == NULL || (ast->parent->parent && ast->parent->parent->type != 1))
+					waitpid(p, NULL, 0);
 				close(out);
 				close(temp);
 			}
@@ -124,7 +153,11 @@ void	execute_right(tree *ast, int in, int out, int temp)
 			execute_builtin(ast);
 			close(out);
 		}
+		return (0);
 	}
+	close(in);
+	close(out);
+	return (1);
 }
 
 void	simple_execution(tree *ast)
@@ -140,9 +173,9 @@ void	simple_execution(tree *ast)
 	in = get_redirections(ast, in, 4, 0);
 	redirs = get_redirs_node(ast);
 	create_argv(ast);
-	if (argv_checker(ast->argv) == 1)
+	if (check_builtin(ast) == 0)
 	{
-		if (check_builtin(ast) == 0)
+		if (argv_checker(ast->argv) == 1)
 		{
 			p = fork();
 			if (p == 0)
@@ -158,9 +191,18 @@ void	simple_execution(tree *ast)
 				waitpid(p, NULL, 0);
 			}
 		}
-		else
-			execute_builtin(ast);
 	}
+	else
+		execute_builtin(ast);
+}
+
+void	create_files(tree *ast)
+{
+	int fd;
+
+	fd = get_redirections(ast, 0, 3, 0);
+	if (fd != 0)
+		close(fd);
 }
 
 void	execute_tree_type_one(tree *ast)
@@ -170,7 +212,10 @@ void	execute_tree_type_one(tree *ast)
 	int tmp_fd;
 	int temp;
 
+	int res;
+
 	start = 0;
+	create_files(ast);
 	while (ast->left->type == 1)
 		ast = ast->left;
 	while (ast != NULL && ast->type == 1)
@@ -193,17 +238,25 @@ void	execute_tree_type_one(tree *ast)
 			}
 			else
 			{
-				execute_start(ast->left, fd[0], fd[1]);
-				start = 1;
-				tmp_fd = fd[0];
-				pipe(fd);
+				res = execute_start(ast->left, fd[0], fd[1]);
+				if (res == 0)
+				{
+					start = 1;
+					tmp_fd = fd[0];
+					pipe(fd);
+				}
 			}
 		}
-		execute_right(ast->right, fd[0], fd[1], tmp_fd);
-		if (check_for_redir(ast->right, 3) == 0)
-			tmp_fd = fd[0];
-		else
-			tmp_fd = get_redirections(ast->right, fd[1], 3, 1);
+		if (res == 0)
+		{
+			res = execute_right(ast->right, fd[0], fd[1], tmp_fd);
+			if (res == 1)
+				break;
+			if (check_for_redir(ast->right, 3) == 0)
+				tmp_fd = fd[0];
+			else
+				tmp_fd = get_redirections(ast->right, fd[1], 3, 1);
+		}
 		ast = ast->parent;
 	}
 	close(tmp_fd);

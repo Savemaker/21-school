@@ -6,11 +6,21 @@
 /*   By: gbeqqo <gbeqqo@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/07 20:45:46 by gbeqqo            #+#    #+#             */
-/*   Updated: 2019/10/02 21:53:55 by gbeqqo           ###   ########.fr       */
+/*   Updated: 2019/10/07 17:38:03 by gbeqqo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "21sh.h"
+
+int		semantics(token *list)
+{
+	if (list && list->next == NULL)
+	{
+		if (list->type == 2)
+			return (1);
+	}
+	return (0);
+}
 
 void	update_lexer(token *list)
 {
@@ -36,7 +46,8 @@ void	action(char *cmd)
 	// (void)envp;
 	list = lexer(cmd);
 	update_lexer(list);
-	
+	if (semantics(list) == 1)
+		return ;
 	// while (list)
 	// {
 	// 	ft_putnbr(list->type);

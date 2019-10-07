@@ -85,17 +85,33 @@ int     check_builtin(tree *ast)
 
 int     execute_builtin(tree *ast)
 {
+	tree *redirs;
+	int fd;
+	int res;
+	int save;
+
+	res = 0;
+	fd = 1;
+	redirs = get_redirs_node(ast);
+	if (redirs)
+		aggregation_order(redirs->current, 1);
+	fd = get_redirections(ast, fd, 3, 0);
+	save = dup(1);
+	dup2(fd, 1);
     if (ft_strcmp(ast->argv[0], "echo") == 0)
-        return (ft_echo(ast->argv));
+        res = ft_echo(ast->argv);
     if (ft_strcmp(ast->argv[0], "env") == 0)
-        return (ft_env(my_env));
+        res = ft_env(my_env);
     if (ft_strcmp(ast->argv[0], "exit") == 0)
-        return (ft_exit(my_env));
+        res = ft_exit(my_env);
     if (ft_strcmp(ast->argv[0], "setenv") == 0)
-        return (ft_setenv(ast->argv, my_env));
+       res = ft_setenv(ast->argv, my_env);
     if (ft_strcmp(ast->argv[0], "unsetenv") == 0)
-        return (ft_unsetenv(ast->argv, my_env));
+        res = ft_unsetenv(ast->argv, my_env);
     if (ft_strcmp(ast->argv[0], "cd") == 0)
-        return (ft_cd(ast->argv));
-    return (0);
+        res = ft_cd(ast->argv);
+	close(fd);
+	dup2(save, 1);
+	close(save);
+    return (res);
 }

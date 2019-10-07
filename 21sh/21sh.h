@@ -5,6 +5,7 @@
 #include "libft.h"
 #include <fcntl.h>
 #include <dirent.h>
+#include <sys/stat.h>
 
 typedef struct hash_node{
     char *path;
@@ -85,8 +86,8 @@ char	*ft_getenv(const char *name, char **envp);
 
 
 //execute_tree.c
-void	execute_start(tree *ast, int in, int out);
-void	execute_right(tree *ast, int in, int out, int temp);
+int		execute_start(tree *ast, int in, int out);
+int		execute_right(tree *ast, int in, int out, int temp);
 void	simple_execution(tree *ast);
 void	execute_tree_type_one(tree *ast);
 void	execute_tree(tree *ast);

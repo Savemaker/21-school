@@ -15,8 +15,9 @@ int     count_command(char *path)
             if (ft_strcmp(d->d_name, ".") != 0 && ft_strcmp(d->d_name, "..") != 0)
                 res++;
         }
+		closedir(dir);
     }
-    closedir(dir);
+    
     return (res);
 }
 
@@ -48,8 +49,9 @@ unsigned int hashing(char *name, int size)
 {
     unsigned int res;
     int i;
-
-    res = 0;
+	if (size == 0)
+		return (0);
+	res = 0;
     i = 0;
     while (name && name[i])
     {
@@ -131,8 +133,8 @@ hash    *create_table(void)
 
     i = 0;
     count = 0;
-    new = (hash *)malloc(sizeof(hash) * 1);
     count = counter();
+	new = (hash *)malloc(sizeof(hash) * 1);
     new->quant = count;
     new->node = (hash_node **)malloc(sizeof(hash_node *) * (count + 1));
     new->node[count + 1] = NULL;
