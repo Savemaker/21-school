@@ -130,7 +130,7 @@ void	action(char *cmd)
 	ast = create_node(list, 2, NULL);
 	create_tree(ast);
 	execute_tree(ast);
-	//free_token_list(&list);
+	// free_token_list(&list);
 	free_tree(ast);
 }
 
@@ -145,9 +145,6 @@ int main(int argc, char **argv, char **envp)
 		g_table = create_table();
 		while (1)
 		{
-			
-			
-		
 			cmd = readline("-> ");
 			action(cmd);
 			// free_copy_envp(&g_my_env);

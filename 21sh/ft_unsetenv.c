@@ -68,7 +68,10 @@ int ft_unsetenv(char **parse, char **envp)
 			g_my_env = NULL;
             g_my_env = new_env;
 			if (ft_strcmp("PATH", parse[1]) == 0)
+			{
+				free_hash_table(&g_table);
 				g_table = create_table();
+			}
 			return (1);
 		}
 	}

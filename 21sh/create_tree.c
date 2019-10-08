@@ -53,26 +53,15 @@ void	split_list(t_token **list, t_token **right, t_tree *ast, int type)
 	{
 		if (temp->next && temp->next->type == type)
 		{
-			if (type == 1)
-			{
 				ast->t_pipes -= 1;
 				if (ast->t_pipes == 0)
 				{
 					*right = temp->next->next;
+					free(temp->next->buf);
+					free(temp->next);
 					temp->next = NULL;
 					break ;
 				}
-			}
-			if (type == 2)
-			{
-				ast->t_semis -= 1;
-				if (ast->t_semis == 0)
-				{
-					*right = temp->next->next;
-					temp->next = NULL;
-					break ;
-				}
-			}
 		}
 		temp = temp->next;
 	}
@@ -90,6 +79,8 @@ void	split_semicolomn(t_token **left, t_token **right)
 	if (list->next && list->next->next)
 	{
 		*right = list->next->next;
+		free(list->next->buf);
+		free(list->next);
 	}
 	else
 		*right = NULL;

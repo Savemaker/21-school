@@ -51,9 +51,15 @@ void	free_tree(t_tree *tree)
 	if (tree == NULL)
 		return ;
 	if (tree->type == 3)
-		free_parse(tree->argv, tree->args);
+	{
+		if (tree->argv != NULL)
+			free_parse(tree->argv, tree->args);
+	}
 	if (tree->type == 4 || tree->type == 5)
-		free_token_list(&(tree->current));
+	{
+		if (tree->current)
+			free_token_list(&(tree->current));
+	}
 	right = tree->right;
 	left = tree->left;
 	free(tree);
