@@ -22,9 +22,9 @@ int		type(char *buf)
 }
 
 
-void	append(token **head, token *new)
+void	append(t_token **head, t_token *new)
 {
-	token *tmp;
+	t_token *tmp;
 
 	tmp = *head;
 	if (*head == NULL)
@@ -69,9 +69,9 @@ char *create_buf(char *cmd)
 	return (res);
 }
 
-token *create_token(char *cmd, size_t i, size_t cmd_len)
+t_token *create_token(char *cmd, size_t i, size_t cmd_len)
 {
-	token	*new;
+	t_token	*new;
 	char	*buf;
 
 	buf = NULL;
@@ -94,7 +94,7 @@ token *create_token(char *cmd, size_t i, size_t cmd_len)
 		buf = ft_strdup("<");
 	if (buf != NULL)
 	{
-		new = (token *)malloc(sizeof(token) * 1);
+		new = (t_token *)malloc(sizeof(t_token) * 1);
 		new->buf = buf;
 		new->type = type(buf);
 		new->next = NULL;
@@ -102,16 +102,16 @@ token *create_token(char *cmd, size_t i, size_t cmd_len)
 	return (new);
 }
 
-token *create_new(char *cmd, size_t i, size_t cmd_len)
+t_token *create_new(char *cmd, size_t i, size_t cmd_len)
 {
-	token *new;
+	t_token *new;
 	char *buf;
 
 	new = NULL;
 	buf = create_buf(&cmd[i]);
 	if (buf != NULL)
 	{
-		new = (token *)malloc(sizeof(token) * 1);
+		new = (t_token *)malloc(sizeof(t_token) * 1);
 		new->buf = buf;
 		new->next = NULL;
 		new->type = type(buf);
@@ -121,12 +121,12 @@ token *create_new(char *cmd, size_t i, size_t cmd_len)
 	return (new);
 }
 
-token *lexer(char *cmd)
+t_token *lexer(char *cmd)
 {
-	token *head;
-	token *new;
-	size_t i;
-	size_t len;
+	t_token	*head;
+	t_token *new;
+	size_t	i;
+	size_t	len;
 
 	len = ft_strlen(cmd);
 	i = 0;

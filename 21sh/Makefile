@@ -1,6 +1,6 @@
 NAME = 21sh
 
-SRC =	main.c lexer.c create_tree.c copy_env.c execute_tree.c redirections.c create_argv.c built_in.c ft_setenv.c ft_unsetenv.c ft_cd.c create_hash_table.c ft_split.c
+SRC =	main.c lexer.c create_tree.c copy_env.c execute_tree.c redirections.c create_argv.c built_in.c ft_setenv.c ft_unsetenv.c ft_cd.c create_hash_table.c ft_split.c free.c
 
 OBJ = $(SRC:.c=.o)
 

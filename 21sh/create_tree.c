@@ -1,8 +1,8 @@
 #include "21sh.h"
 
-void	split(token **list, token **right)
+void	split(t_token **list, t_token **right)
 {
-	token *temp;
+	t_token *temp;
 
 	temp = *list;
 	*right = NULL;
@@ -17,11 +17,11 @@ void	split(token **list, token **right)
 	}
 }
 
-tree *create_node(token *list, int type, tree *parent)
+t_tree *create_node(t_token *list, int type, t_tree *parent)
 {
-	tree *res;
+	t_tree *res;
 
-	res = (tree *)malloc(sizeof(tree) * 1);
+	res = (t_tree *)malloc(sizeof(t_tree) * 1);
 	res->parent = parent;
 	res->current = list;
 	res->left = NULL;
@@ -42,9 +42,9 @@ tree *create_node(token *list, int type, tree *parent)
 	return (res);
 }
 
-void	split_list(token **list, token **right, tree *ast, int type)
+void	split_list(t_token **list, t_token **right, t_tree *ast, int type)
 {
-	token *temp;
+	t_token *temp;
 
 	temp = *list;
 	if (temp == NULL)
@@ -78,9 +78,9 @@ void	split_list(token **list, token **right, tree *ast, int type)
 	}
 }
 
-void	split_semicolomn(token **left, token **right)
+void	split_semicolomn(t_token **left, t_token **right)
 {
-	token *list;
+	t_token *list;
 
 	list = *left;
 	if (list == NULL)
@@ -91,10 +91,12 @@ void	split_semicolomn(token **left, token **right)
 	{
 		*right = list->next->next;
 	}
+	else
+		*right = NULL;
 	list->next = NULL;
 }
 
-int		count_token_types(token *list, int type)
+int		count_token_types(t_token *list, int type)
 {
 	int i;
 
@@ -108,10 +110,10 @@ int		count_token_types(token *list, int type)
 	return (i);
 }
 
-void	create_tree(tree *ast)
+void	create_tree(t_tree *ast)
 {
-	token *left;
-	token *right;
+	t_token *left;
+	t_token *right;
 
 	left = ast->current;
 	right = NULL;
@@ -125,7 +127,6 @@ void	create_tree(tree *ast)
 			ast->type = 3;
 		else if (ast->t_semis == 0 && ast->t_pipes > 0)
 			ast->type = 1;
-
 		else
 		{
 			split_semicolomn(&left, &right);
@@ -154,10 +155,10 @@ void	create_tree(tree *ast)
 			ast->type = 5;
 		else
 		{
-		split(&left, &right);
-		ast->left = create_node(left, 4, ast);
-		ast->right = create_node(right, 3, ast);
-		create_tree(ast->right);
+			split(&left, &right);
+			ast->left = create_node(left, 4, ast);
+			ast->right = create_node(right, 3, ast);
+			create_tree(ast->right);
 		}
 	}
 }

@@ -7,28 +7,28 @@
 #include <dirent.h>
 #include <sys/stat.h>
 
-typedef struct hash_node{
+typedef struct s_hash_node{
     char *path;
     char *name;
-	struct hash_node *next;
-}hash_node;
+	struct s_hash_node *next;
+}t_hash_node;
 
-typedef struct hash{
+typedef struct s_hash{
     int quant;
-    hash_node **node;
-}hash;
+    t_hash_node **node;
+}t_hash;
 
-typedef struct tokens{
+typedef struct s_tokens{
 	int type;                 // 1 = |        2 = ;         3 = redirect         4 = aggregation
 	char *buf;
-	struct tokens *next;
-}token;
+	struct s_tokens *next;
+}t_token;
 
-typedef struct tree{
-	struct tree *parent;
-	struct tree *left;
-	struct tree *right;
-	token		*current;
+typedef struct s_tree{
+	struct s_tree *parent;
+	struct s_tree *left;
+	struct s_tree *right;
+	t_token		*current;
 	char		**argv;
 	int			args;
 	int			cur;
@@ -39,114 +39,131 @@ typedef struct tree{
 	int type;   // 1 = pipe; 2 = command; 3 = suffix; 4 = word;
 	int exe;
 	int fd;         // o;      r;        n;
-}tree;
+}t_tree;
 
-hash *table;
-char **my_env;
+t_hash *g_table;
+char **g_my_env;
 
-//parse_split
-// int		*create_tab(int words);
-// void	copy_split_delim(char **res, char *cmd, char delim);
-// int		*count_each_word_delim(char *cmd, int words, char delim);
-// char	**ft_split_delim(char *cmd, int words, char delim);
-// int		count_words_delim(char *cmd, char delim);
-// int		count_words(char *cmd);
-// int		*count_each_word(char *cmd, int words);
-// void	copy_split(char **res, char *cmd);
-// char	**ft_full_split(char *cmd, int words);
-// // 
+//main.c
+void	action(char *cmd);
+void	update_lexer(t_token **list);
+int		semantics(t_token *list);
+char	*sub_line(char *parse, char **envp);
+char	*sub_line_stuf(char *parse);
+//
 
 //lexer.c
-
 int		type(char *buf);
-void	append(token **head, token *new);
+void	append(t_token **head, t_token *new);
 int     buf_word_len(char *cmd);
 char	*create_buf(char *cmd);
-token	*create_token(char *cmd, size_t i, size_t cmd_len);
-token	*create_new(char *cmd, size_t i, size_t cmd_len);
-token	*lexer(char *cmd);
+t_token	*create_token(char *cmd, size_t i, size_t cmd_len);
+t_token	*create_new(char *cmd, size_t i, size_t cmd_len);
+t_token	*lexer(char *cmd);
 //
 
 //create_tree.c
-void	split(token **list, token **right);
-tree	*create_node(token *list, int type, tree *parent);
-void	split_list(token **list, token **right, tree *ast, int type);
-void	split_semicolomn(token **left, token **right);
-int		count_token_types(token *list, int type);
-void	create_tree(tree *ast);
+void	split(t_token **list, t_token **right);
+t_tree	*create_node(t_token *list, int type, t_tree *parent);
+void	split_list(t_token **list, t_token **right, t_tree *ast, int type);
+void	split_semicolomn(t_token **left, t_token **right);
+int		count_token_types(t_token *list, int type);
+void	create_tree(t_tree *ast);
 //
 
 
 //copy_env.c
+char	*ft_getenv(const char *name, char **envp);
+int		count_pointers(char **envp);
 void	copy_env_to(char **envp, char **copy);
 char	**create_env_copy(char **envp, int c);
-int		count_pointers(char **envp);
-char	*ft_getenv(const char *name, char **envp);
 //
 
 
 //execute_tree.c
-int		execute_start(tree *ast, int in, int out);
-int		execute_right(tree *ast, int in, int out, int temp);
-void	simple_execution(tree *ast);
-void	execute_tree_type_one(tree *ast);
-void	execute_tree(tree *ast);
+int		check_path(char *path);
+char	*create_path(char *name, char *path);
+char	*get_cmd(char *cmd, int hash);
+int		argv_checker(char **argv);
+int		execute_start(t_tree *ast, int in, int out);
+int		execute_right(t_tree *ast, int in, int out, int temp);
+void	simple_execution(t_tree *ast);
+void	create_files(t_tree *ast);
+void	execute_tree_type_one(t_tree *ast);
+void	execute_tree(t_tree *ast);
 //
 
 //redirections.c
-int		check_type_class(token *list, int type, int count);
-char	*take_buf(token *list, int type, int count);
-int		check_for_type(token *list, int type);
-int		check_for_redir(tree *ast, int type);
-tree	*get_redirs_node(tree *ast);
-int		get_redirections(tree *ast, int old, int type, int flag);
-void    aggregation_order(token *list, int fd);
+int		check_type_class(t_token *list, int type, int count);
+char	*take_buf(t_token *list, int type, int count);
+int		check_for_type(t_token *list, int type);
+int		check_for_redir(t_tree *ast, int type);
+t_tree	*get_redirs_node(t_tree *ast);
+void    aggregation_order(t_token *list, int fd);
+int		get_redirections(t_tree *ast, int old, int type, int flag);
 //
 
 //create_argv.c
-void	args_counter(tree *ast, tree *tmp);
-void	argv_creation(tree *ast, tree *tmp);
-void	create_argv(tree *ast);
+void	args_counter(t_tree *ast, t_tree *tmp);
+void	argv_creation(t_tree *ast, t_tree *tmp);
+void	create_argv(t_tree *ast);
 //
 
 //built_in.c
-int     check_builtin(tree *ast);
-int		execute_builtin(tree *ast);
-void	free_copy_envp(char ***envp);
 void	free_parse(char **parse, int w);
+int		ft_echo(char **parse);
+int     ft_env(char **envp);
+int		ft_exit(char **envp);
+int     check_builtin(t_tree *ast);
+int		execute_builtin(t_tree *ast);
 //
 
 //ft_setenv.c
-int     ft_setenv(char **parse, char **envp);
-char	**realloc_envp(int pointers, char *name, char *value, char **envp);
-char	*malloc_line(char *name, char *value);
-void	copy_to_realloc(char **envp, char **res, char *name, char *value);
 void	copy_index(char **ress, char *name, char *value);
 int		test_getenv(const char *name, char *ret);
 int		ft_getenv_index(const char *name, char **envp);
+void	copy_to_realloc(char **envp, char **res, char *name, char *value);
+char	*malloc_line(char *name, char *value);
+char	**realloc_envp(int pointers, char *name, char *value, char **envp);
+int     ft_setenv(char **parse, char **envp);
 //
 
 //ft_unsetenv.c
-int		ft_unsetenv(char **parse, char **envp);
-char	**realloc_envp_del(int p, char *name, char **envp);
 void	copy_realloc_del(char **res, char **envp, int index);
+char	**realloc_envp_del(int p, char *name, char **envp);
+int		ft_unsetenv(char **parse, char **envp);
 //
 
 //ft_cd.c
-int     ft_cd(char **parse);
-void	ft_cd_stuf(char **parse);
-void	print_no_such(char *s);
 void	update_pwd(char *name, char *oldpath);
+void	print_no_such(char *s);
+void	ft_cd_stuf(char **parse);
+int     ft_cd(char **parse);
 //
 
 //ft_split.c
-char	**ft_split_delim(char *cmd, int words, char delim);
+int		*create_tab(int words);
+void	copy_split_delim(char **res, char *cmd, char delim);
+int		*count_each_word_delim(char *cmd, int words, char delim);
 int		count_words_delim(char *cmd, char delim);
+char	**ft_split_delim(char *cmd, int words, char delim);
 //
 
 
 //create_hash_table.c
-hash    *create_table(void);
-unsigned int hashing(char *name, int size);
+int     count_command(char *path);
+int     counter(void);
+int		hashing(char *name, int size);
+void    get_bin_from_path(char *path, t_hash *new);
+void    insert_in_table(t_hash *new);
+t_hash    *create_table(void);
+//
+
+
+//free.c
+void	free_token_list(t_token **list);
+void	free_copy_envp(char ***envp);
+void	free_tree(t_tree *tree);
+void	free_hash_table(t_hash **table);
 //
 #endif

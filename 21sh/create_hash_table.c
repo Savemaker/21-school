@@ -31,7 +31,7 @@ int     counter(void)
 
     i = 0;
     count = 0;
-    env = ft_getenv("PATH", my_env);
+    env = ft_getenv("PATH", g_my_env);
     if (env != NULL)
     {
         words = count_words_delim(env, ':');
@@ -41,13 +41,14 @@ int     counter(void)
             count += count_command(split[i]);
             i++;
         }
+		free_parse(split, words);
     }
     return (count);
 }
 
-unsigned int hashing(char *name, int size)
+int		hashing(char *name, int size)
 {
-    unsigned int res;
+    int res;
     int i;
 	if (size == 0)
 		return (0);
@@ -61,15 +62,15 @@ unsigned int hashing(char *name, int size)
     return (res);
 }
 
-void    get_bin_from_path(char *path, hash *new)
+void    get_bin_from_path(char *path, t_hash *new)
 {
     DIR *dir;
     struct dirent *d;
-    unsigned int hash_i;
+    int hash_i;
     dir = opendir(path);
     int cols;
-    hash_node **node;
-    hash_node *cur;
+    t_hash_node **node;
+    t_hash_node *cur;
 
     node = new->node;
     cols = 0;
@@ -82,7 +83,7 @@ void    get_bin_from_path(char *path, hash *new)
                 hash_i = hashing(d->d_name, new->quant);
                 if (node[hash_i] == NULL)
                 {
-                    node[hash_i] = (hash_node *)malloc(sizeof(hash_node) * 1);
+                    node[hash_i] = (t_hash_node *)malloc(sizeof(t_hash_node) * 1);
                     node[hash_i]->name = ft_strdup(d->d_name);
                     node[hash_i]->path = ft_strdup(path);
                     node[hash_i]->next = NULL;
@@ -92,7 +93,7 @@ void    get_bin_from_path(char *path, hash *new)
                     cur = node[hash_i];
                     while (cur->next != NULL)
                         cur = cur->next;
-                    cur->next = (hash_node *)malloc(sizeof(hash_node) * 1);
+                    cur->next = (t_hash_node *)malloc(sizeof(t_hash_node) * 1);
                     cur->next->name = ft_strdup(d->d_name);
                     cur->next->path= ft_strdup(path);
                     cur->next->next = NULL;
@@ -104,7 +105,7 @@ void    get_bin_from_path(char *path, hash *new)
     
 }
 
-void    insert_in_table(hash *new)
+void    insert_in_table(t_hash *new)
 {
     char *env;
     char **split;
@@ -112,7 +113,7 @@ void    insert_in_table(hash *new)
     int i;
 
     i = 0;
-    env = ft_getenv("PATH", my_env);
+    env = ft_getenv("PATH", g_my_env);
     if (env != NULL)
     {
         words = count_words_delim(env, ':');
@@ -122,22 +123,22 @@ void    insert_in_table(hash *new)
             get_bin_from_path(split[i], new);
             i++;
         }
+		free_parse(split, words);
     }
 }
 
-hash    *create_table(void)
+t_hash    *create_table(void)
 {
-    hash *new;
+    t_hash *new;
     int count;
     int i;
 
     i = 0;
     count = 0;
     count = counter();
-	new = (hash *)malloc(sizeof(hash) * 1);
+	new = (t_hash *)malloc(sizeof(t_hash) * 1);
     new->quant = count;
-    new->node = (hash_node **)malloc(sizeof(hash_node *) * (count + 1));
-    new->node[count + 1] = NULL;
+    new->node = (t_hash_node **)malloc(sizeof(t_hash_node *) * (count + 1));
     while (i < count)
     {
         new->node[i] = NULL;

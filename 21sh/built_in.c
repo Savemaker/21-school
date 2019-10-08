@@ -14,17 +14,6 @@ void	free_parse(char **parse, int w)
 	free(parse);
 }
 
-void	free_copy_envp(char ***envp)
-{
-	int		p;
-	char	**ref;
-
-	ref = *envp;
-	p = count_pointers(ref);
-	free_parse(ref, p);
-	envp = NULL;
-}
-
 int    ft_echo(char **parse)
 {
 	int i;
@@ -66,7 +55,7 @@ int ft_exit(char **envp)
 	return (1);
 }
 
-int     check_builtin(tree *ast)
+int     check_builtin(t_tree *ast)
 {
     if (ft_strcmp(ast->argv[0], "echo") == 0)
         return (1);
@@ -83,9 +72,9 @@ int     check_builtin(tree *ast)
     return (0);
 }
 
-int     execute_builtin(tree *ast)
+int     execute_builtin(t_tree *ast)
 {
-	tree *redirs;
+	t_tree *redirs;
 	int fd;
 	int res;
 	int save;
@@ -101,13 +90,13 @@ int     execute_builtin(tree *ast)
     if (ft_strcmp(ast->argv[0], "echo") == 0)
         res = ft_echo(ast->argv);
     if (ft_strcmp(ast->argv[0], "env") == 0)
-        res = ft_env(my_env);
+        res = ft_env(g_my_env);
     if (ft_strcmp(ast->argv[0], "exit") == 0)
-        res = ft_exit(my_env);
+        res = ft_exit(g_my_env);
     if (ft_strcmp(ast->argv[0], "setenv") == 0)
-       res = ft_setenv(ast->argv, my_env);
+       res = ft_setenv(ast->argv, g_my_env);
     if (ft_strcmp(ast->argv[0], "unsetenv") == 0)
-        res = ft_unsetenv(ast->argv, my_env);
+        res = ft_unsetenv(ast->argv, g_my_env);
     if (ft_strcmp(ast->argv[0], "cd") == 0)
         res = ft_cd(ast->argv);
 	close(fd);

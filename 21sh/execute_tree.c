@@ -36,17 +36,17 @@ char	*create_path(char *name, char *path)
 	return (res);
 }
 
-char	*get_cmd(char *cmd, unsigned int hash)
+char	*get_cmd(char *cmd, int hash)
 {
-	hash_node *node;
+	t_hash_node *node;
 
 	if (hash == 0)
 		return (NULL);
-	if (table->node[hash] == NULL)
+	if (g_table->node[hash] == NULL)
 		return (NULL);
 	else
 	{
-		node = table->node[hash];
+		node = g_table->node[hash];
 		while (node)
 		{
 			if (ft_strcmp(cmd, node->name) == 0)
@@ -59,10 +59,10 @@ char	*get_cmd(char *cmd, unsigned int hash)
 
 int		argv_checker(char **argv)
 {
-	unsigned int hash;
+	int hash;
 	char *upd;
 
-	hash = hashing(argv[0], table->quant);
+	hash = hashing(argv[0], g_table->quant);
 	upd = get_cmd(argv[0], hash);
 	if (upd == NULL)
 	{
@@ -74,16 +74,17 @@ int		argv_checker(char **argv)
 	{
 		free(argv[0]);
 		argv[0] = ft_strdup(upd);
+		free(upd);
 		if (check_path(argv[0]) == 0)
 			return (1);
 		return (0);
 	}
 }
 
-int	execute_start(tree *ast, int in, int out)
+int	execute_start(t_tree *ast, int in, int out)
 {
 	pid_t p;
-	tree *redirs;
+	t_tree *redirs;
 	int flag;
 
 	flag = 1;
@@ -100,7 +101,7 @@ int	execute_start(tree *ast, int in, int out)
 			close(in);
 			if (redirs)
 				aggregation_order(redirs->current, out);
-			execve(ast->argv[0], ast->argv, my_env);
+			execve(ast->argv[0], ast->argv, g_my_env);
 		}
 		else
 		{
@@ -114,10 +115,10 @@ int	execute_start(tree *ast, int in, int out)
 	return (1);
 }
 
-int	execute_right(tree *ast, int in, int out, int temp)
+int	execute_right(t_tree *ast, int in, int out, int temp)
 {
 	pid_t	p;
-	tree *redirs;
+	t_tree *redirs;
 
 	redirs = get_redirs_node(ast);
 	temp = get_redirections(ast, temp, 4, 1);
@@ -140,7 +141,7 @@ int	execute_right(tree *ast, int in, int out, int temp)
 					dup2(out, 1);
 				if (redirs)
 					aggregation_order(redirs->current, out);
-				execve(ast->argv[0], ast->argv, my_env);
+				execve(ast->argv[0], ast->argv, g_my_env);
 			}
 			else
 			{
@@ -162,12 +163,12 @@ int	execute_right(tree *ast, int in, int out, int temp)
 	return (1);
 }
 
-void	simple_execution(tree *ast)
+void	simple_execution(t_tree *ast)
 {
 	pid_t	p;
 	int		in;
 	int		out;
-	tree *redirs;
+	t_tree *redirs;
 
 	in = 0;
 	out = 1;
@@ -186,7 +187,7 @@ void	simple_execution(tree *ast)
 				dup2(out, 1);
 				if (redirs)
 					aggregation_order(redirs->current, out);
-				execve(ast->argv[0], ast->argv, my_env);
+				execve(ast->argv[0], ast->argv, g_my_env);
 			}
 			else
 			{
@@ -198,7 +199,7 @@ void	simple_execution(tree *ast)
 		execute_builtin(ast);
 }
 
-void	create_files(tree *ast)
+void	create_files(t_tree *ast)
 {
 	int fd;
 
@@ -207,7 +208,7 @@ void	create_files(tree *ast)
 		close(fd);
 }
 
-void	execute_tree_type_one(tree *ast)
+void	execute_tree_type_one(t_tree *ast)
 {
 	int fd[2];
 	int start;
@@ -264,7 +265,7 @@ void	execute_tree_type_one(tree *ast)
 	close(tmp_fd);
 }
 
-void	execute_tree(tree *ast)
+void	execute_tree(t_tree *ast)
 {
 	if (ast == NULL)
 		return ;

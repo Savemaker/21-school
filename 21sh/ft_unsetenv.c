@@ -65,10 +65,10 @@ int ft_unsetenv(char **parse, char **envp)
 			p = count_pointers(envp) - 1;
 			new_env = realloc_envp_del(p, parse[1], envp);
 			free_copy_envp(&envp);
-			my_env = NULL;
-            my_env = new_env;
+			g_my_env = NULL;
+            g_my_env = new_env;
 			if (ft_strcmp("PATH", parse[1]) == 0)
-				table = create_table();
+				g_table = create_table();
 			return (1);
 		}
 	}

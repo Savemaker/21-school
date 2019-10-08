@@ -1,6 +1,6 @@
 #include "21sh.h"
 
-void	args_counter(tree *ast, tree *tmp)
+void	args_counter(t_tree *ast, t_tree *tmp)
 {
 	if (ast == NULL)
 		return ;
@@ -10,7 +10,7 @@ void	args_counter(tree *ast, tree *tmp)
 	args_counter(ast->right, tmp);
 }
 
-void	argv_creation(tree *ast, tree *tmp)
+void	argv_creation(t_tree *ast, t_tree *tmp)
 {
 	if (ast == NULL)
 		return ;
@@ -23,9 +23,9 @@ void	argv_creation(tree *ast, tree *tmp)
 	argv_creation(ast->right, tmp);
 }
 
-void	create_argv(tree *ast)
+void	create_argv(t_tree *ast)
 {
-	tree *tmp;
+	t_tree *tmp;
 
 	tmp = ast;
 	args_counter(ast, tmp);

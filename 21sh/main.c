@@ -6,7 +6,7 @@
 /*   By: gbeqqo <gbeqqo@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/07 20:45:46 by gbeqqo            #+#    #+#             */
-/*   Updated: 2019/10/07 17:38:03 by gbeqqo           ###   ########.fr       */
+/*   Updated: 2019/10/08 19:36:13 by gbeqqo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,51 +57,81 @@ char	*sub_line(char *parse, char **envp)
 	return (res);
 }
 
-int		semantics(token *list)
+int		semantics(t_token *list)
 {
+	int first;
+
+	first = 1;
 	if (list && list->next == NULL)
 	{
 		if (list->type == 2)
 			return (1);
 	}
+	while (list)
+	{
+		if (list->type != 1)
+			first = 0;
+		if (list->type == 2)
+		{
+			if (list->next && list->next->type == 2)
+			{
+				ft_putendl("Parse error near ;;");
+				return (1);
+			}
+		}
+		if (list->type == 1)
+		{
+			if ((list->next && list->next->type == 1) || first == 1)
+			{
+				ft_putendl("Parse error near |");
+				return (1);
+			}
+		}
+		list = list->next;
+	}
 	return (0);
 }
 
-void	update_lexer(token *list)
+void	update_lexer(t_token **list)
 {
-	while (list)
+	t_token *temp;
+	t_token *head;
+
+	head = *list;
+	if (head->type == 2 && head->next && head->next->type != 2)
 	{
-		if (list->next && list->next->type == 8)
+		temp = *list;
+		*list = (*list)->next;
+		free(temp->buf);
+		free(temp);
+	}
+	while (head)
+	{
+		if (head->next && head->next->type == 8)
 		{
-			list->type = 9;
-			if (list->next->next)
-				list->next->next->type = 9;
+			head->type = 9;
+			if (head->next->next)
+				head->next->next->type = 9;
 		}
-		list->buf = sub_line(list->buf, my_env);
-		list = list->next;
+		head->buf = sub_line(head->buf, g_my_env);
+		head = head->next;
 	}
 }
 
 void	action(char *cmd)
 {
-	token *list;
-	tree *ast;
-	unsigned int i;
-	i = 0;
-	// ast = NULL;
-	// (void)envp;
+	t_token *list;
+	t_tree *ast;
+
 	list = lexer(cmd);
-	update_lexer(list);
+	update_lexer(&list);
 	if (semantics(list) == 1)
 		return ;
-	// while (list)
-	// {
-	// 	ft_putnbr(list->type);
-	// 	list = list->next;
-	// }
 	ast = create_node(list, 2, NULL);
 	create_tree(ast);
 	execute_tree(ast);
+	//free_token_list(&list);
+	free_tree(ast);
 }
 
 int main(int argc, char **argv, char **envp)
@@ -111,12 +141,19 @@ int main(int argc, char **argv, char **envp)
 	(void)argv;
 	if (argc == 1)
 	{
-		my_env = create_env_copy(envp, count_pointers(envp));
-		table = create_table();
+		g_my_env = create_env_copy(envp, count_pointers(envp));
+		g_table = create_table();
 		while (1)
 		{
+			
+			
+		
 			cmd = readline("-> ");
 			action(cmd);
+			// free_copy_envp(&g_my_env);
+			// free_hash_table(&g_table);
+			free(cmd);
 		}
 	}
+	return (0);
 }

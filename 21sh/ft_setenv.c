@@ -141,11 +141,11 @@ int     ft_setenv(char **parse, char **envp)
 			p++;
 		new_env = realloc_envp(p, parse[1], parse[2], envp);
 		free_copy_envp(&envp);
-        my_env = new_env;
+        g_my_env = new_env;
 		if (ft_strcmp("PATH", parse[1]) == 0)
 		{
-			table = NULL;
-			table = create_table();
+			g_table = NULL;
+			g_table = create_table();
 		}
 		return (1);
 	}

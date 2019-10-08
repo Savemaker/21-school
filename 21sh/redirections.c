@@ -1,6 +1,6 @@
 #include "21sh.h"
 
-int		check_type_class(token *list, int type, int count)
+int		check_type_class(t_token *list, int type, int count)
 {
 	while (list)
 	{
@@ -20,7 +20,7 @@ int		check_type_class(token *list, int type, int count)
 	return (0);
 }
 
-char	*take_buf(token *list, int type, int count)
+char	*take_buf(t_token *list, int type, int count)
 {
 	char *res;
     int fd;
@@ -50,7 +50,7 @@ char	*take_buf(token *list, int type, int count)
 	return (res);
 }
 
-int		check_for_type(token *list, int type)
+int		check_for_type(t_token *list, int type)
 {
 	while (list)
 	{
@@ -61,7 +61,7 @@ int		check_for_type(token *list, int type)
 	return (0);
 }
 
-int		check_for_redir(tree *ast, int type)
+int		check_for_redir(t_tree *ast, int type)
 {
 	int res;
 
@@ -77,7 +77,7 @@ int		check_for_redir(tree *ast, int type)
 	return (res);
 }
 
-tree	*get_redirs_node(tree *ast)
+t_tree	*get_redirs_node(t_tree *ast)
 {
 	while (ast)
 	{
@@ -88,7 +88,7 @@ tree	*get_redirs_node(tree *ast)
 	return (NULL);
 }
 
-void    aggregation_order(token *list, int fd)
+void    aggregation_order(t_token *list, int fd)
 {
     int order;
 	int num_a;
@@ -123,12 +123,12 @@ void    aggregation_order(token *list, int fd)
     }
 }
 
-int		get_redirections(tree *ast, int old, int type, int flag)
+int		get_redirections(t_tree *ast, int old, int type, int flag)
 {
 	int fd;
 	int count;
 	char *buf;
-	tree *redirs;
+	t_tree *redirs;
 
 	if (check_for_redir(ast, type))
 	{

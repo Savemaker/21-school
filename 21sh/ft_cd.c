@@ -15,8 +15,8 @@ void update_pwd(char *name, char *oldpath)
 	parse[1] = ft_strdup("PWD");
 	parse[2] = ft_strdup(name);
 	parse[3] = NULL;
-	ft_setenv(old, my_env);
-	ft_setenv(parse, my_env);
+	ft_setenv(old, g_my_env);
+	ft_setenv(parse, g_my_env);
 	free_parse(parse, 3);
 	free_parse(old, 3);
 }
@@ -36,9 +36,9 @@ void	ft_cd_stuf(char **parse)
 
 	tmp = getcwd(old_buf, 2048);
 	if (ft_strcmp(parse[1], " ") == 0)
-		res = chdir(ft_getenv("HOME", my_env));
+		res = chdir(ft_getenv("HOME", g_my_env));
 	else if (ft_strcmp(parse[1], "-") == 0)
-		res = chdir(ft_getenv("OLDPWD", my_env));
+		res = chdir(ft_getenv("OLDPWD", g_my_env));
 	else
 		res = chdir(parse[1]);
 	if (res == -1)
@@ -61,7 +61,7 @@ int     ft_cd(char **parse)
 	char	*home;
 	char	tmp[2048];
 
-	home = ft_getenv("HOME", my_env);
+	home = ft_getenv("HOME", g_my_env);
 	i = 0;
 	while (parse[i])
 		i++;
