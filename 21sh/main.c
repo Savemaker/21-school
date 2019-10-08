@@ -12,6 +12,51 @@
 
 #include "21sh.h"
 
+char	*sub_line_stuf(char *parse)
+{
+	char *res;
+
+	if (ft_strlen(parse) == 1)
+		res = ft_strdup("$");
+	else
+		res = ft_strdup(" ");
+	return (res);
+}
+
+char	*sub_line(char *parse, char **envp)
+{
+	char *seek;
+	char *res;
+
+	res = parse;
+	if (parse[0] == '$')
+	{
+		seek = ft_getenv(&parse[1], envp);
+		if (seek == NULL)
+		{
+			res = sub_line_stuf(parse);
+			free(parse);
+		}
+		else
+		{
+			res = ft_strdup(seek);
+			free(parse);
+		}
+	}
+	else if (parse[0] == '~')
+	{
+		seek = ft_getenv("HOME", envp);
+		if (seek == NULL)
+			res = NULL;
+		else
+		{
+			res = ft_strjoin(seek, &parse[1]);
+			free(parse);
+		}
+	}
+	return (res);
+}
+
 int		semantics(token *list)
 {
 	if (list && list->next == NULL)
@@ -32,6 +77,7 @@ void	update_lexer(token *list)
 			if (list->next->next)
 				list->next->next->type = 9;
 		}
+		list->buf = sub_line(list->buf, my_env);
 		list = list->next;
 	}
 }

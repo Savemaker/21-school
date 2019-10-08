@@ -74,7 +74,9 @@ int		argv_checker(char **argv)
 	{
 		free(argv[0]);
 		argv[0] = ft_strdup(upd);
-		return (1);
+		if (check_path(argv[0]) == 0)
+			return (1);
+		return (0);
 	}
 }
 
