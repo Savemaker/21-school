@@ -100,6 +100,7 @@ int		execute_right(t_tree *ast, int in, int out, int temp);
 void	simple_execution_fork(t_tree *ast, int in, int out);
 void	simple_execution(t_tree *ast);
 void	create_files(t_tree *ast);
+int		execute_tree_type_one_builtin(t_tree *ast, int fd[2]);
 int		execute_tree_type_one_start(t_tree *ast, int fd[2]);
 void	execute_tree_type_one(t_tree *ast);
 void	execute_tree(t_tree *ast);

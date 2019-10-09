@@ -6,7 +6,7 @@
 /*   By: gbeqqo <gbeqqo@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/09 16:46:01 by gbeqqo            #+#    #+#             */
-/*   Updated: 2019/10/09 19:04:52 by gbeqqo           ###   ########.fr       */
+/*   Updated: 2019/10/09 21:44:49 by gbeqqo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -232,14 +232,71 @@ void	create_files(t_tree *ast)
 		close(fd);
 }
 
+int		execute_tree_type_one_start(t_tree *ast, int fd[2])
+{
+	int tmp_fd;
+	int res;
+
+	tmp_fd = -1;
+	res = 0;
+	create_argv(ast->left);
+	if (check_builtin(ast->left))
+	{
+		tmp_fd = execute_tree_type_one_builtin(ast, fd);
+		pipe(fd);
+	}
+	else
+	{
+		res = execute_start(ast->left, fd[0], fd[1]);
+		if (res == 0)
+		{
+			tmp_fd = fd[0];
+			pipe(fd);
+		}
+	}
+	return (tmp_fd);
+}
+
+int		execute_tree_type_one_builtin(t_tree *ast, int fd[2])
+{
+	int temp;
+	int tmp_fd;
+
+	temp = dup(1);
+	dup2(fd[1], 1);
+	execute_builtin(ast->left);
+	dup2(temp, 1);
+	close(temp);
+	close(fd[1]);
+	tmp_fd = fd[0];
+	return (tmp_fd);
+}
+
+int		execute_tree_type_one_tmp(t_tree *ast, int fd[2])
+{
+	int tmp_fd;
+
+	tmp_fd = -1;
+	if (check_for_redir(ast->right, 3) == 0)
+		tmp_fd = fd[0];
+	else
+		tmp_fd = get_redirections(ast->right, fd[1], 3, 1);
+	return (tmp_fd);
+}
+
+void	director_suka(int tmp_fd)
+{
+	if (tmp_fd != -1)
+		close(tmp_fd);
+}
+
 void	execute_tree_type_one(t_tree *ast)
 {
 	int fd[2];
 	int start;
 	int tmp_fd;
-	int temp;
-	int res;
 
+	tmp_fd = -1;
 	start = 0;
 	while (ast->left->type == 1)
 		ast = ast->left;
@@ -249,41 +306,17 @@ void	execute_tree_type_one(t_tree *ast)
 		if (start == 0)
 		{
 			start = 1;
-			create_argv(ast->left);
-			if (check_builtin(ast->left))
-			{
-				temp = dup(1);
-				dup2(fd[1], 1);
-				execute_builtin(ast->left);
-				dup2(temp, 1);
-				close(temp);
-				close(fd[1]);
-				tmp_fd = fd[0];
-				pipe(fd);
-			}
-			else
-			{
-				res = execute_start(ast->left, fd[0], fd[1]);
-				if (res == 0)
-				{
-					tmp_fd = fd[0];
-					pipe(fd);
-				}
-			}
+			tmp_fd = execute_tree_type_one_start(ast, fd);
 		}
-		if (res == 0)
+		if (tmp_fd != -1)
 		{
-			res = execute_right(ast->right, fd[0], fd[1], tmp_fd);
-			if (res == 1)
+			if (execute_right(ast->right, fd[0], fd[1], tmp_fd) == 1)
 				break ;
-			if (check_for_redir(ast->right, 3) == 0)
-				tmp_fd = fd[0];
-			else
-				tmp_fd = get_redirections(ast->right, fd[1], 3, 1);
+			tmp_fd = execute_tree_type_one_tmp(ast, fd);
 		}
 		ast = ast->parent;
 	}
-	close(tmp_fd);
+	director_suka(tmp_fd);
 }
 
 void	execute_tree(t_tree *ast)
