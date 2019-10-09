@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   redirections.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gbeqqo <gbeqqo@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/10/09 16:06:20 by gbeqqo            #+#    #+#             */
+/*   Updated: 2019/10/09 16:12:57 by gbeqqo           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "21sh.h"
 
 int		check_type_class(t_token *list, int type, int count)
@@ -22,28 +34,25 @@ int		check_type_class(t_token *list, int type, int count)
 
 char	*take_buf(t_token *list, int type, int count)
 {
-	char *res;
-    int fd;
-    int flag;
+	char	*res;
+	int		fd;
 
-    flag = 0;
 	res = NULL;
 	while (list)
 	{
 		if (list->type == type)
 		{
-            flag = 1;
 			count -= 1;
 			if (count == 0)
 			{
 				res = list->next->buf;
-				break;
+				break ;
 			}
-            else
-            {
-                fd = open(list->next->buf, O_RDWR | O_CREAT, 0644);
-                close(fd);
-            }
+			else
+			{
+				fd = open(list->next->buf, O_RDWR | O_CREAT, 0644);
+				close(fd);
+			}
 		}
 		list = list->next;
 	}
@@ -88,21 +97,31 @@ t_tree	*get_redirs_node(t_tree *ast)
 	return (NULL);
 }
 
-void    aggregation_order(t_token *list, int fd)
+void	aggregation_order_stuff(t_token *list, int fd, int order)
 {
-    int order;
 	int num_a;
 	int num_b;
 
-    order = 0;
-    while (list)
-    {
-        if (list->type == 3)
-        {
-            order = 1;
-        }
-        if (list->type == 9)
-        {
+	num_a = ft_atoi(list->buf);
+	num_b = ft_atoi(list->next->next->buf);
+	if (order == 0)
+		dup2(num_b, num_a);
+	if (order == 1)
+		dup2(fd, num_a);
+}
+
+void	aggregation_order(t_token *list, int fd)
+{
+	int order;
+	int num_a;
+
+	order = 0;
+	while (list)
+	{
+		if (list->type == 3)
+			order = 1;
+		if (list->type == 9)
+		{
 			if (ft_strcmp(list->next->next->buf, "-") == 0)
 			{
 				num_a = ft_atoi(list->buf);
@@ -110,25 +129,20 @@ void    aggregation_order(t_token *list, int fd)
 			}
 			else
 			{
-				num_a = ft_atoi(list->buf);
-				num_b = ft_atoi(list->next->next->buf);
-				if (order == 0)
-					dup2(num_b, num_a);
-				if (order == 1)
-					dup2(fd, num_a);
-				break;
+				aggregation_order_stuff(list, fd, order);
+				break ;
 			}
-        }
-        list = list->next;
-    }
+		}
+		list = list->next;
+	}
 }
 
 int		get_redirections(t_tree *ast, int old, int type, int flag)
 {
-	int fd;
-	int count;
-	char *buf;
-	t_tree *redirs;
+	int		fd;
+	int		count;
+	char	*buf;
+	t_tree	*redirs;
 
 	if (check_for_redir(ast, type))
 	{

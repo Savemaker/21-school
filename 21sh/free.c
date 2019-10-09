@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   free.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gbeqqo <gbeqqo@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/10/09 16:01:51 by gbeqqo            #+#    #+#             */
+/*   Updated: 2019/10/09 16:02:17 by gbeqqo           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "21sh.h"
 
 void	free_token_list(t_token **list)
@@ -69,8 +81,8 @@ void	free_tree(t_tree *tree)
 
 void	free_hash_table(t_hash **table)
 {
-	int i;
-	t_hash *cur_hash;
+	int		i;
+	t_hash	*cur_hash;
 
 	i = 0;
 	cur_hash = *table;

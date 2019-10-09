@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_setenv.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gbeqqo <gbeqqo@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/10/09 16:03:37 by gbeqqo            #+#    #+#             */
+/*   Updated: 2019/10/09 16:04:21 by gbeqqo           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "21sh.h"
 
 void	copy_index(char **ress, char *name, char *value)
@@ -127,7 +139,7 @@ char	**realloc_envp(int pointers, char *name, char *value, char **envp)
 	return (res);
 }
 
-int     ft_setenv(char **parse, char **envp)
+int		ft_setenv(char **parse, char **envp)
 {
 	char	**new_env;
 	int		p;
@@ -141,7 +153,7 @@ int     ft_setenv(char **parse, char **envp)
 			p++;
 		new_env = realloc_envp(p, parse[1], parse[2], envp);
 		free_copy_envp(&envp);
-        g_my_env = new_env;
+		g_my_env = new_env;
 		if (ft_strcmp("PATH", parse[1]) == 0)
 		{
 			free_hash_table(&g_table);

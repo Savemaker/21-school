@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   create_tree.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gbeqqo <gbeqqo@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/10/09 16:38:40 by gbeqqo            #+#    #+#             */
+/*   Updated: 2019/10/09 16:44:23 by gbeqqo           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "21sh.h"
 
 void	split(t_token **list, t_token **right)
@@ -17,7 +29,7 @@ void	split(t_token **list, t_token **right)
 	}
 }
 
-t_tree *create_node(t_token *list, int type, t_tree *parent)
+t_tree	*create_node(t_token *list, int type, t_tree *parent)
 {
 	t_tree *res;
 
@@ -53,15 +65,15 @@ void	split_list(t_token **list, t_token **right, t_tree *ast, int type)
 	{
 		if (temp->next && temp->next->type == type)
 		{
-				ast->t_pipes -= 1;
-				if (ast->t_pipes == 0)
-				{
-					*right = temp->next->next;
-					free(temp->next->buf);
-					free(temp->next);
-					temp->next = NULL;
-					break ;
-				}
+			ast->t_pipes -= 1;
+			if (ast->t_pipes == 0)
+			{
+				*right = temp->next->next;
+				free(temp->next->buf);
+				free(temp->next);
+				temp->next = NULL;
+				break ;
+			}
 		}
 		temp = temp->next;
 	}
@@ -101,6 +113,36 @@ int		count_token_types(t_token *list, int type)
 	return (i);
 }
 
+void	create_tree_type_two(t_tree *ast, t_token *left, t_token *right)
+{
+	if (ast->t_pipes == 0 && ast->t_semis == 0)
+		ast->type = 3;
+	else if (ast->t_semis == 0 && ast->t_pipes > 0)
+		ast->type = 1;
+	else
+	{
+		split_semicolomn(&left, &right);
+		ast->left = create_node(left, 2, ast);
+		ast->right = create_node(right, 2, ast);
+		create_tree(ast->left);
+		create_tree(ast->right);
+	}
+}
+
+void	create_tree_type_one(t_tree *ast, t_token *left, t_token *right)
+{
+	if (ast->t_pipes == 0)
+		ast->type = 3;
+	else
+	{
+		split_list(&left, &right, ast, 1);
+		ast->left = create_node(left, 1, ast);
+		ast->right = create_node(right, 2, ast);
+		create_tree(ast->left);
+		create_tree(ast->right);
+	}
+}
+
 void	create_tree(t_tree *ast)
 {
 	t_token *left;
@@ -113,33 +155,9 @@ void	create_tree(t_tree *ast)
 	ast->t_pipes = count_token_types(ast->current, 1);
 	ast->t_semis = count_token_types(ast->current, 2);
 	if (ast->type == 2)
-	{
-		if (ast->t_pipes == 0 && ast->t_semis == 0)
-			ast->type = 3;
-		else if (ast->t_semis == 0 && ast->t_pipes > 0)
-			ast->type = 1;
-		else
-		{
-			split_semicolomn(&left, &right);
-			ast->left = create_node(left, 2, ast);
-			ast->right = create_node(right, 2, ast);
-			create_tree(ast->left);
-			create_tree(ast->right);
-		}
-	}
+		create_tree_type_two(ast, left, right);
 	if (ast->type == 1)
-	{
-		if (ast->t_pipes == 0)
-			ast->type = 3;
-		else
-		{
-			split_list(&left, &right, ast, 1);
-			ast->left = create_node(left, 1, ast);
-			ast->right = create_node(right, 2, ast);
-			create_tree(ast->left);
-			create_tree(ast->right);
-		}
-	}
+		create_tree_type_one(ast, left, right);
 	if (ast->type == 3)
 	{
 		if (ast->current->type >= 3 && ast->current->type <= 9)

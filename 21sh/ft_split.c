@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_split.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gbeqqo <gbeqqo@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/10/09 16:04:33 by gbeqqo            #+#    #+#             */
+/*   Updated: 2019/10/09 16:04:51 by gbeqqo           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "21sh.h"
 
 int		*create_tab(int words)
@@ -97,7 +109,7 @@ char	**ft_split_delim(char *cmd, int words, char delim)
 		res[i] = (char *)malloc(sizeof(char) * tab[i] + 1);
 		i++;
 	}
-    free(tab);
+	free(tab);
 	res[i] = NULL;
 	copy_split_delim(res, cmd, delim);
 	return (res);

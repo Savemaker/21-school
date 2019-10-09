@@ -47,7 +47,9 @@ char **g_my_env;
 //main.c
 void	action(char *cmd);
 void	update_lexer(t_token **list);
+int		semantics_semicolomn(t_token *list);
 int		semantics(t_token *list);
+char	*sub_line_dollar(char *parse);
 char	*sub_line(char *parse, char **envp);
 char	*sub_line_stuf(char *parse);
 //
@@ -57,8 +59,11 @@ int		type(char *buf);
 void	append(t_token **head, t_token *new);
 int     buf_word_len(char *cmd);
 char	*create_buf(char *cmd);
+char	*create_token_buf(char *cmd, size_t i, size_t cmd_len);
+t_token *create_token_new(char *buf);
 t_token	*create_token(char *cmd, size_t i, size_t cmd_len);
 t_token	*create_new(char *cmd, size_t i, size_t cmd_len);
+size_t	lexer_count_i(char *cmd, int i);
 t_token	*lexer(char *cmd);
 //
 
@@ -68,6 +73,8 @@ t_tree	*create_node(t_token *list, int type, t_tree *parent);
 void	split_list(t_token **list, t_token **right, t_tree *ast, int type);
 void	split_semicolomn(t_token **left, t_token **right);
 int		count_token_types(t_token *list, int type);
+void	create_tree_type_two(t_tree *ast, t_token *left, t_token *right);
+void	create_tree_type_one(t_tree *ast, t_token *left, t_token *right);
 void	create_tree(t_tree *ast);
 //
 
@@ -85,10 +92,15 @@ int		check_path(char *path);
 char	*create_path(char *name, char *path);
 char	*get_cmd(char *cmd, int hash);
 int		argv_checker(char **argv);
+void	execute_start_fork(t_tree *ast, int in, int out, t_tree *redirs);
 int		execute_start(t_tree *ast, int in, int out);
+void	close_fds(int out, int temp);
+void	execute_right_cmd(t_tree *ast, int in, int out, int temp);
 int		execute_right(t_tree *ast, int in, int out, int temp);
+void	simple_execution_fork(t_tree *ast, int in, int out);
 void	simple_execution(t_tree *ast);
 void	create_files(t_tree *ast);
+int		execute_tree_type_one_start(t_tree *ast, int fd[2]);
 void	execute_tree_type_one(t_tree *ast);
 void	execute_tree(t_tree *ast);
 //
@@ -115,6 +127,7 @@ int		ft_echo(char **parse);
 int     ft_env(char **envp);
 int		ft_exit(char **envp);
 int     check_builtin(t_tree *ast);
+int		builtin_execution(t_tree *ast);
 int		execute_builtin(t_tree *ast);
 //
 
@@ -151,11 +164,13 @@ char	**ft_split_delim(char *cmd, int words, char delim);
 
 
 //create_hash_table.c
-int     count_command(char *path);
-int     counter(void);
-int		hashing(char *name, int size);
-void    get_bin_from_path(char *path, t_hash *new);
-void    insert_in_table(t_hash *new);
+int     	count_command(char *path);
+int     	counter(void);
+int			hashing(char *name, int size);
+void		get_bin_fresh(t_hash_node **node, int hash_i, char *name, char *path);
+void		get_bin_used(t_hash_node **node, int hash_i, char *name, char *path);
+void    	get_bin_from_path(char *path, t_hash *new);
+void    	insert_in_table(t_hash *new);
 t_hash    *create_table(void);
 //
 

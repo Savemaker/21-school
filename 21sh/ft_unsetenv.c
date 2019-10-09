@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_unsetenv.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gbeqqo <gbeqqo@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/10/09 16:05:07 by gbeqqo            #+#    #+#             */
+/*   Updated: 2019/10/09 16:05:32 by gbeqqo           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "21sh.h"
 
 void	copy_realloc_del(char **res, char **envp, int index)
@@ -51,7 +63,7 @@ char	**realloc_envp_del(int p, char *name, char **envp)
 	return (res);
 }
 
-int ft_unsetenv(char **parse, char **envp)
+int		ft_unsetenv(char **parse, char **envp)
 {
 	char	**new_env;
 	int		p;
@@ -66,7 +78,7 @@ int ft_unsetenv(char **parse, char **envp)
 			new_env = realloc_envp_del(p, parse[1], envp);
 			free_copy_envp(&envp);
 			g_my_env = NULL;
-            g_my_env = new_env;
+			g_my_env = new_env;
 			if (ft_strcmp("PATH", parse[1]) == 0)
 			{
 				free_hash_table(&g_table);

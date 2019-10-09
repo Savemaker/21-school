@@ -1,6 +1,18 @@
-#include "21sh.h" //segfault
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_cd.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gbeqqo <gbeqqo@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/10/09 16:02:33 by gbeqqo            #+#    #+#             */
+/*   Updated: 2019/10/09 16:38:17 by gbeqqo           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-void update_pwd(char *name, char *oldpath)
+#include "21sh.h"
+
+void	update_pwd(char *name, char *oldpath)
 {
 	char **parse;
 	char **old;
@@ -55,7 +67,7 @@ void	ft_cd_stuf(char **parse)
 		update_pwd(getcwd(buf, 2048), tmp);
 }
 
-int     ft_cd(char **parse)
+int		ft_cd(char **parse)
 {
 	int		i;
 	char	*home;

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   execute_tree.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gbeqqo <gbeqqo@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/10/09 16:46:01 by gbeqqo            #+#    #+#             */
+/*   Updated: 2019/10/09 19:04:52 by gbeqqo           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "21sh.h"
 
 int		check_path(char *path)
@@ -59,8 +71,8 @@ char	*get_cmd(char *cmd, int hash)
 
 int		argv_checker(char **argv)
 {
-	int hash;
-	char *upd;
+	int		hash;
+	char	*upd;
 
 	hash = hashing(argv[0], g_table->quant);
 	upd = get_cmd(argv[0], hash);
@@ -81,11 +93,21 @@ int		argv_checker(char **argv)
 	}
 }
 
-int	execute_start(t_tree *ast, int in, int out)
+void	execute_start_fork(t_tree *ast, int in, int out, t_tree *redirs)
 {
-	pid_t p;
-	t_tree *redirs;
-	int flag;
+	dup2(in, 0);
+	dup2(out, 1);
+	close(in);
+	if (redirs)
+		aggregation_order(redirs->current, out);
+	execve(ast->argv[0], ast->argv, g_my_env);
+}
+
+int		execute_start(t_tree *ast, int in, int out)
+{
+	pid_t	p;
+	t_tree	*redirs;
+	int		flag;
 
 	flag = 1;
 	redirs = get_redirs_node(ast);
@@ -95,19 +117,9 @@ int	execute_start(t_tree *ast, int in, int out)
 	{
 		p = fork();
 		if (p == 0)
-		{
-			dup2(in, 0);
-			dup2(out, 1);
-			close(in);
-			if (redirs)
-				aggregation_order(redirs->current, out);
-			execve(ast->argv[0], ast->argv, g_my_env);
-		}
+			execute_start_fork(ast, in, out, redirs);
 		else
-		{
-				// waitpid(p, NULL, 0);
 			close(out);
-		}
 		return (0);
 	}
 	close(in);
@@ -115,42 +127,50 @@ int	execute_start(t_tree *ast, int in, int out)
 	return (1);
 }
 
-int	execute_right(t_tree *ast, int in, int out, int temp)
+void	close_fds(int out, int temp)
 {
+	close(out);
+	close(temp);
+}
+
+void	execute_right_cmd(t_tree *ast, int in, int out, int temp)
+{
+	t_tree	*redirs;
 	pid_t	p;
-	t_tree *redirs;
 
 	redirs = get_redirs_node(ast);
+	p = fork();
+	if (p == 0)
+	{
+		dup2(temp, 0);
+		close(in);
+		if (check_for_redir(ast, 3) == 1)
+			dup2(out, 1);
+		else if (ast->parent && ast->parent->parent
+		&& ast->parent->parent->type == 1)
+			dup2(out, 1);
+		if (redirs)
+			aggregation_order(redirs->current, out);
+		execve(ast->argv[0], ast->argv, g_my_env);
+	}
+	else
+	{
+		if (ast->parent->parent == NULL || (ast->parent->parent
+		&& ast->parent->parent->type != 1))
+			waitpid(p, NULL, 0);
+		close_fds(out, temp);
+	}
+}
+
+int		execute_right(t_tree *ast, int in, int out, int temp)
+{
 	temp = get_redirections(ast, temp, 4, 1);
 	out = get_redirections(ast, out, 3, 1);
 	create_argv(ast);
 	if (argv_checker(ast->argv) == 1)
 	{
 		if (check_builtin(ast) == 0)
-		{
-			p = fork();
-			if (p == 0)
-			{
-				dup2(temp, 0);
-				close(in);
-				if (check_for_redir(ast, 3) == 1)
-				{
-					dup2(out, 1);
-				}
-				else if (ast->parent && ast->parent->parent && ast->parent->parent->type == 1)
-					dup2(out, 1);
-				if (redirs)
-					aggregation_order(redirs->current, out);
-				execve(ast->argv[0], ast->argv, g_my_env);
-			}
-			else
-			{
-				if (ast->parent->parent == NULL || (ast->parent->parent && ast->parent->parent->type != 1))
-					waitpid(p, NULL, 0);
-				close(out);
-				close(temp);
-			}
-		}
+			execute_right_cmd(ast, in, out, temp);
 		else
 		{
 			execute_builtin(ast);
@@ -163,38 +183,42 @@ int	execute_right(t_tree *ast, int in, int out, int temp)
 	return (1);
 }
 
+void	simple_execution_fork(t_tree *ast, int in, int out)
+{
+	t_tree	*redirs;
+	pid_t	p;
+
+	redirs = get_redirs_node(ast);
+	if (argv_checker(ast->argv) == 1)
+	{
+		p = fork();
+		if (p == 0)
+		{
+			dup2(in, 0);
+			dup2(out, 1);
+			if (redirs)
+				aggregation_order(redirs->current, out);
+			execve(ast->argv[0], ast->argv, g_my_env);
+		}
+		else
+		{
+			waitpid(p, NULL, 0);
+		}
+	}
+}
+
 void	simple_execution(t_tree *ast)
 {
-	pid_t	p;
 	int		in;
 	int		out;
-	t_tree *redirs;
 
 	in = 0;
 	out = 1;
 	out = get_redirections(ast, out, 3, 0);
 	in = get_redirections(ast, in, 4, 0);
-	redirs = get_redirs_node(ast);
 	create_argv(ast);
 	if (check_builtin(ast) == 0)
-	{
-		if (argv_checker(ast->argv) == 1)
-		{
-			p = fork();
-			if (p == 0)
-			{
-				dup2(in, 0);
-				dup2(out, 1);
-				if (redirs)
-					aggregation_order(redirs->current, out);
-				execve(ast->argv[0], ast->argv, g_my_env);
-			}
-			else
-			{
-				waitpid(p, NULL, 0);
-			}
-		}
-	}
+		simple_execution_fork(ast, in, out);
 	else
 		execute_builtin(ast);
 }
@@ -214,11 +238,9 @@ void	execute_tree_type_one(t_tree *ast)
 	int start;
 	int tmp_fd;
 	int temp;
-
 	int res;
 
 	start = 0;
-	create_files(ast);
 	while (ast->left->type == 1)
 		ast = ast->left;
 	while (ast != NULL && ast->type == 1)
@@ -226,6 +248,7 @@ void	execute_tree_type_one(t_tree *ast)
 		pipe(fd);
 		if (start == 0)
 		{
+			start = 1;
 			create_argv(ast->left);
 			if (check_builtin(ast->left))
 			{
@@ -235,7 +258,6 @@ void	execute_tree_type_one(t_tree *ast)
 				dup2(temp, 1);
 				close(temp);
 				close(fd[1]);
-				start = 1;
 				tmp_fd = fd[0];
 				pipe(fd);
 			}
@@ -244,7 +266,6 @@ void	execute_tree_type_one(t_tree *ast)
 				res = execute_start(ast->left, fd[0], fd[1]);
 				if (res == 0)
 				{
-					start = 1;
 					tmp_fd = fd[0];
 					pipe(fd);
 				}
@@ -254,7 +275,7 @@ void	execute_tree_type_one(t_tree *ast)
 		{
 			res = execute_right(ast->right, fd[0], fd[1], tmp_fd);
 			if (res == 1)
-				break;
+				break ;
 			if (check_for_redir(ast->right, 3) == 0)
 				tmp_fd = fd[0];
 			else
@@ -270,7 +291,10 @@ void	execute_tree(t_tree *ast)
 	if (ast == NULL)
 		return ;
 	if (ast->type == 1)
+	{
+		create_files(ast);
 		execute_tree_type_one(ast);
+	}
 	else if (ast->type == 2)
 	{
 		execute_tree(ast->left);
