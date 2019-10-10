@@ -74,6 +74,14 @@ int		semantics_semicolomn(t_token *list)
 			return (1);
 		}
 	}
+	if (list->type == 8)
+	{
+		if ((list->next && list->next->type != 9) || list->next == NULL)
+		{
+			ft_putendl("Unexpected token in redirections");
+			return (1);
+		}
+	}
 	return (0);
 }
 
