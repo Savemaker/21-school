@@ -1,0 +1,369 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6"/>
+	<Project>
+		<Option title="lelelk"/>
+		<Option makefile_is_custom="1"/>
+		<Option compiler="gcc"/>
+		<Option virtualFolders="CMake Files\;"/>
+		<Build>
+			<Target title="all">
+				<Option working_dir="/Users/gbeqqo/Desktop/lelelk/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/Users/gbeqqo/Desktop/lelelk/cmake-build-debug/Makefile&quot;  VERBOSE=1 all"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/Users/gbeqqo/Desktop/lelelk/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/Users/gbeqqo/Desktop/lelelk/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/Users/gbeqqo/Desktop/lelelk/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="rebuild_cache">
+				<Option working_dir="/Users/gbeqqo/Desktop/lelelk/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/Users/gbeqqo/Desktop/lelelk/cmake-build-debug/Makefile&quot;  VERBOSE=1 rebuild_cache"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/Users/gbeqqo/Desktop/lelelk/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/Users/gbeqqo/Desktop/lelelk/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/Users/gbeqqo/Desktop/lelelk/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="edit_cache">
+				<Option working_dir="/Users/gbeqqo/Desktop/lelelk/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/Users/gbeqqo/Desktop/lelelk/cmake-build-debug/Makefile&quot;  VERBOSE=1 edit_cache"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/Users/gbeqqo/Desktop/lelelk/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/Users/gbeqqo/Desktop/lelelk/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/Users/gbeqqo/Desktop/lelelk/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="lelelk">
+				<Option output="/Users/gbeqqo/Desktop/lelelk/cmake-build-debug/lelelk" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/Users/gbeqqo/Desktop/lelelk/cmake-build-debug"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/Users/gbeqqo/Desktop/lelelk/."/>
+					<Add directory="/Users/gbeqqo/Desktop/lelelk/get_next_line"/>
+					<Add directory="/Users/gbeqqo/Desktop/lelelk/libft"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/9.0.0/include"/>
+					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include"/>
+					<Add directory="/usr/include"/>
+					<Add directory="/System/Library/Frameworks"/>
+					<Add directory="/Library/Frameworks"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/Users/gbeqqo/Desktop/lelelk/cmake-build-debug/Makefile&quot;  VERBOSE=1 lelelk"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/Users/gbeqqo/Desktop/lelelk/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/Users/gbeqqo/Desktop/lelelk/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/Users/gbeqqo/Desktop/lelelk/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="lelelk/fast">
+				<Option output="/Users/gbeqqo/Desktop/lelelk/cmake-build-debug/lelelk" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/Users/gbeqqo/Desktop/lelelk/cmake-build-debug"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/Users/gbeqqo/Desktop/lelelk/."/>
+					<Add directory="/Users/gbeqqo/Desktop/lelelk/get_next_line"/>
+					<Add directory="/Users/gbeqqo/Desktop/lelelk/libft"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/9.0.0/include"/>
+					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include"/>
+					<Add directory="/usr/include"/>
+					<Add directory="/System/Library/Frameworks"/>
+					<Add directory="/Library/Frameworks"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/Users/gbeqqo/Desktop/lelelk/cmake-build-debug/Makefile&quot;  VERBOSE=1 lelelk/fast"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/Users/gbeqqo/Desktop/lelelk/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/Users/gbeqqo/Desktop/lelelk/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/Users/gbeqqo/Desktop/lelelk/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+		</Build>
+		<Unit filename="/Users/gbeqqo/Desktop/lelelk/absolutepath_launch.c">
+			<Option target="lelelk"/>
+		</Unit>
+		<Unit filename="/Users/gbeqqo/Desktop/lelelk/builtin.c">
+			<Option target="lelelk"/>
+		</Unit>
+		<Unit filename="/Users/gbeqqo/Desktop/lelelk/cd.c">
+			<Option target="lelelk"/>
+		</Unit>
+		<Unit filename="/Users/gbeqqo/Desktop/lelelk/clearing.c">
+			<Option target="lelelk"/>
+		</Unit>
+		<Unit filename="/Users/gbeqqo/Desktop/lelelk/completion.c">
+			<Option target="lelelk"/>
+		</Unit>
+		<Unit filename="/Users/gbeqqo/Desktop/lelelk/cursor.c">
+			<Option target="lelelk"/>
+		</Unit>
+		<Unit filename="/Users/gbeqqo/Desktop/lelelk/cut_copy.c">
+			<Option target="lelelk"/>
+		</Unit>
+		<Unit filename="/Users/gbeqqo/Desktop/lelelk/echo.c">
+			<Option target="lelelk"/>
+		</Unit>
+		<Unit filename="/Users/gbeqqo/Desktop/lelelk/enter_del_char.c">
+			<Option target="lelelk"/>
+		</Unit>
+		<Unit filename="/Users/gbeqqo/Desktop/lelelk/error.c">
+			<Option target="lelelk"/>
+		</Unit>
+		<Unit filename="/Users/gbeqqo/Desktop/lelelk/execution.c">
+			<Option target="lelelk"/>
+		</Unit>
+		<Unit filename="/Users/gbeqqo/Desktop/lelelk/external_launch.c">
+			<Option target="lelelk"/>
+		</Unit>
+		<Unit filename="/Users/gbeqqo/Desktop/lelelk/free.c">
+			<Option target="lelelk"/>
+		</Unit>
+		<Unit filename="/Users/gbeqqo/Desktop/lelelk/get_next_line/get_next_line.c">
+			<Option target="lelelk"/>
+		</Unit>
+		<Unit filename="/Users/gbeqqo/Desktop/lelelk/get_next_line/get_next_line.h">
+			<Option target="lelelk"/>
+		</Unit>
+		<Unit filename="/Users/gbeqqo/Desktop/lelelk/getenv.c">
+			<Option target="lelelk"/>
+		</Unit>
+		<Unit filename="/Users/gbeqqo/Desktop/lelelk/goto.c">
+			<Option target="lelelk"/>
+		</Unit>
+		<Unit filename="/Users/gbeqqo/Desktop/lelelk/history.c">
+			<Option target="lelelk"/>
+		</Unit>
+		<Unit filename="/Users/gbeqqo/Desktop/lelelk/init_term.c">
+			<Option target="lelelk"/>
+		</Unit>
+		<Unit filename="/Users/gbeqqo/Desktop/lelelk/libft/ft_atoi.c">
+			<Option target="lelelk"/>
+		</Unit>
+		<Unit filename="/Users/gbeqqo/Desktop/lelelk/libft/ft_bzero.c">
+			<Option target="lelelk"/>
+		</Unit>
+		<Unit filename="/Users/gbeqqo/Desktop/lelelk/libft/ft_isalnum.c">
+			<Option target="lelelk"/>
+		</Unit>
+		<Unit filename="/Users/gbeqqo/Desktop/lelelk/libft/ft_isalpha.c">
+			<Option target="lelelk"/>
+		</Unit>
+		<Unit filename="/Users/gbeqqo/Desktop/lelelk/libft/ft_isascii.c">
+			<Option target="lelelk"/>
+		</Unit>
+		<Unit filename="/Users/gbeqqo/Desktop/lelelk/libft/ft_isdigit.c">
+			<Option target="lelelk"/>
+		</Unit>
+		<Unit filename="/Users/gbeqqo/Desktop/lelelk/libft/ft_isprint.c">
+			<Option target="lelelk"/>
+		</Unit>
+		<Unit filename="/Users/gbeqqo/Desktop/lelelk/libft/ft_isspace.c">
+			<Option target="lelelk"/>
+		</Unit>
+		<Unit filename="/Users/gbeqqo/Desktop/lelelk/libft/ft_itoa.c">
+			<Option target="lelelk"/>
+		</Unit>
+		<Unit filename="/Users/gbeqqo/Desktop/lelelk/libft/ft_lstadd.c">
+			<Option target="lelelk"/>
+		</Unit>
+		<Unit filename="/Users/gbeqqo/Desktop/lelelk/libft/ft_lstdel.c">
+			<Option target="lelelk"/>
+		</Unit>
+		<Unit filename="/Users/gbeqqo/Desktop/lelelk/libft/ft_lstdelone.c">
+			<Option target="lelelk"/>
+		</Unit>
+		<Unit filename="/Users/gbeqqo/Desktop/lelelk/libft/ft_lstiter.c">
+			<Option target="lelelk"/>
+		</Unit>
+		<Unit filename="/Users/gbeqqo/Desktop/lelelk/libft/ft_lstmap.c">
+			<Option target="lelelk"/>
+		</Unit>
+		<Unit filename="/Users/gbeqqo/Desktop/lelelk/libft/ft_lstnew.c">
+			<Option target="lelelk"/>
+		</Unit>
+		<Unit filename="/Users/gbeqqo/Desktop/lelelk/libft/ft_memalloc.c">
+			<Option target="lelelk"/>
+		</Unit>
+		<Unit filename="/Users/gbeqqo/Desktop/lelelk/libft/ft_memccpy.c">
+			<Option target="lelelk"/>
+		</Unit>
+		<Unit filename="/Users/gbeqqo/Desktop/lelelk/libft/ft_memchr.c">
+			<Option target="lelelk"/>
+		</Unit>
+		<Unit filename="/Users/gbeqqo/Desktop/lelelk/libft/ft_memcmp.c">
+			<Option target="lelelk"/>
+		</Unit>
+		<Unit filename="/Users/gbeqqo/Desktop/lelelk/libft/ft_memcpy.c">
+			<Option target="lelelk"/>
+		</Unit>
+		<Unit filename="/Users/gbeqqo/Desktop/lelelk/libft/ft_memdel.c">
+			<Option target="lelelk"/>
+		</Unit>
+		<Unit filename="/Users/gbeqqo/Desktop/lelelk/libft/ft_memmove.c">
+			<Option target="lelelk"/>
+		</Unit>
+		<Unit filename="/Users/gbeqqo/Desktop/lelelk/libft/ft_memset.c">
+			<Option target="lelelk"/>
+		</Unit>
+		<Unit filename="/Users/gbeqqo/Desktop/lelelk/libft/ft_putchar.c">
+			<Option target="lelelk"/>
+		</Unit>
+		<Unit filename="/Users/gbeqqo/Desktop/lelelk/libft/ft_putchar_fd.c">
+			<Option target="lelelk"/>
+		</Unit>
+		<Unit filename="/Users/gbeqqo/Desktop/lelelk/libft/ft_putendl.c">
+			<Option target="lelelk"/>
+		</Unit>
+		<Unit filename="/Users/gbeqqo/Desktop/lelelk/libft/ft_putendl_fd.c">
+			<Option target="lelelk"/>
+		</Unit>
+		<Unit filename="/Users/gbeqqo/Desktop/lelelk/libft/ft_putnbr.c">
+			<Option target="lelelk"/>
+		</Unit>
+		<Unit filename="/Users/gbeqqo/Desktop/lelelk/libft/ft_putnbr_fd.c">
+			<Option target="lelelk"/>
+		</Unit>
+		<Unit filename="/Users/gbeqqo/Desktop/lelelk/libft/ft_putstr.c">
+			<Option target="lelelk"/>
+		</Unit>
+		<Unit filename="/Users/gbeqqo/Desktop/lelelk/libft/ft_putstr_fd.c">
+			<Option target="lelelk"/>
+		</Unit>
+		<Unit filename="/Users/gbeqqo/Desktop/lelelk/libft/ft_str_is_printable.c">
+			<Option target="lelelk"/>
+		</Unit>
+		<Unit filename="/Users/gbeqqo/Desktop/lelelk/libft/ft_strcapitalize.c">
+			<Option target="lelelk"/>
+		</Unit>
+		<Unit filename="/Users/gbeqqo/Desktop/lelelk/libft/ft_strcat.c">
+			<Option target="lelelk"/>
+		</Unit>
+		<Unit filename="/Users/gbeqqo/Desktop/lelelk/libft/ft_strchr.c">
+			<Option target="lelelk"/>
+		</Unit>
+		<Unit filename="/Users/gbeqqo/Desktop/lelelk/libft/ft_strclr.c">
+			<Option target="lelelk"/>
+		</Unit>
+		<Unit filename="/Users/gbeqqo/Desktop/lelelk/libft/ft_strcmp.c">
+			<Option target="lelelk"/>
+		</Unit>
+		<Unit filename="/Users/gbeqqo/Desktop/lelelk/libft/ft_strcpy.c">
+			<Option target="lelelk"/>
+		</Unit>
+		<Unit filename="/Users/gbeqqo/Desktop/lelelk/libft/ft_strdel.c">
+			<Option target="lelelk"/>
+		</Unit>
+		<Unit filename="/Users/gbeqqo/Desktop/lelelk/libft/ft_strdup.c">
+			<Option target="lelelk"/>
+		</Unit>
+		<Unit filename="/Users/gbeqqo/Desktop/lelelk/libft/ft_strequ.c">
+			<Option target="lelelk"/>
+		</Unit>
+		<Unit filename="/Users/gbeqqo/Desktop/lelelk/libft/ft_striter.c">
+			<Option target="lelelk"/>
+		</Unit>
+		<Unit filename="/Users/gbeqqo/Desktop/lelelk/libft/ft_striteri.c">
+			<Option target="lelelk"/>
+		</Unit>
+		<Unit filename="/Users/gbeqqo/Desktop/lelelk/libft/ft_strjoin.c">
+			<Option target="lelelk"/>
+		</Unit>
+		<Unit filename="/Users/gbeqqo/Desktop/lelelk/libft/ft_strlcat.c">
+			<Option target="lelelk"/>
+		</Unit>
+		<Unit filename="/Users/gbeqqo/Desktop/lelelk/libft/ft_strlen.c">
+			<Option target="lelelk"/>
+		</Unit>
+		<Unit filename="/Users/gbeqqo/Desktop/lelelk/libft/ft_strlowcase.c">
+			<Option target="lelelk"/>
+		</Unit>
+		<Unit filename="/Users/gbeqqo/Desktop/lelelk/libft/ft_strmap.c">
+			<Option target="lelelk"/>
+		</Unit>
+		<Unit filename="/Users/gbeqqo/Desktop/lelelk/libft/ft_strmapi.c">
+			<Option target="lelelk"/>
+		</Unit>
+		<Unit filename="/Users/gbeqqo/Desktop/lelelk/libft/ft_strncat.c">
+			<Option target="lelelk"/>
+		</Unit>
+		<Unit filename="/Users/gbeqqo/Desktop/lelelk/libft/ft_strncmp.c">
+			<Option target="lelelk"/>
+		</Unit>
+		<Unit filename="/Users/gbeqqo/Desktop/lelelk/libft/ft_strncpy.c">
+			<Option target="lelelk"/>
+		</Unit>
+		<Unit filename="/Users/gbeqqo/Desktop/lelelk/libft/ft_strnequ.c">
+			<Option target="lelelk"/>
+		</Unit>
+		<Unit filename="/Users/gbeqqo/Desktop/lelelk/libft/ft_strnew.c">
+			<Option target="lelelk"/>
+		</Unit>
+		<Unit filename="/Users/gbeqqo/Desktop/lelelk/libft/ft_strnstr.c">
+			<Option target="lelelk"/>
+		</Unit>
+		<Unit filename="/Users/gbeqqo/Desktop/lelelk/libft/ft_strrchr.c">
+			<Option target="lelelk"/>
+		</Unit>
+		<Unit filename="/Users/gbeqqo/Desktop/lelelk/libft/ft_strsplit.c">
+			<Option target="lelelk"/>
+		</Unit>
+		<Unit filename="/Users/gbeqqo/Desktop/lelelk/libft/ft_strstr.c">
+			<Option target="lelelk"/>
+		</Unit>
+		<Unit filename="/Users/gbeqqo/Desktop/lelelk/libft/ft_strsub.c">
+			<Option target="lelelk"/>
+		</Unit>
+		<Unit filename="/Users/gbeqqo/Desktop/lelelk/libft/ft_strtrim.c">
+			<Option target="lelelk"/>
+		</Unit>
+		<Unit filename="/Users/gbeqqo/Desktop/lelelk/libft/ft_strupcase.c">
+			<Option target="lelelk"/>
+		</Unit>
+		<Unit filename="/Users/gbeqqo/Desktop/lelelk/libft/ft_tolower.c">
+			<Option target="lelelk"/>
+		</Unit>
+		<Unit filename="/Users/gbeqqo/Desktop/lelelk/libft/ft_toupper.c">
+			<Option target="lelelk"/>
+		</Unit>
+		<Unit filename="/Users/gbeqqo/Desktop/lelelk/libft/libft.h">
+			<Option target="lelelk"/>
+		</Unit>
+		<Unit filename="/Users/gbeqqo/Desktop/lelelk/main.c">
+			<Option target="lelelk"/>
+		</Unit>
+		<Unit filename="/Users/gbeqqo/Desktop/lelelk/minishell.h">
+			<Option target="lelelk"/>
+		</Unit>
+		<Unit filename="/Users/gbeqqo/Desktop/lelelk/prompt.c">
+			<Option target="lelelk"/>
+		</Unit>
+		<Unit filename="/Users/gbeqqo/Desktop/lelelk/quotes.c">
+			<Option target="lelelk"/>
+		</Unit>
+		<Unit filename="/Users/gbeqqo/Desktop/lelelk/setenv.c">
+			<Option target="lelelk"/>
+		</Unit>
+		<Unit filename="/Users/gbeqqo/Desktop/lelelk/shell_loop.c">
+			<Option target="lelelk"/>
+		</Unit>
+		<Unit filename="/Users/gbeqqo/Desktop/lelelk/signals.c">
+			<Option target="lelelk"/>
+		</Unit>
+		<Unit filename="/Users/gbeqqo/Desktop/lelelk/split.c">
+			<Option target="lelelk"/>
+		</Unit>
+		<Unit filename="/Users/gbeqqo/Desktop/lelelk/unsetenv.c">
+			<Option target="lelelk"/>
+		</Unit>
+		<Unit filename="/Users/gbeqqo/Desktop/lelelk/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\"/>
+		</Unit>
+	</Project>
+</CodeBlocks_project_file>

@@ -1,0 +1,342 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6"/>
+	<Project>
+		<Option title="clear_version_21sh"/>
+		<Option makefile_is_custom="1"/>
+		<Option compiler="gcc"/>
+		<Option virtualFolders="CMake Files\;"/>
+		<Build>
+			<Target title="all">
+				<Option working_dir="/Users/bellyn-t/Desktop/clear version 21sh/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/Users/bellyn-t/Desktop/clear\ version\ 21sh/cmake-build-debug/Makefile&quot;  VERBOSE=1 all"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/Users/bellyn-t/Desktop/clear\ version\ 21sh/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/Users/bellyn-t/Desktop/clear\ version\ 21sh/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/Users/bellyn-t/Desktop/clear\ version\ 21sh/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="rebuild_cache">
+				<Option working_dir="/Users/bellyn-t/Desktop/clear version 21sh/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/Users/bellyn-t/Desktop/clear\ version\ 21sh/cmake-build-debug/Makefile&quot;  VERBOSE=1 rebuild_cache"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/Users/bellyn-t/Desktop/clear\ version\ 21sh/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/Users/bellyn-t/Desktop/clear\ version\ 21sh/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/Users/bellyn-t/Desktop/clear\ version\ 21sh/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="edit_cache">
+				<Option working_dir="/Users/bellyn-t/Desktop/clear version 21sh/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/Users/bellyn-t/Desktop/clear\ version\ 21sh/cmake-build-debug/Makefile&quot;  VERBOSE=1 edit_cache"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/Users/bellyn-t/Desktop/clear\ version\ 21sh/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/Users/bellyn-t/Desktop/clear\ version\ 21sh/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/Users/bellyn-t/Desktop/clear\ version\ 21sh/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="clear_version_21sh">
+				<Option output="/Users/bellyn-t/Desktop/clear version 21sh/cmake-build-debug/clear_version_21sh" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/Users/bellyn-t/Desktop/clear version 21sh/cmake-build-debug"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/Users/bellyn-t/Desktop/clear version 21sh/."/>
+					<Add directory="/Users/bellyn-t/Desktop/clear version 21sh/get_next_line"/>
+					<Add directory="/Users/bellyn-t/Desktop/clear version 21sh/libft"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/9.0.0/include"/>
+					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include"/>
+					<Add directory="/usr/include"/>
+					<Add directory="/System/Library/Frameworks"/>
+					<Add directory="/Library/Frameworks"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/Users/bellyn-t/Desktop/clear\ version\ 21sh/cmake-build-debug/Makefile&quot;  VERBOSE=1 clear_version_21sh"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/Users/bellyn-t/Desktop/clear\ version\ 21sh/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/Users/bellyn-t/Desktop/clear\ version\ 21sh/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/Users/bellyn-t/Desktop/clear\ version\ 21sh/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="clear_version_21sh/fast">
+				<Option output="/Users/bellyn-t/Desktop/clear version 21sh/cmake-build-debug/clear_version_21sh" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/Users/bellyn-t/Desktop/clear version 21sh/cmake-build-debug"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/Users/bellyn-t/Desktop/clear version 21sh/."/>
+					<Add directory="/Users/bellyn-t/Desktop/clear version 21sh/get_next_line"/>
+					<Add directory="/Users/bellyn-t/Desktop/clear version 21sh/libft"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/9.0.0/include"/>
+					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include"/>
+					<Add directory="/usr/include"/>
+					<Add directory="/System/Library/Frameworks"/>
+					<Add directory="/Library/Frameworks"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/Users/bellyn-t/Desktop/clear\ version\ 21sh/cmake-build-debug/Makefile&quot;  VERBOSE=1 clear_version_21sh/fast"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/Users/bellyn-t/Desktop/clear\ version\ 21sh/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/Users/bellyn-t/Desktop/clear\ version\ 21sh/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/Users/bellyn-t/Desktop/clear\ version\ 21sh/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+		</Build>
+		<Unit filename="/Users/bellyn-t/Desktop/clear version 21sh/absolutepath_launch.c">
+			<Option target="clear_version_21sh"/>
+		</Unit>
+		<Unit filename="/Users/bellyn-t/Desktop/clear version 21sh/builtin.c">
+			<Option target="clear_version_21sh"/>
+		</Unit>
+		<Unit filename="/Users/bellyn-t/Desktop/clear version 21sh/cd.c">
+			<Option target="clear_version_21sh"/>
+		</Unit>
+		<Unit filename="/Users/bellyn-t/Desktop/clear version 21sh/completion.c">
+			<Option target="clear_version_21sh"/>
+		</Unit>
+		<Unit filename="/Users/bellyn-t/Desktop/clear version 21sh/echo.c">
+			<Option target="clear_version_21sh"/>
+		</Unit>
+		<Unit filename="/Users/bellyn-t/Desktop/clear version 21sh/error.c">
+			<Option target="clear_version_21sh"/>
+		</Unit>
+		<Unit filename="/Users/bellyn-t/Desktop/clear version 21sh/execution.c">
+			<Option target="clear_version_21sh"/>
+		</Unit>
+		<Unit filename="/Users/bellyn-t/Desktop/clear version 21sh/external_launch.c">
+			<Option target="clear_version_21sh"/>
+		</Unit>
+		<Unit filename="/Users/bellyn-t/Desktop/clear version 21sh/free.c">
+			<Option target="clear_version_21sh"/>
+		</Unit>
+		<Unit filename="/Users/bellyn-t/Desktop/clear version 21sh/get_next_line/get_next_line.c">
+			<Option target="clear_version_21sh"/>
+		</Unit>
+		<Unit filename="/Users/bellyn-t/Desktop/clear version 21sh/get_next_line/get_next_line.h">
+			<Option target="clear_version_21sh"/>
+		</Unit>
+		<Unit filename="/Users/bellyn-t/Desktop/clear version 21sh/getenv.c">
+			<Option target="clear_version_21sh"/>
+		</Unit>
+		<Unit filename="/Users/bellyn-t/Desktop/clear version 21sh/libft/ft_atoi.c">
+			<Option target="clear_version_21sh"/>
+		</Unit>
+		<Unit filename="/Users/bellyn-t/Desktop/clear version 21sh/libft/ft_bzero.c">
+			<Option target="clear_version_21sh"/>
+		</Unit>
+		<Unit filename="/Users/bellyn-t/Desktop/clear version 21sh/libft/ft_isalnum.c">
+			<Option target="clear_version_21sh"/>
+		</Unit>
+		<Unit filename="/Users/bellyn-t/Desktop/clear version 21sh/libft/ft_isalpha.c">
+			<Option target="clear_version_21sh"/>
+		</Unit>
+		<Unit filename="/Users/bellyn-t/Desktop/clear version 21sh/libft/ft_isascii.c">
+			<Option target="clear_version_21sh"/>
+		</Unit>
+		<Unit filename="/Users/bellyn-t/Desktop/clear version 21sh/libft/ft_isdigit.c">
+			<Option target="clear_version_21sh"/>
+		</Unit>
+		<Unit filename="/Users/bellyn-t/Desktop/clear version 21sh/libft/ft_isprint.c">
+			<Option target="clear_version_21sh"/>
+		</Unit>
+		<Unit filename="/Users/bellyn-t/Desktop/clear version 21sh/libft/ft_isspace.c">
+			<Option target="clear_version_21sh"/>
+		</Unit>
+		<Unit filename="/Users/bellyn-t/Desktop/clear version 21sh/libft/ft_itoa.c">
+			<Option target="clear_version_21sh"/>
+		</Unit>
+		<Unit filename="/Users/bellyn-t/Desktop/clear version 21sh/libft/ft_lstadd.c">
+			<Option target="clear_version_21sh"/>
+		</Unit>
+		<Unit filename="/Users/bellyn-t/Desktop/clear version 21sh/libft/ft_lstdel.c">
+			<Option target="clear_version_21sh"/>
+		</Unit>
+		<Unit filename="/Users/bellyn-t/Desktop/clear version 21sh/libft/ft_lstdelone.c">
+			<Option target="clear_version_21sh"/>
+		</Unit>
+		<Unit filename="/Users/bellyn-t/Desktop/clear version 21sh/libft/ft_lstiter.c">
+			<Option target="clear_version_21sh"/>
+		</Unit>
+		<Unit filename="/Users/bellyn-t/Desktop/clear version 21sh/libft/ft_lstmap.c">
+			<Option target="clear_version_21sh"/>
+		</Unit>
+		<Unit filename="/Users/bellyn-t/Desktop/clear version 21sh/libft/ft_lstnew.c">
+			<Option target="clear_version_21sh"/>
+		</Unit>
+		<Unit filename="/Users/bellyn-t/Desktop/clear version 21sh/libft/ft_memalloc.c">
+			<Option target="clear_version_21sh"/>
+		</Unit>
+		<Unit filename="/Users/bellyn-t/Desktop/clear version 21sh/libft/ft_memccpy.c">
+			<Option target="clear_version_21sh"/>
+		</Unit>
+		<Unit filename="/Users/bellyn-t/Desktop/clear version 21sh/libft/ft_memchr.c">
+			<Option target="clear_version_21sh"/>
+		</Unit>
+		<Unit filename="/Users/bellyn-t/Desktop/clear version 21sh/libft/ft_memcmp.c">
+			<Option target="clear_version_21sh"/>
+		</Unit>
+		<Unit filename="/Users/bellyn-t/Desktop/clear version 21sh/libft/ft_memcpy.c">
+			<Option target="clear_version_21sh"/>
+		</Unit>
+		<Unit filename="/Users/bellyn-t/Desktop/clear version 21sh/libft/ft_memdel.c">
+			<Option target="clear_version_21sh"/>
+		</Unit>
+		<Unit filename="/Users/bellyn-t/Desktop/clear version 21sh/libft/ft_memmove.c">
+			<Option target="clear_version_21sh"/>
+		</Unit>
+		<Unit filename="/Users/bellyn-t/Desktop/clear version 21sh/libft/ft_memset.c">
+			<Option target="clear_version_21sh"/>
+		</Unit>
+		<Unit filename="/Users/bellyn-t/Desktop/clear version 21sh/libft/ft_putchar.c">
+			<Option target="clear_version_21sh"/>
+		</Unit>
+		<Unit filename="/Users/bellyn-t/Desktop/clear version 21sh/libft/ft_putchar_fd.c">
+			<Option target="clear_version_21sh"/>
+		</Unit>
+		<Unit filename="/Users/bellyn-t/Desktop/clear version 21sh/libft/ft_putendl.c">
+			<Option target="clear_version_21sh"/>
+		</Unit>
+		<Unit filename="/Users/bellyn-t/Desktop/clear version 21sh/libft/ft_putendl_fd.c">
+			<Option target="clear_version_21sh"/>
+		</Unit>
+		<Unit filename="/Users/bellyn-t/Desktop/clear version 21sh/libft/ft_putnbr.c">
+			<Option target="clear_version_21sh"/>
+		</Unit>
+		<Unit filename="/Users/bellyn-t/Desktop/clear version 21sh/libft/ft_putnbr_fd.c">
+			<Option target="clear_version_21sh"/>
+		</Unit>
+		<Unit filename="/Users/bellyn-t/Desktop/clear version 21sh/libft/ft_putstr.c">
+			<Option target="clear_version_21sh"/>
+		</Unit>
+		<Unit filename="/Users/bellyn-t/Desktop/clear version 21sh/libft/ft_putstr_fd.c">
+			<Option target="clear_version_21sh"/>
+		</Unit>
+		<Unit filename="/Users/bellyn-t/Desktop/clear version 21sh/libft/ft_str_is_printable.c">
+			<Option target="clear_version_21sh"/>
+		</Unit>
+		<Unit filename="/Users/bellyn-t/Desktop/clear version 21sh/libft/ft_strcapitalize.c">
+			<Option target="clear_version_21sh"/>
+		</Unit>
+		<Unit filename="/Users/bellyn-t/Desktop/clear version 21sh/libft/ft_strcat.c">
+			<Option target="clear_version_21sh"/>
+		</Unit>
+		<Unit filename="/Users/bellyn-t/Desktop/clear version 21sh/libft/ft_strchr.c">
+			<Option target="clear_version_21sh"/>
+		</Unit>
+		<Unit filename="/Users/bellyn-t/Desktop/clear version 21sh/libft/ft_strclr.c">
+			<Option target="clear_version_21sh"/>
+		</Unit>
+		<Unit filename="/Users/bellyn-t/Desktop/clear version 21sh/libft/ft_strcmp.c">
+			<Option target="clear_version_21sh"/>
+		</Unit>
+		<Unit filename="/Users/bellyn-t/Desktop/clear version 21sh/libft/ft_strcpy.c">
+			<Option target="clear_version_21sh"/>
+		</Unit>
+		<Unit filename="/Users/bellyn-t/Desktop/clear version 21sh/libft/ft_strdel.c">
+			<Option target="clear_version_21sh"/>
+		</Unit>
+		<Unit filename="/Users/bellyn-t/Desktop/clear version 21sh/libft/ft_strdup.c">
+			<Option target="clear_version_21sh"/>
+		</Unit>
+		<Unit filename="/Users/bellyn-t/Desktop/clear version 21sh/libft/ft_strequ.c">
+			<Option target="clear_version_21sh"/>
+		</Unit>
+		<Unit filename="/Users/bellyn-t/Desktop/clear version 21sh/libft/ft_striter.c">
+			<Option target="clear_version_21sh"/>
+		</Unit>
+		<Unit filename="/Users/bellyn-t/Desktop/clear version 21sh/libft/ft_striteri.c">
+			<Option target="clear_version_21sh"/>
+		</Unit>
+		<Unit filename="/Users/bellyn-t/Desktop/clear version 21sh/libft/ft_strjoin.c">
+			<Option target="clear_version_21sh"/>
+		</Unit>
+		<Unit filename="/Users/bellyn-t/Desktop/clear version 21sh/libft/ft_strlcat.c">
+			<Option target="clear_version_21sh"/>
+		</Unit>
+		<Unit filename="/Users/bellyn-t/Desktop/clear version 21sh/libft/ft_strlen.c">
+			<Option target="clear_version_21sh"/>
+		</Unit>
+		<Unit filename="/Users/bellyn-t/Desktop/clear version 21sh/libft/ft_strlowcase.c">
+			<Option target="clear_version_21sh"/>
+		</Unit>
+		<Unit filename="/Users/bellyn-t/Desktop/clear version 21sh/libft/ft_strmap.c">
+			<Option target="clear_version_21sh"/>
+		</Unit>
+		<Unit filename="/Users/bellyn-t/Desktop/clear version 21sh/libft/ft_strmapi.c">
+			<Option target="clear_version_21sh"/>
+		</Unit>
+		<Unit filename="/Users/bellyn-t/Desktop/clear version 21sh/libft/ft_strncat.c">
+			<Option target="clear_version_21sh"/>
+		</Unit>
+		<Unit filename="/Users/bellyn-t/Desktop/clear version 21sh/libft/ft_strncmp.c">
+			<Option target="clear_version_21sh"/>
+		</Unit>
+		<Unit filename="/Users/bellyn-t/Desktop/clear version 21sh/libft/ft_strncpy.c">
+			<Option target="clear_version_21sh"/>
+		</Unit>
+		<Unit filename="/Users/bellyn-t/Desktop/clear version 21sh/libft/ft_strnequ.c">
+			<Option target="clear_version_21sh"/>
+		</Unit>
+		<Unit filename="/Users/bellyn-t/Desktop/clear version 21sh/libft/ft_strnew.c">
+			<Option target="clear_version_21sh"/>
+		</Unit>
+		<Unit filename="/Users/bellyn-t/Desktop/clear version 21sh/libft/ft_strnstr.c">
+			<Option target="clear_version_21sh"/>
+		</Unit>
+		<Unit filename="/Users/bellyn-t/Desktop/clear version 21sh/libft/ft_strrchr.c">
+			<Option target="clear_version_21sh"/>
+		</Unit>
+		<Unit filename="/Users/bellyn-t/Desktop/clear version 21sh/libft/ft_strsplit.c">
+			<Option target="clear_version_21sh"/>
+		</Unit>
+		<Unit filename="/Users/bellyn-t/Desktop/clear version 21sh/libft/ft_strstr.c">
+			<Option target="clear_version_21sh"/>
+		</Unit>
+		<Unit filename="/Users/bellyn-t/Desktop/clear version 21sh/libft/ft_strsub.c">
+			<Option target="clear_version_21sh"/>
+		</Unit>
+		<Unit filename="/Users/bellyn-t/Desktop/clear version 21sh/libft/ft_strtrim.c">
+			<Option target="clear_version_21sh"/>
+		</Unit>
+		<Unit filename="/Users/bellyn-t/Desktop/clear version 21sh/libft/ft_strupcase.c">
+			<Option target="clear_version_21sh"/>
+		</Unit>
+		<Unit filename="/Users/bellyn-t/Desktop/clear version 21sh/libft/ft_tolower.c">
+			<Option target="clear_version_21sh"/>
+		</Unit>
+		<Unit filename="/Users/bellyn-t/Desktop/clear version 21sh/libft/ft_toupper.c">
+			<Option target="clear_version_21sh"/>
+		</Unit>
+		<Unit filename="/Users/bellyn-t/Desktop/clear version 21sh/libft/libft.h">
+			<Option target="clear_version_21sh"/>
+		</Unit>
+		<Unit filename="/Users/bellyn-t/Desktop/clear version 21sh/main.c">
+			<Option target="clear_version_21sh"/>
+		</Unit>
+		<Unit filename="/Users/bellyn-t/Desktop/clear version 21sh/minishell.h">
+			<Option target="clear_version_21sh"/>
+		</Unit>
+		<Unit filename="/Users/bellyn-t/Desktop/clear version 21sh/setenv.c">
+			<Option target="clear_version_21sh"/>
+		</Unit>
+		<Unit filename="/Users/bellyn-t/Desktop/clear version 21sh/shell_loop.c">
+			<Option target="clear_version_21sh"/>
+		</Unit>
+		<Unit filename="/Users/bellyn-t/Desktop/clear version 21sh/signals.c">
+			<Option target="clear_version_21sh"/>
+		</Unit>
+		<Unit filename="/Users/bellyn-t/Desktop/clear version 21sh/split.c">
+			<Option target="clear_version_21sh"/>
+		</Unit>
+		<Unit filename="/Users/bellyn-t/Desktop/clear version 21sh/unsetenv.c">
+			<Option target="clear_version_21sh"/>
+		</Unit>
+		<Unit filename="/Users/bellyn-t/Desktop/clear version 21sh/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\"/>
+		</Unit>
+	</Project>
+</CodeBlocks_project_file>

@@ -1,0 +1,369 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6"/>
+	<Project>
+		<Option title="21sh_last"/>
+		<Option makefile_is_custom="1"/>
+		<Option compiler="gcc"/>
+		<Option virtualFolders="CMake Files\;"/>
+		<Build>
+			<Target title="all">
+				<Option working_dir="/Users/bellyn-t/Desktop/21sh last/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/Users/bellyn-t/Desktop/21sh\ last/cmake-build-debug/Makefile&quot;  VERBOSE=1 all"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/Users/bellyn-t/Desktop/21sh\ last/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/Users/bellyn-t/Desktop/21sh\ last/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/Users/bellyn-t/Desktop/21sh\ last/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="rebuild_cache">
+				<Option working_dir="/Users/bellyn-t/Desktop/21sh last/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/Users/bellyn-t/Desktop/21sh\ last/cmake-build-debug/Makefile&quot;  VERBOSE=1 rebuild_cache"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/Users/bellyn-t/Desktop/21sh\ last/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/Users/bellyn-t/Desktop/21sh\ last/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/Users/bellyn-t/Desktop/21sh\ last/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="edit_cache">
+				<Option working_dir="/Users/bellyn-t/Desktop/21sh last/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/Users/bellyn-t/Desktop/21sh\ last/cmake-build-debug/Makefile&quot;  VERBOSE=1 edit_cache"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/Users/bellyn-t/Desktop/21sh\ last/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/Users/bellyn-t/Desktop/21sh\ last/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/Users/bellyn-t/Desktop/21sh\ last/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="21sh_last">
+				<Option output="/Users/bellyn-t/Desktop/21sh last/cmake-build-debug/21sh_last" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/Users/bellyn-t/Desktop/21sh last/cmake-build-debug"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/Users/bellyn-t/Desktop/21sh last/."/>
+					<Add directory="/Users/bellyn-t/Desktop/21sh last/get_next_line"/>
+					<Add directory="/Users/bellyn-t/Desktop/21sh last/libft"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/9.0.0/include"/>
+					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include"/>
+					<Add directory="/usr/include"/>
+					<Add directory="/System/Library/Frameworks"/>
+					<Add directory="/Library/Frameworks"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/Users/bellyn-t/Desktop/21sh\ last/cmake-build-debug/Makefile&quot;  VERBOSE=1 21sh_last"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/Users/bellyn-t/Desktop/21sh\ last/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/Users/bellyn-t/Desktop/21sh\ last/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/Users/bellyn-t/Desktop/21sh\ last/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="21sh_last/fast">
+				<Option output="/Users/bellyn-t/Desktop/21sh last/cmake-build-debug/21sh_last" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/Users/bellyn-t/Desktop/21sh last/cmake-build-debug"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/Users/bellyn-t/Desktop/21sh last/."/>
+					<Add directory="/Users/bellyn-t/Desktop/21sh last/get_next_line"/>
+					<Add directory="/Users/bellyn-t/Desktop/21sh last/libft"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/9.0.0/include"/>
+					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include"/>
+					<Add directory="/usr/include"/>
+					<Add directory="/System/Library/Frameworks"/>
+					<Add directory="/Library/Frameworks"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/Users/bellyn-t/Desktop/21sh\ last/cmake-build-debug/Makefile&quot;  VERBOSE=1 21sh_last/fast"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/Users/bellyn-t/Desktop/21sh\ last/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/Users/bellyn-t/Desktop/21sh\ last/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/Users/bellyn-t/Desktop/21sh\ last/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+		</Build>
+		<Unit filename="/Users/bellyn-t/Desktop/21sh last/absolutepath_launch.c">
+			<Option target="21sh_last"/>
+		</Unit>
+		<Unit filename="/Users/bellyn-t/Desktop/21sh last/builtin.c">
+			<Option target="21sh_last"/>
+		</Unit>
+		<Unit filename="/Users/bellyn-t/Desktop/21sh last/cd.c">
+			<Option target="21sh_last"/>
+		</Unit>
+		<Unit filename="/Users/bellyn-t/Desktop/21sh last/clearing.c">
+			<Option target="21sh_last"/>
+		</Unit>
+		<Unit filename="/Users/bellyn-t/Desktop/21sh last/completion.c">
+			<Option target="21sh_last"/>
+		</Unit>
+		<Unit filename="/Users/bellyn-t/Desktop/21sh last/cursor.c">
+			<Option target="21sh_last"/>
+		</Unit>
+		<Unit filename="/Users/bellyn-t/Desktop/21sh last/cut_copy.c">
+			<Option target="21sh_last"/>
+		</Unit>
+		<Unit filename="/Users/bellyn-t/Desktop/21sh last/echo.c">
+			<Option target="21sh_last"/>
+		</Unit>
+		<Unit filename="/Users/bellyn-t/Desktop/21sh last/enter_del_char.c">
+			<Option target="21sh_last"/>
+		</Unit>
+		<Unit filename="/Users/bellyn-t/Desktop/21sh last/error.c">
+			<Option target="21sh_last"/>
+		</Unit>
+		<Unit filename="/Users/bellyn-t/Desktop/21sh last/execution.c">
+			<Option target="21sh_last"/>
+		</Unit>
+		<Unit filename="/Users/bellyn-t/Desktop/21sh last/external_launch.c">
+			<Option target="21sh_last"/>
+		</Unit>
+		<Unit filename="/Users/bellyn-t/Desktop/21sh last/free.c">
+			<Option target="21sh_last"/>
+		</Unit>
+		<Unit filename="/Users/bellyn-t/Desktop/21sh last/get_next_line/get_next_line.c">
+			<Option target="21sh_last"/>
+		</Unit>
+		<Unit filename="/Users/bellyn-t/Desktop/21sh last/get_next_line/get_next_line.h">
+			<Option target="21sh_last"/>
+		</Unit>
+		<Unit filename="/Users/bellyn-t/Desktop/21sh last/getenv.c">
+			<Option target="21sh_last"/>
+		</Unit>
+		<Unit filename="/Users/bellyn-t/Desktop/21sh last/goto.c">
+			<Option target="21sh_last"/>
+		</Unit>
+		<Unit filename="/Users/bellyn-t/Desktop/21sh last/history.c">
+			<Option target="21sh_last"/>
+		</Unit>
+		<Unit filename="/Users/bellyn-t/Desktop/21sh last/init_term.c">
+			<Option target="21sh_last"/>
+		</Unit>
+		<Unit filename="/Users/bellyn-t/Desktop/21sh last/libft/ft_atoi.c">
+			<Option target="21sh_last"/>
+		</Unit>
+		<Unit filename="/Users/bellyn-t/Desktop/21sh last/libft/ft_bzero.c">
+			<Option target="21sh_last"/>
+		</Unit>
+		<Unit filename="/Users/bellyn-t/Desktop/21sh last/libft/ft_isalnum.c">
+			<Option target="21sh_last"/>
+		</Unit>
+		<Unit filename="/Users/bellyn-t/Desktop/21sh last/libft/ft_isalpha.c">
+			<Option target="21sh_last"/>
+		</Unit>
+		<Unit filename="/Users/bellyn-t/Desktop/21sh last/libft/ft_isascii.c">
+			<Option target="21sh_last"/>
+		</Unit>
+		<Unit filename="/Users/bellyn-t/Desktop/21sh last/libft/ft_isdigit.c">
+			<Option target="21sh_last"/>
+		</Unit>
+		<Unit filename="/Users/bellyn-t/Desktop/21sh last/libft/ft_isprint.c">
+			<Option target="21sh_last"/>
+		</Unit>
+		<Unit filename="/Users/bellyn-t/Desktop/21sh last/libft/ft_isspace.c">
+			<Option target="21sh_last"/>
+		</Unit>
+		<Unit filename="/Users/bellyn-t/Desktop/21sh last/libft/ft_itoa.c">
+			<Option target="21sh_last"/>
+		</Unit>
+		<Unit filename="/Users/bellyn-t/Desktop/21sh last/libft/ft_lstadd.c">
+			<Option target="21sh_last"/>
+		</Unit>
+		<Unit filename="/Users/bellyn-t/Desktop/21sh last/libft/ft_lstdel.c">
+			<Option target="21sh_last"/>
+		</Unit>
+		<Unit filename="/Users/bellyn-t/Desktop/21sh last/libft/ft_lstdelone.c">
+			<Option target="21sh_last"/>
+		</Unit>
+		<Unit filename="/Users/bellyn-t/Desktop/21sh last/libft/ft_lstiter.c">
+			<Option target="21sh_last"/>
+		</Unit>
+		<Unit filename="/Users/bellyn-t/Desktop/21sh last/libft/ft_lstmap.c">
+			<Option target="21sh_last"/>
+		</Unit>
+		<Unit filename="/Users/bellyn-t/Desktop/21sh last/libft/ft_lstnew.c">
+			<Option target="21sh_last"/>
+		</Unit>
+		<Unit filename="/Users/bellyn-t/Desktop/21sh last/libft/ft_memalloc.c">
+			<Option target="21sh_last"/>
+		</Unit>
+		<Unit filename="/Users/bellyn-t/Desktop/21sh last/libft/ft_memccpy.c">
+			<Option target="21sh_last"/>
+		</Unit>
+		<Unit filename="/Users/bellyn-t/Desktop/21sh last/libft/ft_memchr.c">
+			<Option target="21sh_last"/>
+		</Unit>
+		<Unit filename="/Users/bellyn-t/Desktop/21sh last/libft/ft_memcmp.c">
+			<Option target="21sh_last"/>
+		</Unit>
+		<Unit filename="/Users/bellyn-t/Desktop/21sh last/libft/ft_memcpy.c">
+			<Option target="21sh_last"/>
+		</Unit>
+		<Unit filename="/Users/bellyn-t/Desktop/21sh last/libft/ft_memdel.c">
+			<Option target="21sh_last"/>
+		</Unit>
+		<Unit filename="/Users/bellyn-t/Desktop/21sh last/libft/ft_memmove.c">
+			<Option target="21sh_last"/>
+		</Unit>
+		<Unit filename="/Users/bellyn-t/Desktop/21sh last/libft/ft_memset.c">
+			<Option target="21sh_last"/>
+		</Unit>
+		<Unit filename="/Users/bellyn-t/Desktop/21sh last/libft/ft_putchar.c">
+			<Option target="21sh_last"/>
+		</Unit>
+		<Unit filename="/Users/bellyn-t/Desktop/21sh last/libft/ft_putchar_fd.c">
+			<Option target="21sh_last"/>
+		</Unit>
+		<Unit filename="/Users/bellyn-t/Desktop/21sh last/libft/ft_putendl.c">
+			<Option target="21sh_last"/>
+		</Unit>
+		<Unit filename="/Users/bellyn-t/Desktop/21sh last/libft/ft_putendl_fd.c">
+			<Option target="21sh_last"/>
+		</Unit>
+		<Unit filename="/Users/bellyn-t/Desktop/21sh last/libft/ft_putnbr.c">
+			<Option target="21sh_last"/>
+		</Unit>
+		<Unit filename="/Users/bellyn-t/Desktop/21sh last/libft/ft_putnbr_fd.c">
+			<Option target="21sh_last"/>
+		</Unit>
+		<Unit filename="/Users/bellyn-t/Desktop/21sh last/libft/ft_putstr.c">
+			<Option target="21sh_last"/>
+		</Unit>
+		<Unit filename="/Users/bellyn-t/Desktop/21sh last/libft/ft_putstr_fd.c">
+			<Option target="21sh_last"/>
+		</Unit>
+		<Unit filename="/Users/bellyn-t/Desktop/21sh last/libft/ft_str_is_printable.c">
+			<Option target="21sh_last"/>
+		</Unit>
+		<Unit filename="/Users/bellyn-t/Desktop/21sh last/libft/ft_strcapitalize.c">
+			<Option target="21sh_last"/>
+		</Unit>
+		<Unit filename="/Users/bellyn-t/Desktop/21sh last/libft/ft_strcat.c">
+			<Option target="21sh_last"/>
+		</Unit>
+		<Unit filename="/Users/bellyn-t/Desktop/21sh last/libft/ft_strchr.c">
+			<Option target="21sh_last"/>
+		</Unit>
+		<Unit filename="/Users/bellyn-t/Desktop/21sh last/libft/ft_strclr.c">
+			<Option target="21sh_last"/>
+		</Unit>
+		<Unit filename="/Users/bellyn-t/Desktop/21sh last/libft/ft_strcmp.c">
+			<Option target="21sh_last"/>
+		</Unit>
+		<Unit filename="/Users/bellyn-t/Desktop/21sh last/libft/ft_strcpy.c">
+			<Option target="21sh_last"/>
+		</Unit>
+		<Unit filename="/Users/bellyn-t/Desktop/21sh last/libft/ft_strdel.c">
+			<Option target="21sh_last"/>
+		</Unit>
+		<Unit filename="/Users/bellyn-t/Desktop/21sh last/libft/ft_strdup.c">
+			<Option target="21sh_last"/>
+		</Unit>
+		<Unit filename="/Users/bellyn-t/Desktop/21sh last/libft/ft_strequ.c">
+			<Option target="21sh_last"/>
+		</Unit>
+		<Unit filename="/Users/bellyn-t/Desktop/21sh last/libft/ft_striter.c">
+			<Option target="21sh_last"/>
+		</Unit>
+		<Unit filename="/Users/bellyn-t/Desktop/21sh last/libft/ft_striteri.c">
+			<Option target="21sh_last"/>
+		</Unit>
+		<Unit filename="/Users/bellyn-t/Desktop/21sh last/libft/ft_strjoin.c">
+			<Option target="21sh_last"/>
+		</Unit>
+		<Unit filename="/Users/bellyn-t/Desktop/21sh last/libft/ft_strlcat.c">
+			<Option target="21sh_last"/>
+		</Unit>
+		<Unit filename="/Users/bellyn-t/Desktop/21sh last/libft/ft_strlen.c">
+			<Option target="21sh_last"/>
+		</Unit>
+		<Unit filename="/Users/bellyn-t/Desktop/21sh last/libft/ft_strlowcase.c">
+			<Option target="21sh_last"/>
+		</Unit>
+		<Unit filename="/Users/bellyn-t/Desktop/21sh last/libft/ft_strmap.c">
+			<Option target="21sh_last"/>
+		</Unit>
+		<Unit filename="/Users/bellyn-t/Desktop/21sh last/libft/ft_strmapi.c">
+			<Option target="21sh_last"/>
+		</Unit>
+		<Unit filename="/Users/bellyn-t/Desktop/21sh last/libft/ft_strncat.c">
+			<Option target="21sh_last"/>
+		</Unit>
+		<Unit filename="/Users/bellyn-t/Desktop/21sh last/libft/ft_strncmp.c">
+			<Option target="21sh_last"/>
+		</Unit>
+		<Unit filename="/Users/bellyn-t/Desktop/21sh last/libft/ft_strncpy.c">
+			<Option target="21sh_last"/>
+		</Unit>
+		<Unit filename="/Users/bellyn-t/Desktop/21sh last/libft/ft_strnequ.c">
+			<Option target="21sh_last"/>
+		</Unit>
+		<Unit filename="/Users/bellyn-t/Desktop/21sh last/libft/ft_strnew.c">
+			<Option target="21sh_last"/>
+		</Unit>
+		<Unit filename="/Users/bellyn-t/Desktop/21sh last/libft/ft_strnstr.c">
+			<Option target="21sh_last"/>
+		</Unit>
+		<Unit filename="/Users/bellyn-t/Desktop/21sh last/libft/ft_strrchr.c">
+			<Option target="21sh_last"/>
+		</Unit>
+		<Unit filename="/Users/bellyn-t/Desktop/21sh last/libft/ft_strsplit.c">
+			<Option target="21sh_last"/>
+		</Unit>
+		<Unit filename="/Users/bellyn-t/Desktop/21sh last/libft/ft_strstr.c">
+			<Option target="21sh_last"/>
+		</Unit>
+		<Unit filename="/Users/bellyn-t/Desktop/21sh last/libft/ft_strsub.c">
+			<Option target="21sh_last"/>
+		</Unit>
+		<Unit filename="/Users/bellyn-t/Desktop/21sh last/libft/ft_strtrim.c">
+			<Option target="21sh_last"/>
+		</Unit>
+		<Unit filename="/Users/bellyn-t/Desktop/21sh last/libft/ft_strupcase.c">
+			<Option target="21sh_last"/>
+		</Unit>
+		<Unit filename="/Users/bellyn-t/Desktop/21sh last/libft/ft_tolower.c">
+			<Option target="21sh_last"/>
+		</Unit>
+		<Unit filename="/Users/bellyn-t/Desktop/21sh last/libft/ft_toupper.c">
+			<Option target="21sh_last"/>
+		</Unit>
+		<Unit filename="/Users/bellyn-t/Desktop/21sh last/libft/libft.h">
+			<Option target="21sh_last"/>
+		</Unit>
+		<Unit filename="/Users/bellyn-t/Desktop/21sh last/main.c">
+			<Option target="21sh_last"/>
+		</Unit>
+		<Unit filename="/Users/bellyn-t/Desktop/21sh last/minishell.h">
+			<Option target="21sh_last"/>
+		</Unit>
+		<Unit filename="/Users/bellyn-t/Desktop/21sh last/prompt.c">
+			<Option target="21sh_last"/>
+		</Unit>
+		<Unit filename="/Users/bellyn-t/Desktop/21sh last/quotes.c">
+			<Option target="21sh_last"/>
+		</Unit>
+		<Unit filename="/Users/bellyn-t/Desktop/21sh last/setenv.c">
+			<Option target="21sh_last"/>
+		</Unit>
+		<Unit filename="/Users/bellyn-t/Desktop/21sh last/shell_loop.c">
+			<Option target="21sh_last"/>
+		</Unit>
+		<Unit filename="/Users/bellyn-t/Desktop/21sh last/signals.c">
+			<Option target="21sh_last"/>
+		</Unit>
+		<Unit filename="/Users/bellyn-t/Desktop/21sh last/split.c">
+			<Option target="21sh_last"/>
+		</Unit>
+		<Unit filename="/Users/bellyn-t/Desktop/21sh last/unsetenv.c">
+			<Option target="21sh_last"/>
+		</Unit>
+		<Unit filename="/Users/bellyn-t/Desktop/21sh last/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\"/>
+		</Unit>
+	</Project>
+</CodeBlocks_project_file>
