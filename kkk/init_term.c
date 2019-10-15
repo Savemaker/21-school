@@ -7,7 +7,13 @@
 
 void reset_input_tmode(void)
 {
-	tcsetattr(0, TCSANOW, &g_saved_attributes);
+	// tcsetattr(0, TCSANOW, &g_saved_attributes);
+	struct termios	tattr;
+
+	tcgetattr(STDIN_FILENO, &tattr);
+	tattr.c_lflag |= (ECHO | ICANON);
+	//верни гейский сигнал
+	tcsetattr(STDIN_FILENO, TCSADRAIN, &tattr);
 }
 
 void exit_clean(void)

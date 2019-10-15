@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signals.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bellyn-t <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: gbeqqo <gbeqqo@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/07 21:34:29 by bellyn-t          #+#    #+#             */
-/*   Updated: 2019/09/07 21:34:32 by bellyn-t         ###   ########.fr       */
+/*   Updated: 2019/10/15 18:32:55 by gbeqqo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,12 +52,11 @@ void	handler_win(int sig)
 	if (g_shell->input->line)
 		line_cp = ft_strdup(g_shell->input->line);
 //	ft_bzero(g_shell->input->line, sizeof(g_shell->input->line));
-	free(&g_shell->input->line);
+	// free(&g_shell->input->line);
 	if (g_shell->input->clipboard)
 		clipboard_cp = ft_strdup(g_shell->input->clipboard);
 //	ft_bzero(g_shell->input->clipboard, sizeof(g_shell->input->clipboard));
 	free(g_shell->input->clipboard);
-
 //
 	position_cp = g_shell->input->y * g_shell->input->maxwidth + g_shell->input->x - g_shell->input->prompt_end;
 	promptsize_cp = g_shell->input->prompt_size;

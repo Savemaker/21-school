@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   shell_loop.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bellyn-t <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: gbeqqo <gbeqqo@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/08 13:48:14 by bellyn-t          #+#    #+#             */
-/*   Updated: 2019/09/08 13:48:17 by bellyn-t         ###   ########.fr       */
+/*   Updated: 2019/10/15 18:27:40 by gbeqqo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,8 @@ t_readline *init_readline(int prompt_size)
 	input->maxheight = win.ws_row;
 	if (prompt_size >= (input->maxwidth))
 	{
+		ft_putchar('\n');
+		ft_putnbr(input->maxwidth);
 		input->prompt_end = prompt_size % (input->maxwidth);
 		if (input->prompt_end == 0)
 			TDOWN;
@@ -856,7 +858,7 @@ void line_editing(char *buf, t_readline *input, t_history *history)
        if (buf[0] == 9)
 	   {
        	g_shell->inputmode = AUTOCOM_INPUT;
-       	autocom(input);
+       	// autocom(input);
 	   }
 
         if (!ft_strcmp(buf, FN_DEL))
@@ -978,6 +980,8 @@ void do_sigint(char **line) //???
 
 int action_signs(char *buff, char **line)
 {
+	char *tmp;
+
 	if (*buff == EOT)
 		do_ctrl_d();
 
@@ -998,7 +1002,9 @@ int action_signs(char *buff, char **line)
 
 	if (!ft_strcmp(buff, EOL)) // \n
 	{
-
+		tmp = *line;
+		if (tmp)
+			free(tmp);
 		*line = ft_strdup(ft_strcat(g_shell->input->line, "\0"));
 		if (g_shell->inputmode != HISTORY_INPUT && (g_shell->inputmode != HISTORY_INPUT_STOP))
 			print_line(g_shell->input, 1);
@@ -1072,6 +1078,39 @@ void heredoc_output(char *str)
 //
 }
 
+void	free_t_history(t_history **hist)
+{
+	t_history *cur;
+
+	cur = *hist;
+	free(cur->path);
+	free_parse(cur->cmnds, count_pointers(cur->cmnds));
+	free(cur);
+	cur = NULL;
+}
+
+void	free_t_readline(t_readline **line)
+{
+	t_readline *cur;
+
+	cur = *line;
+	free(cur->clipboard);
+	free(cur->line);
+	free(cur);
+	cur = NULL;
+}
+
+void	free_g_shell()
+{
+	if (g_shell->autocom_buf)
+		free(g_shell->autocom_buf);
+	if (g_shell->main_cmnd)
+		free(g_shell->main_cmnd);
+	if (g_shell->old_request)
+		free(g_shell->old_request);
+	free_t_readline(&(g_shell->input));
+}
+
 void	cmnd_loop()
 {
 	char	*line;
@@ -1088,13 +1127,12 @@ void	cmnd_loop()
 		signals(0);
 		set_input_tmode();
 		g_shell->main_cmnd = ft_memalloc(MAXLINE); //free!
-		g_shell->autocom_buf = ft_memalloc(MAXLINE);
+		// g_shell->autocom_buf = ft_memalloc(MAXLINE);
 		g_shell->inputmode = DEFAULT_INPUT;
 		g_shell->sig = 0;
 		readline_cmnd(&line, display_prompt());
-
-
-		if (ft_strcmp(line, "\0") && !g_shell->sig) {
+		if (ft_strcmp(line, "\0") && !g_shell->sig)
+		{
 
 			if ((q_type = check_quote(line)) && g_shell->inputmode == DEFAULT_INPUT)
 			{
@@ -1117,7 +1155,7 @@ void	cmnd_loop()
 			else
 				perror_cmnd(SHELLNAME, g_shell->main_cmnd, CMNDNTFND);
 		}
-
+		free_g_shell();
 	}
 
 }

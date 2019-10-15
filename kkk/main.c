@@ -6,7 +6,7 @@
 /*   By: gbeqqo <gbeqqo@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/07 20:45:46 by gbeqqo            #+#    #+#             */
-/*   Updated: 2019/10/12 19:29:26 by gbeqqo           ###   ########.fr       */
+/*   Updated: 2019/10/15 18:02:54 by gbeqqo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -967,6 +967,7 @@ int		ft_env(char **envp)
 	return (1);
 }
 
+
 int		ft_exit(char **envp)
 {
 	free_copy_envp(&envp);
@@ -1897,15 +1898,23 @@ void	print_usage(void)
 	ft_putstr_fd(SHELLNAME, STDOUT_FILENO);
 	ft_putchar_fd('\n', STDOUT_FILENO);
 }
+
+t_shell *create_g_shell()
+{
+	t_shell *res;
+
+	if (!(res = (t_shell *)malloc(sizeof(t_shell))))
+		return (NULL);
+	ft_bzero(res, sizeof(t_shell));
+	return (res);
+}
+
 int		main(int argc, char **argv, char **env)
 {
-	t_shell	*shell;
-
 	(void)argv;
 	if (argc == 1)
 	{
-		shell = ft_memalloc(sizeof(t_shell));
-		g_shell = shell;
+		g_shell = create_g_shell();
 		g_my_env = create_env_copy(env, count_pointers(env));
 		g_table = create_table();
 		g_shell->history = init_history();
